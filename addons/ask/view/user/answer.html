@@ -1,0 +1,30 @@
+{include file="user/header" /}
+<div class="container">
+    <div class="row" style="margin-top:20px;">
+        <div class="col-md-8 col-sm-12">
+            <ul class="nav nav-tabs nav-noborder mb-10 mt-20">
+                <li class="active"><a href="?type=new">{:$__user__.me?'我':'TA'}的回答</a></li>
+            </ul>
+            <div class="tab-inner" style="background:#fff;padding:15px;">
+                <div class="question-list" data-page="{$Think.get.page|default=1|intval}" data-more="{$answerList->hasPages()}">
+                    {foreach name="answerList" id="answer"}
+                    {include file="user/common/answeritem" /}
+                    {/foreach}
+
+                    <div class="pager text-center">
+                        {$answerList->render()}
+                    </div>
+
+                    {if $answerList->isEmpty()}
+                    <div class="loadmore loadmore-line loadmore-nodata"><span class="loadmore-tips">暂无数据</span></div>
+                    {/if}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-12">
+            {include file="user/sidebar" /}
+        </div>
+    </div>
+</div>
+
+<script data-render="script" src="__ADDON__/js/question.js?v={$site.version}"></script>

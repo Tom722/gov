@@ -1,0 +1,35 @@
+expireRender = function(value) {	
+	if (!value) {
+		return '请先购买会员吧！';
+	}
+	var obj1 = getDate(value);
+	var obj2 = getDate();
+	var time1 = obj1.getFullYear() + '-' + (obj1.getMonth() + 1) + '-' + obj1.getDate();
+	var time2 = obj2.getFullYear() + '-' + (obj2.getMonth() + 1) + '-' + obj2.getDate();
+	if (time1 == time2) {
+		return '今天过期，尽快续费哦！';
+	}
+	if (obj1 - obj2 < 0) {
+		return '会员已过期，请续费哦！';
+	}
+	return time1 + ' 后过期';
+}
+
+nowLevel = function(isDisabled,level,tab) {
+	if (isDisabled) {
+		return '不可操作';
+	}
+	if (!level) {
+		return '立即购买';
+	}
+	if (tab.list.length > 0 && level == tab.list[tab.selectedId].level) {
+		return '我要续费';
+	}
+	return '我要升级';
+},
+
+module.exports = {
+	expireRender: expireRender,
+	nowLevel:nowLevel
+  }
+  

@@ -1,0 +1,34 @@
+<view class="u-countdown">
+	<view class="u-countdown-item" style="{{itemStyle}}" wx:if="{{showDays && (hideZeroDay || (!hideZeroDay && d != '00'))}}">
+		<view class="u-countdown-time" style="{{letterStyle}}">
+			{{ d }}
+		</view>
+	</view>
+	<view class="u-countdown-colon" wx:if="{{showDays && (hideZeroDay || (!hideZeroDay && d != '00'))}}">
+		{{ separator == 'colon' ? ':' : '天' }}
+	</view>
+	<view class="u-countdown-item" style="{{itemStyle}}" wx:if="{{showHours}}">
+		<view class="u-countdown-time" style="{{letterStyle}}">
+			{{ h }}
+		</view>
+	</view>
+	<view class="u-countdown-colon" wx:if="{{showHours}}">
+		{{ separator == 'colon' ? ':' : '时' }}
+	</view>
+	<view class="u-countdown-item" style="{{itemStyle}}" wx:if="{{showMinutes}}">
+		<view class="u-countdown-time" style="{{letterStyle}}">
+			{{ i }}
+		</view>
+	</view>
+	<view class="u-countdown-colon" wx:if="{{showMinutes}}">
+		{{ separator == 'colon' ? ':' : '分' }}
+	</view>
+	<view class="u-countdown-item" style="{{itemStyle}}" wx:if="{{showSeconds}}">
+		<view class="u-countdown-time" style="{{letterStyle}}">
+			{{ s }}
+		</view>
+	</view>
+	<view class="u-countdown-colon" wx:if="{{showSeconds && separator == 'zh'}}">
+		秒
+	</view>
+</view>

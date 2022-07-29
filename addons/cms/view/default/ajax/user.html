@@ -1,0 +1,31 @@
+{if $type == 'archives'}
+    {volist name="archivesList" id="item"}
+        {include file="common/item" /}
+    {/volist}
+{else/}
+    {volist name="commentList" id="item"}
+        <article class="article-item">
+            <div class="media">
+                <div class="media-left">
+                    <a href="{$item.source.url}">
+                        <div class="embed-responsive embed-responsive-4by3 img-zoom">
+                            <img src="{$item.source.image}">
+                        </div>
+                    </a>
+                </div>
+                <div class="media-body">
+                    <h3 class="article-title">
+                        <a href="{$item.source.url}" {if isset($item.source.style) && $item.source.style}style="{$item.source.style_text|default=''}" {/if}>{$item.source.title|htmlentities}</a>
+                    </h3>
+                    <div class="comment-content">
+                        <div>{$item.content|htmlentities}</div>
+                    </div>
+                    <div class="article-tag">
+                        <span itemprop="date"><i class="fa fa-calendar"></i> {:date("Y年m月d日", $item['createtime'])}</span>
+                    </div>
+                </div>
+            </div>
+
+        </article>
+    {/volist}
+{/if}

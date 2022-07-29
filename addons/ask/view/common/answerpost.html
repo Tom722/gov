@@ -1,0 +1,110 @@
+{if $user}
+    {if $user.score<$config.limitscore.postanswer}
+        <div class="alert alert-warning">
+            <i class="fa fa-info-circle"></i> 积分大于{$config.limitscore.postanswer}才能够发布答案，当前你有{$user.score}积分，
+        </div>
+    {/if}
+{else /}
+    <div class="alert alert-warning">
+        <i class="fa fa-info-circle"></i> 请登录后再发布答案，<a href="{:url('index/user/login')}">点击登录</a>
+    </div>
+{/if}
+<form action="{:addon_url('ask/answer/post')}" method="post" id="postanswer">
+    {:token()}
+    <input type="hidden" name="type" value="question">
+    <input type="hidden" name="id" value="{$__question__.id}">
+    <div class="form-group">
+        <textarea name="content" rows="10" class="form-control" data-rule="required" {if $user.score<$config.limitscore.postanswer}disabled{/if} data-autosave-key="post-answer-{$__question__.id|default=0}" id="answercontent" rows="8" placeholder="回答越详细准确，会更加容易被提问者采纳"></textarea>
+    </div>
+    {if $config.peeptype!=='none'}
+    <div id="peepsetting" class="alert  mt-1 hidden" role="alert" style="background:rgba(0, 132, 255, 0.1);color:#444">
+        <h4 class="mt-1">
+            {if $config.peeptype=='both'}
+                付费查看:
+                <select name="switchpeeptype" class="form-control form-selecttype" style="display:inline-block;width:75px;">
+                    <option value="price">设定金额</option>
+                    <option value="score">设定积分</option>
+                </select>
+            {else /}
+                付费查看:<!--{:$config.peeptype=='score'?'积分':'金额'}-->
+            {/if}
+        </h4>
+        <div class="mb-2 mt-1 {if $config.peeptype=='score'}hidden{/if}" data-type="price">
+            <div class="input-group">
+                <span class="input-group-addon">￥</span>
+                <input type="number" step="0.01" name="price" class="form-control" placeholder="请输入付费查看的金额，金额区间：{$config.peepprice}">
+                <span class="input-group-btn">
+                    <a class="btn btn-primary btn-clear" href="javascript:">清除</a>
+                </span>
+            </div>
+        </div>
+        <div class="mb-2 mt-1 {if $config.peeptype!='score'}hidden{/if}" data-type="score">
+            <div class="input-group">
+                <span class="input-group-addon">积分</span>
+                <input type="number" step="1" name="score" class="form-control" placeholder="请输入付费查看的积分，积分区间：{$config.peepscore}">
+                <span class="input-group-btn">
+                    <a class="btn btn-primary btn-clear" href="javascript:">清除</a>
+                </span>
+            </div>
+        </div>
+        <div class="row mb-2 {if $config.peeptype=='score'}hidden{/if}" data-type="price">
+            {foreach name="config.peeppricelist" id="item"}
+            <div class="col-xs-3">
+                <button type="button" class="btn btn-light btn-block btn-price" data-value="{$item}">{$key}</button>
+            </div>
+            {/foreach}
+        </div>
+        <div class="row mb-2 {if $config.peeptype!='score'}hidden{/if}" data-type="score">
+            {foreach name="config.peepscorelist" id="item"}
+            <div class="col-xs-3">
+                <button type="button" class="btn btn-light btn-block btn-price" data-value="{$item}">{$key}</button>
+            </div>
+            {/foreach}
+        </div>
+        <div class="peephelp">
+            1. 如果设定了付费查看，则此回答只有提问者、回答者和管理员可以查看<br>
+            2. 如果提问者采纳了此回答，则付费查看生效(会员需要支付你设定的费用才能查看)，如果采纳了其它答案，付费查看失效(此时全体可见)<br>
+            3. 如果提问者在 {$config.adoptdays} 天后仍未采纳最佳答案，则所有付费查看失效(此时全体可见)
+        </div>
+    </div>
+    {/if}
+    <div class="row">
+        <div class="col-xs-8">
+            {if $user && in_array('postanswer', explode(',', $askConfig['captchaparts']??''))}
+            <div class="form-group">
+                <label class="control-label">验证码</label>
+                <div class="controls">
+                    <div class="input-group" style="width:230px;">
+                        <input type="text" name="captcha" class="form-control input-lg" placeholder="请输入验证码" autocomplete="off" data-rule="required;length(4)"/>
+                        <span class="input-group-btn" style="padding:0;border:none;">
+                        <img src="{:captcha_src()}" width="100" height="40" onclick="this.src = '{:captcha_src()}?r=' + Math.random();"/>
+                    </span>
+                    </div>
+                    <p class="help-block"></p>
+                </div>
+            </div>
+            {/if}
+            <div class="form-group">
+                {if $user}
+                    <input name="submit" type="submit" id="submit" value="提交答案(Ctrl+回车)" {if $user.score<$config.limitscore.postanswer}disabled{/if} class="btn btn-primary">
+                    {if $config.peeptype!=='none' && !$__question__.isprivate}
+                    <span class="btn btn-light btn-peepsetting {if $__question__.is_peep_disabled}disabled{/if}" data-adoptdays="{$config.adoptdays}" data-reason="{:$__question__.peep_disabled_reason}" data-toggle="tooltip" data-title="{if $__question__.is_peep_disabled}当前无法进行付费查看设定，原因：{$__question__.peep_disabled_reason}{else/}你可以进行付费查看设定{/if}">
+                        <i class="fa fa-eye-slash"></i> <label>付费查看</label>
+                    </span>
+                    {/if}
+                {else /}
+                    <a href="{:url('index/user/login')}" class="btn btn-primary">登录</a>
+                    <a href="{:url('index/user/register')}" class="btn btn-light">注册新账号</a>
+                {/if}
+            </div>
+        </div>
+        <div class="col-xs-4 text-right">
+            <div class="checkbox my-1 hidden">
+                <label>
+                    <input name="subscribe" type="checkbox" class="checkbox" tabindex="7" checked="" value="1"> 有人回复时邮件通知我
+                </label>
+            </div>
+        </div>
+    </div>
+</form>
+{include file="common/markdowntips" /}

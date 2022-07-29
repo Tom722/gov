@@ -1,0 +1,60 @@
+{include file="user/header" /}
+<div class="container">
+    <div class="row" style="margin-top:20px;">
+        <div class="col-md-8 col-sm-12">
+            <ul class="nav nav-tabs nav-noborder mb-10 mt-20">
+                <li class="active"><a href="javascript:">我的私信</a></li>
+                <li class="pull-right">
+                    <button class="btn btn-primary btn-xs mt-2 btn-markall">全部标为已读</button>
+                </li>
+            </ul>
+            <div class="tab-inner" style="background:#fff;padding:15px;">
+                <div class="question-list" data-page="{$Think.get.page|default=1|intval}" data-more="{$messageList->hasPages()}">
+                    {foreach name="messageList" id="message"}
+                    {include file="user/common/messageitem" /}
+                    {/foreach}
+
+                    <div class="pager text-center">
+                        {$messageList->render()}
+                    </div>
+
+                    {if $messageList->isEmpty()}
+                    <div class="loadmore loadmore-line loadmore-nodata"><span class="loadmore-tips">暂无数据</span></div>
+                    {/if}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-12">
+            {include file="user/sidebar" /}
+        </div>
+    </div>
+</div>
+
+<script data-render="script">
+    $(function () {
+        $(document).on("click", ".btn-markone", function () {
+            var that = this;
+            ASK.api.ajax({
+                data: {act: "mark", message_id: $(that).data("id")}
+            }, function (data, ret) {
+                $(that).text("已读").removeClass("btn-markone").addClass("disabled");
+            });
+        });
+        $(document).on("click", ".btn-delone", function () {
+            var that = this;
+            ASK.api.ajax({
+                data: {act: "del", message_id: $(that).data("id")}
+            }, function (data, ret) {
+                $(that).closest(".comment").slideUp();
+            });
+        });
+        $(document).on("click", ".btn-markall", function () {
+            var that = this;
+            ASK.api.ajax({
+                data: {act: "markall"}
+            }, function (data, ret) {
+                $(".btn-markone").text("已读").removeClass("btn-markone").addClass("disabled");
+            });
+        });
+    });
+</script>

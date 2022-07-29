@@ -1,0 +1,44 @@
+<div class="comment">
+    <div class="media media-user">
+        <div class="media-left {if $feed.user.id==$user.id}hidden{/if}">
+            <a href="{$feed.user.url}" data-toggle="popover" data-type="user" data-id="{$feed.user.id}" data-title="{$feed.user.nickname}" target="_blank">
+                <img class="media-object img-circle img-small" src="{$feed.user.avatar|cdnurl}" alt="{$feed.user.nickname}">
+            </a>
+        </div>
+        <div class="media-body">
+            <p class="text-muted">
+                {if $feed.user.id!=$user.id}
+                <a target="_blank" href="{$feed.user.url}"> {$feed.user.nickname}</a>
+                {else/}
+                我
+                {/if}
+                {if $feed['action']=='post_question'}
+                发布了问题
+                {elseif $feed['action']=='post_article' /}
+                发表了文章
+                {elseif $feed['action']=='post_comment' /}
+                发表了评论
+                {elseif $feed['action']=='post_answer' /}
+                对问题发布了答案
+                {elseif $feed['action']=='adopt' /}
+                采纳了的最佳答案
+                {elseif $feed['action']=='collection' /}
+                收藏了{:$feed['type']=='question'?'问题':($feed['type']=='article'?'文章':'答案')}
+                {elseif $feed['action']=='attention' /}
+                关注了{:$feed['type']=='question'?'问题':($feed['type']=='article'?'文章':'答案')}
+                {elseif $feed['action']=='thanks' /}
+                感谢了{:$feed['type']=='question'?'问题':($feed['type']=='article'?'文章':'答案')}
+                {/if}
+            </p>
+            <div class="text-muted">
+                <span>{$feed.createtime|human_date} </span>
+            </div>
+            <h2 class="h4 title"><a href="{$feed.url}" target="_blank">{$feed.title|htmlentities}</a></h2>
+            {if $feed.content}
+            <div class="text-muted">
+                <blockquote>{$feed.content|strip_tags|mb_substr=0,500}</blockquote>
+            </div>
+            {/if}
+        </div>
+    </div>
+</div>

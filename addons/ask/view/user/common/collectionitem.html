@@ -1,0 +1,31 @@
+{if $collectionType=='question'}
+<div class="col-xs-12">
+    <div class="comment">
+        <div class="comment-header space-between">
+            <h4 class="title"><a href="{$collection.question.url}"><span class="tag">问</span> {$collection.question.title|htmlentities}</a></h4>
+            <a href="javascript:;" class="btn btn-primary btn-xs btn-collection collected" data-type="question" data-id="{$collection.question.id}"><i class="fa fa-plus"></i> <span>已收藏</span></a>
+        </div>
+    </div>
+</div>
+{elseif $collectionType=='answer' /}
+<div class="col-xs-12">
+    <div class="comment">
+        <div class="comment-header space-between">
+            <h4 class="title"><a href="{$collection.question.url}"><span class="tag">问</span> {$collection.question.title|htmlentities}</a></h4>
+            <a href="javascript:;" class="btn btn-primary btn-xs btn-collection collected" data-type="answer" data-id="{$collection.answer.id}"><i class="fa fa-plus"></i> <span>已收藏</span></a>
+        </div>
+        <div class="text-muted">
+            {$collection.answer.content_fmt}
+        </div>
+    </div>
+</div>
+{elseif $collectionType=='article' /}
+<div class="col-xs-12">
+    <div class="comment">
+        <div class="comment-header space-between">
+            <h4 class="title"><a href="{$collection.article.url}">{$collection.article.title|htmlentities}</a></h4>
+            <a href="javascript:;" class="btn btn-primary btn-xs btn-collection collected" data-type="article" data-id="{$collection.article.id}"><i class="fa fa-plus"></i> <span>已收藏</span></a>
+        </div>
+    </div>
+</div>
+{/if}

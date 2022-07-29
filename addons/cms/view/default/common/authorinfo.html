@@ -1,0 +1,44 @@
+<!--@formatter:off-->
+{if $config['userpage'] && $__ARCHIVES__['user']}
+<!-- S 关于作者 -->
+<div class="panel panel-default about-author no-padding" data-id="{$__ARCHIVES__.user.id}" itemProp="author" itemscope="" itemType="http://schema.org/Person">
+    <meta itemProp="name" content="{$__ARCHIVES__.user.nickname|htmlentities}"/>
+    <meta itemProp="image" content="{$__ARCHIVES__.user.avatar|cdnurl|htmlentities}"/>
+    <meta itemProp="url" content="{$__ARCHIVES__.user.url}"/>
+    <div class="panel-body no-padding">
+        <div class="author-card">
+            <div class="author-head" {if $Think.config.cms.default_author_head_img}style="background-image:url('{$Think.config.cms.default_author_head_img|cdnurl}');"{/if}></div>
+
+            <div class="author-avatar">
+                <a href="{$__ARCHIVES__.user.url}">
+                    <img src="{$__ARCHIVES__.user.avatar|cdnurl|htmlentities}">
+                </a>
+            </div>
+
+            <div class="author-basic">
+                <div class="author-nickname">
+                    <a href="{$__ARCHIVES__.user.url}">{$__ARCHIVES__.user.nickname|htmlentities}</a>
+                </div>
+                <span class="text-muted">{$__ARCHIVES__.user.bio|default="这家伙很懒，什么也没写！"|htmlentities}</span>
+            </div>
+
+            <div class="row author-statistics">
+                <div class="col-xs-4">
+                    <div class="statistics-text">文章</div>
+                    <div class="statistics-nums"><a href="{:addon_url('cms/user/index',[':id'=>$__ARCHIVES__.user_id],false)}/archives">{$__ARCHIVES__.user.archives|default=0}</a></div>
+                </div>
+                <div class="col-xs-4">
+                    <div class="statistics-text">评论</div>
+                    <div class="statistics-nums"><a href="{:addon_url('cms/user/index',[':id'=>$__ARCHIVES__.user_id],false)}/comment">{$__ARCHIVES__.user.comments|default=0}</a></div>
+                </div>
+                <div class="col-xs-4">
+                    <div class="statistics-text">加入时间</div>
+                    <div class="statistics-nums">{$__ARCHIVES__.user.jointime|default=0|human_date}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- E 关于作者 -->
+{/if}
+<!--@formatter:on-->

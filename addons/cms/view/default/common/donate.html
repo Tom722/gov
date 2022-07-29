@@ -1,0 +1,8 @@
+<!-- S 点赞 -->
+<div class="article-donate">
+    <a href="javascript:" class="btn btn-primary btn-like btn-lg" data-action="vote" data-type="like" data-id="{cms:archives name='id' /}" data-tag="archives"><i class="fa fa-thumbs-up"></i> 点赞(<span>{cms:archives name='likes' /}</span>)</a>
+    {if config('cms.donateimage')}
+    <a href="javascript:" class="btn btn-outline-primary btn-donate btn-lg" data-action="donate" data-id="{cms:archives name='id' /}" data-image="{$config.donateimage|cdnurl}"><i class="fa fa-cny"></i> 打赏</a>
+    {/if}
+</div>
+<!-- E 点赞 -->

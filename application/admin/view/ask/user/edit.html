@@ -1,0 +1,112 @@
+<form id="edit-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Flag')}:</label>
+        <div class="col-xs-12 col-sm-8">
+
+            <select id="c-flag" class="form-control selectpicker" multiple="" name="row[flag][]">
+                {foreach name="flagList" item="vo"}
+                <option value="{$key}" {in name="key" value="$row.flag" }selected{/in}>{$vo}</option>
+                {/foreach}
+            </select>
+
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Category_id')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-category_id" data-rule="required" data-source="ask/category/index" data-params='{"custom[type]":"expert"}' class="form-control selectpage form-control" name="row[category_id]" type="text" value="{$row.category_id}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Followers')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-followers" class="form-control form-control" name="row[followers]" type="number" value="{$row.followers}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Questions')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-questions" class="form-control form-control" name="row[questions]" type="number" value="{$row.questions}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Answers')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-answers" class="form-control form-control" name="row[answers]" type="number" value="{$row.answers}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Comments')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-comments" class="form-control form-control" name="row[comments]" type="number" value="{$row.comments}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Articles')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-articles" class="form-control form-control" name="row[articles]" type="number" value="{$row.articles}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Collections')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-collections" class="form-control form-control" name="row[collections]" type="number" value="{$row.collections}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Adoptions')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-adoptions" class="form-control form-control" name="row[adoptions]" type="number" value="{$row.adoptions}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Views')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-views" class="form-control form-control" name="row[views]" type="number" value="{$row.views}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Isexpert')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            {:Form::radios('row[isexpert]',[1=>__('Yes'),0=>__('No')],$row['isexpert'])}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Experttitle')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-experttitle" class="form-control form-control" name="row[experttitle]" type="text" value="{$row.experttitle|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Invites')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-invites" class="form-control form-control" name="row[invites]" type="number" value="{$row.invites}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Messages')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-messages" class="form-control form-control" name="row[messages]" type="number" value="{$row.messages}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Notifications')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-notifications" class="form-control form-control" name="row[notifications]" type="number" value="{$row.notifications}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Unadopted')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-unadopted" class="form-control form-control" name="row[unadopted]" type="number" value="{$row.unadopted}">
+        </div>
+    </div>
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-primary btn-embossed disabled">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,29 @@
+<!--@formatter:off-->
+{if (config('cms.loadmode')=='paging' && "[loadmode]"!="infinite") || "[loadmode]"=="paging"}
+    {/* 普通分页 */ }
+    <!-- S 分页栏 -->
+    <div class="text-center pager">
+        {:$__PAGELIST__->render(['type' => in_array('[type]',['simple', 'full'])?'[type]':config('cms.pagemode')])}
+    </div>
+    <!-- E 分页栏 -->
+    {if $__PAGELIST__->isEmpty()}
+        <div class="loadmore loadmore-line loadmore-nodata"><span class="loadmore-tips">暂无数据</span></div>
+    {/if}
+{else/}
+    {/* 无刷新加载下一页 */ }
+    {if $__PAGELIST__->isEmpty() || !$__PAGELIST__->hasPages()}
+        {if $__PAGELIST__->currentPage()>1 || ($__PAGELIST__->isEmpty() && $__PAGELIST__->currentPage()==1)}
+            <div class="loadmore loadmore-line loadmore-nodata"><span class="loadmore-tips">暂无更多数据</span></div>
+        {/if}
+    {else /}
+        <div class="text-center clearfix">
+            <a href="?{:http_build_query(array_merge(request()->get(), ['page'=>$__PAGELIST__->currentPage()+1]))}"
+               data-url="?{:http_build_query(array_merge(request()->get(), ['page'=>'__page__']))}"
+               data-page="{:$__PAGELIST__->currentPage()+1}" class="btn btn-default my-4 px-4 btn-loadmore"
+               data-autoload="{:in_array('[autoload]',['true', 'false'])?'[autoload]':'false'}">
+                加载更多
+            </a>
+        </div>
+    {/if}
+{/if}
+<!--@formatter:on-->

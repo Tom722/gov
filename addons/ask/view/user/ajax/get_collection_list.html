@@ -1,0 +1,9 @@
+{__NOLAYOUT__}
+
+{foreach name="collectionList" id="collection"}
+{include file="user/common/collectionitem" /}
+{/foreach}
+
+<div class="pager text-center">
+    {$collectionList->render()}
+</div>

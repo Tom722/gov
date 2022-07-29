@@ -1,0 +1,19 @@
+
+.logo {
+  display: block;
+  margin: 0px auto;
+  width: 100%;
+}
+.zan-panel {
+  padding:15px;
+}
+
+
+.h2w, .h2w__pre {
+  font-size: 28rpx;
+}
+
+.h2w__main {
+  margin: 0;
+  padding-top: 10rpx;
+}

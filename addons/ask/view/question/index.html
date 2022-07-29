@@ -1,0 +1,57 @@
+<style>
+    .category-list .tag {
+        border-radius:3px;
+    }
+    .btn-label {position: relative;left: -12px;display: inline-block;padding: 6px 12px;background: rgba(0,0,0,0.15);border-radius: 3px 0 0 3px;}
+    .btn-labeled {padding-top: 0;padding-bottom: 0;}
+    .category-list .btn { margin-bottom:10px; margin-right:10px;}
+    .btn-light .btn-label {background:#0076ff;color:#fff;}
+</style>
+<div class="container">
+    <div class="row mt-4" id="questionlist">
+        <div class="col-md-8 col-sm-12">
+            <div class="category-list mb-2">
+                <a href="?" class="btn btn-{:$categoryId?'light':'primary'} btn-labeled">
+                    <span class="btn-label"><i class="fa fa-home"></i></span>全部
+                </a>
+                {foreach name="categoryList" id="category"}
+                    <a class="btn btn-{:$category.id==$categoryId?'primary':'light'} btn-labeled" href="?category={$category.id}" role="button">
+                        {if $category.icon}<span class="btn-label"><i class="{$category.icon}"></i></span>{/if}{$category.name}</a>
+                {/foreach}
+            </div>
+
+            <!-- S 首页问题列表 -->
+            <ul class="nav nav-tabs nav-noborder mb-10 mt-20">
+                <li class="{:$questionType=='new'?'active':''}"><a href="?category={$categoryId}&type=new">最新</a></li>
+                <li class="{:$questionType=='hot'?'active':''}"><a href="?category={$categoryId}&type=hot">热门</a></li>
+                <li class="{:$questionType=='price'?'active':''}"><a href="?category={$categoryId}&type=price">悬赏</a></li>
+                <li class="{:$questionType=='unsolved'?'active':''}"><a href="?category={$categoryId}&type=unsolved">未解决</a></li>
+                <li class="{:$questionType=='unanswer'?'active':''}"><a href="?category={$categoryId}&type=unanswer">未回答</a></li>
+                <li class="{:$questionType=='solved'?'active':''}"><a href="?category={$categoryId}&type=solved">已解决</a></li>
+                {if $isAdmin}
+                <li class="{:$questionType=='unsettled'?'active':''}"><a href="?category={$categoryId}&type=unsettled" title="已经过期的悬赏">已过期</a></li>
+                {/if}
+                <a href="{:addon_url('ask/question/post')}" class="btn btn-light pull-right"><i class="fa fa-pencil"></i> 发布问题</a>
+            </ul>
+
+            <div class="tab-inner" style="background:#fff;padding:15px;">
+                <div class="question-list" data-page="{$Think.get.page|default=1|intval}" data-more="{$questionList->hasPages()}">
+
+                    {foreach name="questionList" id="question"}
+                    {include file="common/questionitem" /}
+                    {/foreach}
+
+                    <!-- S 分页 -->
+                    {include file="common/pageinfo" autoload="true"}
+                    <!-- E 分页 -->
+                </div>
+            </div>
+            <!-- E 首页问题列表 -->
+        </div>
+        <div class="col-md-4 col-sm-12">
+            <div class="article-sidebar">
+                {include file="common/sidebar" /}
+            </div>
+        </div>
+    </div>
+</div>

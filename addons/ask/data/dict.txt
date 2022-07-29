@@ -1,0 +1,1 @@
+请从以下地址下载更新词库：https://raw.githubusercontent.com/lizhichao/VicWord/master/Data/dict.txt

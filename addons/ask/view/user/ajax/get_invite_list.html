@@ -1,0 +1,9 @@
+{__NOLAYOUT__}
+
+{foreach name="inviteList" id="invite"}
+{include file="user/common/inviteitem" /}
+{/foreach}
+
+<div class="pager text-center">
+    {$inviteList->render()}
+</div>

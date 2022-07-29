@@ -1,0 +1,191 @@
+<style>
+    #datefilter {
+        margin:10px 0;
+    }
+</style>
+<div class="panel panel-default panel-intro">
+    {:build_heading()}
+    <div class="panel-body">
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade active in" id="one">
+                <div class="widget-body no-padding">
+                    <div class="row">
+                        <div class="col-lg-3 col-xs-6">
+                            <!-- small box -->
+                            <div class="small-box bg-aqua">
+                                <div class="inner">
+                                    <h3>￥<span id="todayincome">{$statistics.todayincome}</span></h3>
+                                    <p>今日收入</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-rmb"></i>
+                                </div>
+                                <a href="ask/order/index" title="问答付费订单" class="small-box-footer btn-addtabs">
+                                    总收入：￥<span id="totalincome">{$statistics.totalincome}</span> <i class="fa fa-arrow-circle-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <!-- ./col -->
+                        <div class="col-lg-3 col-xs-6">
+                            <!-- small box -->
+                            <div class="small-box bg-green">
+                                <div class="inner">
+                                    <h3><span id="todayorders">{$statistics.todayorders}</span></h3>
+
+                                    <p>今日订单数</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-navicon"></i>
+                                </div>
+                                <a href="ask/order/index" title="问答付费订单" class="small-box-footer btn-addtabs">
+                                    总订单数：￥<span id="totalorders">{$statistics.totalorders}</span> <i class="fa fa-arrow-circle-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <!-- ./col -->
+                        <div class="col-lg-3 col-xs-6">
+                            <!-- small box -->
+                            <div class="small-box bg-yellow">
+                                <div class="inner">
+                                    <h3><span id="todayquestions">{$statistics.todayquestions}</span></h3>
+
+                                    <p>今日提问数</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-bullhorn"></i>
+                                </div>
+                                <a href="ask/question/index" title="问答问答管理" class="small-box-footer btn-addtabs">
+                                    总提问数：<span id="totalquestions">{$statistics.totalquestions}</span> <i class="fa fa-arrow-circle-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <!-- ./col -->
+                        <div class="col-lg-3 col-xs-6">
+                            <!-- small box -->
+                            <div class="small-box bg-red">
+                                <div class="inner">
+                                    <h3><span id="todayarticles">{$statistics.todayarticles}</span></h3>
+                                    <p>今日文章数</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-warning"></i>
+                                </div>
+                                <a href="ask/article/index" title="问答文章管理" class="small-box-footer btn-addtabs">
+                                    总文章数：<span id="totalarticles">{$statistics.totalarticles}</span> <i class="fa fa-arrow-circle-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <!-- ./col -->
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 col-sm-6 col-xs-12">
+                            <div class="info-box bg-aqua">
+                                <span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>
+
+                                <div class="info-box-content">
+                                    <span class="info-box-text">待处理举报数</span>
+                                    <span class="info-box-number">￥<span id="totalunreports">{$statistics.totalunreports}</span></span>
+
+                                    <div class="progress">
+                                        <div class="progress-bar" style="width: 20%"></div>
+                                    </div>
+                                    <span class="progress-description">
+                                        待处理举报数的数量
+                                    </span>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-md-3 col-sm-6 col-xs-12">
+                            <div class="info-box bg-green">
+                                <span class="info-box-icon"><i class="fa fa-thumbs-o-up"></i></span>
+
+                                <div class="info-box-content">
+                                    <span class="info-box-text">待处理认证数</span>
+                                    <span class="info-box-number"><span id="totaluncertifications">{$statistics.totaluncertifications}</span></span>
+
+                                    <div class="progress">
+                                        <div class="progress-bar" style="width: 20%"></div>
+                                    </div>
+                                    <span class="progress-description">
+                                        所有支付成功的订单总数
+                                      </span>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-md-3 col-sm-6 col-xs-12">
+                            <div class="info-box bg-yellow">
+                                <span class="info-box-icon"><i class="fa fa-calendar"></i></span>
+
+                                <div class="info-box-content">
+                                    <span class="info-box-text">待采纳问题数</span>
+                                    <span class="info-box-number"><span id="totalunadopted">{$statistics.totalunadopted}</span></span>
+
+                                    <div class="progress">
+                                        <div class="progress-bar" style="width: 20%"></div>
+                                    </div>
+                                    <span class="progress-description">
+                                        所有待采纳的问题数量
+                                      </span>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-md-3 col-sm-6 col-xs-12">
+                            <div class="info-box bg-red">
+                                <span class="info-box-icon"><i class="fa fa-comments-o"></i></span>
+
+                                <div class="info-box-content">
+                                    <span class="info-box-text">总答案数</span>
+                                    <span class="info-box-number"><span id="totalanswers">{$statistics.totalanswers}</span></span>
+
+                                    <div class="progress">
+                                        <div class="progress-bar" style="width: 20%"></div>
+                                    </div>
+                                    <span class="progress-description">
+                                    所有会员发布的回答数量
+                                  </span>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                        <!-- /.col -->
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="page-header">
+                                <h4 class="no-margin">订单趋势</h4>
+                            </div>
+                            <div id="datefilter">
+                                <form action="" role="form" novalidate class="form-inline">
+                                <a href="javascript:;" class="btn btn-primary btn-refresh"><i class="fa fa-refresh"></i></a>
+                                <a href="javascript:;" class="btn btn-success btn-filter">{:__('Today')}</a>
+                                <a href="javascript:;" class="btn btn-success btn-filter">{:__('Yesterday')}</a>
+                                <a href="javascript:;" class="btn btn-success btn-filter">{:__('Last 7 Days')}</a>
+                                <a href="javascript:;" class="btn btn-success btn-filter">{:__('Last 30 Days')}</a>
+                                <a href="javascript:;" class="btn btn-success btn-filter">{:__('Last month')}</a>
+                                <a href="javascript:;" class="btn btn-success btn-filter">{:__('This month')}</a>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    <input type="text" class="form-control input-inline datetimerange" placeholder="指定日期" style="width:270px;" />
+                                </div>
+                                <a href="javascript:;" class="btn btn-info btn-amount"><i class="fa fa-cny"></i> <span id="amount">{$statistics.amount}</span></a>
+                                </form>
+                            </div>
+                            <div id="echart" style="height:400px;width:100%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,30 @@
+<!-- S 付费阅读 -->
+{if !$__ARCHIVES__.ispaid}
+<div class="article-pay">
+    {if $__CHANNEL__.vip>0 && (!$user || $user.vip<$__CHANNEL__.vip)}
+    <div class="alert alert-danger">
+        <strong>温馨提示!</strong> 升级 <b>VIP {$__CHANNEL__.vip}</b> 免费浏览，你当前
+        {if $user}
+            <b>VIP {$user.vip|default=0}</b>
+        {else/}
+            未登录
+        {/if}
+        <div class="mt-3">
+            <a href="{:url('index/vip/viplist')}" target="_blank" class="btn btn-warning">
+                <i class="fa fa-diamond"></i> 升级VIP {$__CHANNEL__.vip}
+            </a>
+        </div>
+    </div>
+    {/if}
+
+    {if $__ARCHIVES__.price>0}
+    <div class="alert alert-danger">
+        <strong>温馨提示!</strong> 你需要支付 <b>￥{cms:archives name='price' /}</b> 元后才能查看付费内容
+        <div class="mt-3">
+            {include file="common/paytype" /}
+        </div>
+    </div>
+    {/if}
+</div>
+{/if}
+<!-- E 付费阅读 -->

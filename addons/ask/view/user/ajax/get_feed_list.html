@@ -1,0 +1,9 @@
+{__NOLAYOUT__}
+
+{foreach name="feedList" id="feed"}
+{include file="user/common/feeditem" /}
+{/foreach}
+
+<div class="pager text-center">
+    {$feedList->render()}
+</div>

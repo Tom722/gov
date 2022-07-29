@@ -1,0 +1,58 @@
+<section class="question-list-item">
+    <div class="qa-rank mr-2">
+        <div class="answers {if $article.voteup>0} answered{/if} {if $article.vote=='up'} solved{/if}">
+            {$article.voteup}
+            <small> 点赞</small>
+        </div>
+    </div>
+    <div class="summary">
+        <h2 class="title">
+            <a href="{$article.url}">
+                {if $article.flag == 'top'}
+                <span class="label label-danger" style="margin-right: 3px;">置顶</span>
+                {/if}
+                {if $article.price>0}
+                <span class="price-tag" data-toggle="tooltip" data-title="此文章需要支付{$article.price}元才能查看"><i class="fa fa-rmb"></i> {$article.price}</span>
+                {/if}
+                {if $article.score>0}
+                <span class="price-tag" data-toggle="tooltip" data-title="此文章需要使用{$article.price}积分才能查看"><i class="fa fa-database"></i> {$article.score}</span>
+                {/if}
+                <span style="{$article.style_text}">{$article.title|htmlentities}</span>
+            </a>
+
+            {if $article.tags}
+            <div class="tags">
+                {foreach name="article.tags" id="tag"}
+                <a href="{$tag.url}" class="tag">{if $tag.icon}<img src="{$tag.icon}" alt="">{/if}{$tag.name|htmlentities}</a>
+                {/foreach}
+            </div>
+            {/if}
+        </h2>
+        <ul class="author list-inline mt-1">
+            <li>
+                <a href="{$article.user.url}" data-toggle="popover" data-title="{$article.user.nickname}" data-type="user" data-id="{$article.user_id}">
+                    <!--<img src="{$article.user.avatar|cdnurl}" alt="" class="img-circle mr-1" style="width:20px;">-->
+                    {$article.user.nickname}
+                </a>
+                <span class="split"></span>
+                <span class="date">{$article.create_date}</span>
+            </li>
+        </ul>
+        {if $article.images}
+        <div class="images row mb-2">
+            {foreach name="article.images_list" id="image"}
+            <div class="col-xs-6 col-sm-3">
+                <a href="{$article.url}" class="img-zoom">
+                    <div class="embed-responsive embed-responsive-4by3">
+                        <img src="{$image}" class="embed-responsive-item">
+                    </div>
+                </a>
+            </div>
+            {/foreach}
+        </div>
+        {/if}
+        <div class="text-muted">
+            <small>{$article.summary|htmlentities}</small>
+        </div>
+    </div>
+</section>

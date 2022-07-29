@@ -1,0 +1,58 @@
+<form id="edit-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('From_user_id')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-from_user_id" data-rule="required" data-source="user/user/index" data-field="nickname" class="form-control selectpage form-control" name="row[from_user_id]" type="text" value="{$row.from_user_id}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('To_user_id')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-to_user_id" data-rule="required" data-source="user/user/index" data-field="nickname" class="form-control selectpage form-control" name="row[to_user_id]" type="text" value="{$row.to_user_id}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Action')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-action" class="form-control form-control" name="row[action]" type="text" value="{$row.action|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Type')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-type" data-rule="required" class="form-control form-control" name="row[type]" type="text" value="{$row.type|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Source_id')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-source_id" data-rule="required" class="form-control form-control" name="row[source_id]" type="text" value="{$row.source_id}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Title')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-title" class="form-control form-control" name="row[title]" type="text" value="{$row.title|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Content')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <textarea id="c-content" class="form-control mdeditor" rows="5" name="row[content]" cols="50">{$row.content|htmlentities}</textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Isread')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-isread" data-rule="required" class="form-control form-control" name="row[isread]" type="number" value="{$row.isread}">
+        </div>
+    </div>
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-primary btn-embossed disabled">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>

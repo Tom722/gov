@@ -1,0 +1,57 @@
+<section class="question-list-item">
+    <div class="qa-rank">
+        <div class="answers {:$question.answers?'answered':''} {:$question.best_answer_id?'solved':''}">
+            {$question.answers}
+            <small> {:$question.best_answer_id?'解决':'回答'}</small>
+        </div>
+        <div class="views hidden-xs">
+            {$question.views_format}
+            <small>浏览</small>
+        </div>
+    </div>
+    <div class="summary">
+        <ul class="author list-inline">
+            <li>
+                {if $question.isanonymous}
+                <a href="javascript:">匿名</a>
+                {else/}
+                <a href="{$question.user.url}" data-toggle="popover" data-title="{$question.user.nickname}" data-type="user" data-id="{$question.user_id}">{$question.user.nickname}</a>
+                {/if}
+                <span class="split"></span>
+                <span class="askDate">{$question.create_date}</span>
+            </li>
+        </ul>
+        <h2 class="title">
+            <a href="{$question.url}">
+                {if $question.flag == 'top'}
+                <span class="label label-danger" style="float: left;margin-right: 10px;">置顶</span>
+                {/if}
+                {if $question.price>0}
+                <span class="price-tag" data-toggle="tooltip" data-title="如果回答被采纳，回答者将获得{$question.price}元"><i class="fa fa-rmb"></i> {$question.price}</span>
+                {/if}
+                {if $question.score>0}
+                <span class="price-tag" data-toggle="tooltip" data-title="如果回答被采纳，回答者将获得{$question.score}积分"><i class="fa fa-database"></i> {$question.score}</span>
+                {/if}
+                <span style="{$question.style_text}">{$question.title|htmlentities}</span>
+            </a>
+        </h2>
+        <div class="tags">
+            {foreach name="question.tags" id="tag"}
+            <a href="{$tag.url}" class="tag">{if $tag.icon}<img src="{$tag.icon}" alt="">{/if}{$tag.name|htmlentities}</a>
+            {/foreach}
+        </div>
+        {if $question.images}
+        <div class="images row">
+            {foreach name="question.images_list" id="image"}
+            <div class="col-xs-6 col-sm-3">
+                <a href="{$question.url}" class="img-zoom">
+                    <div class="embed-responsive embed-responsive-4by3">
+                        <img src="{$image}" class="embed-responsive-item">
+                    </div>
+                </a>
+            </div>
+            {/foreach}
+        </div>
+        {/if}
+    </div>
+</section>

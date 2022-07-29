@@ -1,0 +1,97 @@
+<div class="comment">
+    <div class="comment-header">
+        <a href="{$answer.user.url}" class="comment-avatar" data-toggle="popover" data-title="{$answer.user.nickname}" data-placement="right" data-type="user" data-id="{$answer.user_id}">
+            <img class="img-circle img-small" src="{$answer.user.avatar|cdnurl}" alt="{$answer.user.nickname}"></a>
+        <div class="comment-authorinfo">
+            <div>
+                <a href="{$answer.user.url}" class="mr-5" data-toggle="popover" data-title="{$answer.user.nickname}" data-placement="right" data-type="user" data-id="{$answer.user_id}"><b>{$answer.user.nickname}</b></a>
+                {if $answer.user.title}
+                <span class="label label-primary">{$answer.user.title}</span>
+                {/if}
+                <span class="comment-title pull-right text-muted small">{$answer.create_date}</span>
+            </div>
+            <div class="comment-title text-muted">{$answer.user.bio|default=__("This guy hasn't written anything yet")}</div>
+        </div>
+    </div>
+    <div class="comment-body">
+        <div class="comment-content">
+            {php}$peep_status = $answer->getPeepStatus($__question__);{/php}
+
+            {if (isset($zoneProductList)&&$zoneProductList)||(isset($zoneConditionList)&&$zoneConditionList)}
+            <div class="text-muted">
+                {if !$user}
+                    请<a href="{:url('user/login', '', false, 'www')}" target="_blank">登录</a>后查看是否有阅读权限
+                {else/}
+                    此回答只针对
+                    {if $zoneConditionList}
+                        <span class="text-primary">[{:implode('/', $zoneConditionList)}]</span>
+                    {/if}
+                    {if $zoneProductList}
+                        {if $zoneConditionList}且{/if}
+                        {if count($zoneProductList)>1}
+                        同时购买了
+                        {foreach name="zoneList" id="zone"}
+                            {if $key>0} 和 {/if}
+                            [<a href='{$zone.producturl}' target='_blank'>{$zone.productname}</a>]
+                        {/foreach}
+                        {else}
+                            购买了
+                            {php}$zone=reset($zoneProductList);{/php}
+                            [<a href='{$zone.producturl}' target='_blank'>{$zone.productname}</a>]
+                        {/if}
+                    {/if}
+                    的用户可见
+                {/if}
+            </div>
+            {elseif $__question__.isprivate/}
+                {if $user && ($__question__.user_id==$user.id || $answer.user_id==$user.id)}
+                    <div class="text-fmt wysiwyg mt-10 mb-10">{$answer.content_fmt}</div>
+                {else/}
+                    <div class="text-muted">此回答仅提问者可以查看</div>
+                {/if}
+            {elseif in_array($peep_status,['noneed','expired','paid','unadopted'])/}
+                <div class="text-fmt wysiwyg mt-10 mb-10">{$answer.content_fmt}</div>
+            {elseif $peep_status=='waiting'/}
+                <a href="javascript:" class="btn btn-default disabled"><i class="fa fa-lock"></i> 此回答需要待提问者采纳最佳答案{if $__question__.reward_remain_seconds>0}(或<span class="countdown" data-seconds="{$__question__.reward_remain_seconds}">{$__question__.reward_remain_text}</span>){/if}后可见</a>
+            {elseif $peep_status=='unpaid'/}
+                <a href="javascript:" class="btn btn-danger btn-paynow" data-id="{$answer.id}" data-type="answer" data-price="{$answer.price}" data-score="{$answer.score}" data-currency="{:$answer.price>0?'money':'score'}" {if $answer.sales>0}data-toggle="tooltip" data-title="已有 {$answer.sales} 人已看过"{/if}>
+                    {if $answer.price>0}
+                        <i class="fa fa-lock"></i> 此回答被采纳为最佳答案，付费￥{$answer.price} 元可查看
+                    {else/}
+                        <i class="fa fa-lock"></i> 此回答被采纳为最佳答案，需要 {$answer.score} 积分可查看
+                    {/if}
+                </a>
+            {/if}
+        </div>
+
+    </div>
+    <div class="comment-footer clearfix">
+        <div class="comment-toolbar">
+            <a href="javascript:" class="btn btn-light btn-vote {:$answer.vote=='up'?'voted':''}" data-id="{$answer.id}" data-type="answer" data-value="up" data-toggle="tooltip" data-title="回答对小伙伴有帮助"><i class="fa fa-caret-up"></i> 赞同 <span>{$answer.voteup}</span></a>
+            <a href="javascript:" class="btn btn-light btn-vote {:$answer.vote=='down'?'voted':''}" data-id="{$answer.id}" data-type="answer" data-value="down" data-toggle="tooltip" data-title="答案是错误的,没有帮助"><i class="fa fa-caret-down"></i></a>
+            <a href="javascript:" class="action btn-comment" data-type="answer" data-id="{$answer.id}"><i class="fa fa-comment-o"></i> {if $answer['comments']>0}<span>{$answer.comments}</span> 条回复{else/}添加回复{/if}</a>
+
+            <a href="javascript:" class="btn btn-expand"><i class="fa fa-ellipsis-h"></i></a>
+            <span class="expand">
+            <a href="javascript:" class="action btn-collection {:$answer.collected?'collected':''}" data-id="{$answer.id}" data-type="answer"><i class="fa fa-bookmark-o"></i> <span>{:$answer.collected?'已收藏':'收藏'}</span></a>
+            <a href="javascript:" class="action btn-thanks" data-id="{$answer.id}" data-type="answer" data-user-id="{$answer.user.id}" data-user-url="{$answer.user.url}" data-user-nickname="{$answer.user.nickname}" data-user-avatar="{$answer.user.avatar|cdnurl}" data-toggle="popover" data-title="感谢" data-url="{:addon_url('ask/ajax/get_thanks_list')}"><i class="fa fa-heart-o"></i> <span>感谢{if $answer.thanks}({$answer.thanks}){/if}</span></a>
+            <a href="javascript:" class="action btn-report" data-id="{$answer.id}" data-type="answer"><i class="fa fa-exclamation-triangle"></i> <span>举报</span></a>
+            {if $isAdmin || ($user && $user.id==$answer.user_id&&$__question__.best_answer_id!=$answer.id)}
+                <a href="javascript:" class="action btn-editanswer" data-id="{$answer.id}" data-type="answer" data-toggle="tooltip" data-title="补充完善回答"><i class="fa fa-pencil"></i> 补充回答</a>
+            {/if}
+            {if $isAdmin || ($user && isset($__question__) && $user.id==$__question__.user_id && !$__question__.best_answer_id)}
+                <a href="javascript:" class="action btn-adopt" data-id="{$answer.id}" data-type="answer" data-question-id="{$__question__.id}" data-toggle="tooltip" data-title="采纳此回答"><i class="fa fa-check-square-o"></i> <span>采纳此回答</span></a>
+            {/if}
+            {if $isAdmin}
+                <a href="{:addon_url('ask/answer/delete',[],false)}/id/{$answer.id}" class="action btn-delete" data-toggle="tooltip" data-title="删除回答"><i class="fa fa-times"></i> 删除</a>
+            {/if}
+            </span>
+        </div>
+        <div class="sub-comments {:$config['commentlistmode']=='expanded' && $answer['comments']>0 && ((!isset($zoneProductList)||!$zoneProductList)&&(!isset($zoneConditionList)||!$zoneConditionList))&&in_array($peep_status,['noneed','expired','paid','unadopted'])?'expanded':'collapsed'}">
+            {if $answer['comments']>0}
+            {php}$page=1;$type='answer';$source_id=$answer['id'];$commentList = $answer->comment_list;{/php}
+            {include file="ajax/get_comment_list" /}
+            {/if}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,91 @@
+{layout name="common/layout" /}
+
+<div class="container" id="content-container">
+
+    <div class="row">
+
+        <main class="col-xs-12 col-md-8">
+            <div class="panel panel-default article-content">
+                <div class="panel-heading">
+                    <ol class="breadcrumb">
+                        <!-- S 面包屑导航 -->
+                        {cms:breadcrumb id="item"}
+                        <li><a href="{$item.url}">{$item.name|htmlentities}</a></li>
+                        {/cms:breadcrumb}
+                        <!-- E 面包屑导航 -->
+                    </ol>
+                </div>
+                <div class="panel-body">
+                    <div class="article-metas">
+                        <h1 class="metas-title" {if $__ARCHIVES__.style}style="{$__ARCHIVES__.style_text}" {/if}>{cms:archives name="title|htmlentities" /}</h1>
+
+                        <div class="metas-body">
+                            {if isset($__ARCHIVES__.author) && $__ARCHIVES__.author}
+                            <span>
+                                <i class="fa fa-user"></i> {cms:archives name="author|htmlentities" /}
+                            </span>
+                            {/if}
+                            <span class="views-num">
+                                <i class="fa fa-eye"></i> {cms:archives name="views" /} 阅读
+                            </span>
+                            <span class="comment-num">
+                                <i class="fa fa-comments"></i> {cms:archives name="comments" /} 评论
+                            </span>
+                            <span class="like-num">
+                                <i class="fa fa-thumbs-o-up"></i>
+                                <span class="js-like-num"> {cms:archives name="likes" /} 点赞
+                                </span>
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <div class="article-text">
+                        <!-- S 正文 -->
+                        <p>
+                            {if $__ARCHIVES__.is_paid_part_of_content || $__ARCHIVES__.ispaid}
+                            {cms:archives name="content" /}
+                            {/if}
+                        </p>
+                        <!-- E 正文 -->
+                    </div>
+
+                    {include file="common/payment" /}
+
+                    {include file="common/donate" /}
+
+                    {include file="common/share" type="archives" image="__ARCHIVES__.image" aid="__ARCHIVES__.id"}
+
+                    {include file="common/metainfo" /}
+
+                    {include file="common/related" /}
+
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+
+            {if $config.iscomment && config('fastadmin.usercenter')}
+            <div class="panel panel-default" id="comments">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{:__('Comment list')}
+                        <small>共有 <span>{cms:archives name="comments" /}</span> 条评论</small>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    {if $__ARCHIVES__.iscomment}
+                    {include file="common/comment" type="archives" aid="__ARCHIVES__.eid"}
+                    {else/}
+                    <div class="text-muted text-center">评论功能已关闭</div>
+                    {/if}
+                </div>
+            </div>
+            {/if}
+
+        </main>
+
+        <aside class="col-xs-12 col-md-4">
+            {include file="common/authorinfo" /}
+            {include file="common/sidebar" /}
+        </aside>
+    </div>
+</div>

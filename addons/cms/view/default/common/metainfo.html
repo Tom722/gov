@@ -1,0 +1,29 @@
+<div class="entry-meta">
+    <ul>
+        <!-- S 归档 -->
+        <li>{:__('Article category')}：<a href="{cms:channel name='url' /}">{cms:channel name="name|htmlentities" /}</a></li>
+        <li>{:__('Article tags')}：{volist name="$__ARCHIVES__.taglist" id="tag" empty="无"}<a href="{$tag.url}" class="tag" rel="tag">{$tag.name|htmlentities}</a>{/volist}</li>
+        <li>{:__('Article views')}：<span>{cms:archives name="views" /}</span> 次浏览</li>
+        <li>{:__('Post date')}：{cms:archives name="publishtime|datetime" /}</li>
+        <li>{:__('Article url')}：<a href="{cms:archives name='fullurl' /}">{cms:archives name="fullurl" /}</a></li>
+        <!-- S 归档 -->
+    </ul>
+
+    <ul class="article-prevnext">
+        <!-- S 上一篇下一篇 -->
+        {cms:prevnext id="prev" type="prev" archives="__ARCHIVES__.id" channel="__CHANNEL__.id"}
+        <li>
+            <span>{:__('Prev')} &gt;</span>
+            <a href="{$prev.url}">{$prev.title|htmlentities}</a>
+        </li>
+        {/cms:prevnext}
+
+        {cms:prevnext id="next" type="next" archives="__ARCHIVES__.id" channel="__CHANNEL__.id"}
+        <li>
+            <span>{:__('Next')} &gt;</span>
+            <a href="{$next.url}">{$next.title|htmlentities}</a>
+        </li>
+        {/cms:prevnext}
+        <!-- E 上一篇下一篇 -->
+    </ul>
+</div>

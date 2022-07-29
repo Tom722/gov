@@ -1,0 +1,39 @@
+<div style="max-width:650px;margin:0 auto;text-align: center;">
+    <table style="margin: 25px auto;text-align:left;" border="0" cellspacing="0" cellpadding="0" width="100%"
+           align="center">
+        <tbody>
+        <tr>
+            <td style="color:#71c8ff;">
+                <h1 style="margin:0px;">
+                    <img src="{:cdnurl('/assets/addons/ask/img/emailheader.png', true)}" style="width:650px;height:215px;" alt="">
+                </h1>
+            </td>
+        </tr>
+        <tr>
+            <td style="border-left: 1px solid #71c8ff; padding: 20px 20px 0px; background: none repeat scroll 0% 0% #ffffff; border-top: 5px solid #71c8ff; border-right: 1px solid #71c8ff;">
+                <p>亲爱的小伙伴{$username|default=''}, 您好!</p>
+            </td>
+        </tr>
+        <tr>
+            <td style="border-left: 1px solid #71c8ff; padding: 10px 20px; background: none repeat scroll 0% 0% #ffffff; border-right: 1px solid #71c8ff;">
+                <p>
+                    {$content}
+                </p>
+                {if isset($url) && $url}
+                <p><a href="{$url}">点击这里</a>查看详情，如无效请将下述地址复制到地址栏打开,</p>
+                <p>{$url}</p>
+                {/if}
+            </td>
+        </tr>
+        <tr>
+            <td style="border-bottom: 1px solid #71c8ff; border-left: 1px solid #71c8ff; padding: 0px 20px 20px; background: none repeat scroll 0% 0% #ffffff; border-right: 1px solid #71c8ff;">
+                <hr style="color:#ccc;height:1px;border:none;background:#dddddd;">
+                <p style="color:#444;font-size:9pt;">
+                    想了解更多信息，请访问
+                    <a href="{$siteurl}?from=email" target="_blank">{$siteurl}</a>
+                </p>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

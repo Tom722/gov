@@ -1,0 +1,455 @@
+{
+	"easycom": {
+		"^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue"
+	},
+	"pages": [{
+			"path": "pages/index/index",
+			"title": "首页",
+			"aliasPath": "/",
+			//对于h5端你必须在首页加上aliasPath并设置为/
+			"style": {
+				"navigationBarTitleText": "首页",
+				"navigationBarTextStyle": "white",
+				"enablePullDownRefresh": true,
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/index/my",
+			"title": "个人中心",
+			"style": {
+				"navigationBarTitleText": "个人中心",
+				"enablePullDownRefresh": true,
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path": "pages/article/article",
+			"title": "资讯",
+			"style": {
+				"navigationBarTitleText": "资讯",
+				"enablePullDownRefresh": true,
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path": "pages/product/product",
+			"title": "产品",
+			"style": {
+				"navigationBarTitleText": "产品",
+				"enablePullDownRefresh": true,
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path": "pages/webview/webview",
+			"title": "webview",
+			"style": {
+				"navigationBarTitleText": "webview",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path": "pages/article/detail",
+			"style": {
+				"navigationBarTitleText": "资讯详情",
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white",
+				"app-plus": {
+					"softinputMode": "adjustResize"
+				}
+			}
+		},
+		{
+			"path": "pages/product/detail",
+			"title": "产品详情",
+			"style": {
+				"navigationBarTitleText": "产品详情",
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white",
+				"app-plus": {
+					"softinputMode": "adjustResize"
+				}
+			}
+		},
+		{
+			"path": "pages/user/user",
+			"title": "详情",
+			"style": {
+				"navigationBarTitleText": "详情",
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/tag/tag",
+			"title": "标签",
+			"style": {
+				"navigationBarTitleText": "标签",
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path": "pages/search/search",
+			"title": "搜索",
+			"style": {
+				"navigationBarTitleText": "搜索",
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path": "uview-ui/components/u-avatar-cropper/u-avatar-cropper",
+			"title": "头像裁剪",
+			"style": {
+				"navigationBarTitleText": "头像裁剪",
+				"navigationBarBackgroundColor": "#000000"
+			}
+		},
+		{
+			"path": "pages/page/detail",
+			"title": "详情",
+			"style": {
+				"navigationBarTitleText": "详情",
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
+			}
+		}
+	],
+	"subPackages": [{
+		"root": "pages/publish",
+		"pages": [
+			{
+				"path": "channel",
+				"title": "选择栏目",
+				"style": {
+					"navigationBarTitleText": "栏目",
+					"navigationStyle": "custom",
+					"navigationBarTextStyle": "white"
+				}
+			},
+			{
+				"path": "archives",
+				"title": "发布文章",
+				"style": {
+					"navigationBarTitleText": "发布文章",
+					"navigationStyle": "custom",
+					"navigationBarTextStyle": "white",
+					"app-plus": {
+						"softinputMode": "adjustResize"
+					}
+				}
+			},
+			{
+				"path": "diyform",
+				"title": "自定义表单",
+				"style": {
+					"navigationBarTitleText": "自定义表单",
+					"navigationStyle": "custom",
+					"navigationBarTextStyle": "white",
+					"app-plus": {
+						"softinputMode": "adjustResize"
+					}
+				}
+			}
+		]
+	}, {
+		"root": "pages/signin",
+		"pages": [
+			{
+				"path": "signin",
+				"title": "签到",
+				"style": {
+					"navigationBarTitleText": "签到",
+					"navigationStyle": "custom",
+					"navigationBarTextStyle": "white"
+				}
+			},
+			{
+				"path": "logs",
+				"title": "签到日志",
+				"style": {
+					"navigationBarTitleText": "签到日志",
+					"navigationStyle": "custom",
+					"navigationBarTextStyle": "white"
+				}
+			},
+			{
+				"path": "ranking",
+				"title": "排行榜",
+				"style": {
+					"navigationBarTitleText": "签到排行榜",
+					"navigationStyle": "custom",
+					"navigationBarTextStyle": "white"
+				}
+			}
+		]
+	}, {
+		"root": "pages/special",
+		"pages": [
+		{
+			"path": "special",
+			"title": "专题列表",
+			"style": {
+				"navigationBarTitleText": "专题",
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "detail",
+			"title": "专题内容",
+			"style": {
+				"navigationBarTitleText": "专题内容",
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white",
+				"enablePullDownRefresh": true
+			}
+		}
+		]
+	}, {
+		"root": "pages/diyform",
+		"pages": [
+			{
+				"path": "lists",
+				"title": "留言列表",
+				"style": {
+					"navigationBarTitleText": "留言列表",
+					"navigationStyle": "custom",
+					"navigationBarTextStyle": "white"
+				}
+			},
+			{
+				"path": "detail",
+				"title": "留言详情",
+				"style": {
+					"navigationBarTitleText": "留言详情",
+					"navigationStyle": "custom",
+					"navigationBarTextStyle": "white"
+				}
+			}
+		]
+	}, {
+		"root": "pages/my",
+		"pages": [
+			{
+				"path": "comment",
+				"title": "我发表的评论",
+				"style": {
+					"navigationBarTitleText": "我发表的评论",
+					"navigationStyle": "custom",
+					"navigationBarTextStyle": "white"
+				}
+			},
+			{
+				"path": "order",
+				"title": "我的消费订单",
+				"style": {
+					"navigationBarTitleText": "我的消费订单",
+					"navigationStyle": "custom",
+					"navigationBarTextStyle": "white"
+				}
+			},
+			{
+				"path": "article",
+				"title": "我发布的文章",
+				"style": {
+					"navigationBarTitleText": "我发布的文章",
+					"navigationStyle": "custom",
+					"navigationBarTextStyle": "white"
+				}
+			},
+			{
+				"path": "collection",
+				"title": "我的收藏",
+				"style": {
+					"navigationBarTitleText": "我的收藏",
+					"navigationStyle": "custom",
+					"navigationBarTextStyle": "white",
+					"enablePullDownRefresh": false
+				}
+			},
+			{
+				"path": "bind",
+				"title": "绑定账号",
+				"style": {
+					"navigationBarTitleText": "绑定账号",
+					"navigationStyle": "custom",
+					"navigationBarTextStyle": "white"
+				}
+			},
+			{
+				"path": "profile",
+				"title": "个人资料",
+				"style": {
+					"navigationBarTitleText": "个人资料",
+					"navigationStyle": "custom",
+					"navigationBarTextStyle": "white"
+				}
+			},
+			{
+				"path": "aboutus",
+				"title": "关于我们",
+				"style": {
+					"navigationBarTitleText": "关于我们",
+					"navigationStyle": "custom",
+					"navigationBarTextStyle": "white"
+				}
+			},
+			{
+				"path": "agreement",
+				"title": "用户协议",
+				"style": {
+					"navigationBarTitleText": "用户协议",
+					"navigationStyle": "custom",
+					"navigationBarTextStyle": "white"
+				}
+			},
+			{
+				"path": "member",
+				"title": "VIP会员",
+				"style": {
+					"navigationBarTitleText": "VIP会员",
+					"navigationStyle": "custom",
+					"navigationBarTextStyle": "white",
+					"enablePullDownRefresh": false
+				}
+			},
+			{
+				"path": "moneylog",
+				"title": "余额日志",
+				"style": {
+					"navigationBarTitleText": "余额日志",
+					"navigationStyle": "custom",
+					"navigationBarTextStyle": "white"
+				}
+			},
+			{
+				"path": "scorelog",
+				"title": "积分日志",
+				"style": {
+					"navigationBarTitleText": "积分日志",
+					"navigationStyle": "custom",
+					"navigationBarTextStyle": "white"
+				}
+			}
+		]
+	}, {
+		"root": "pages/login",
+		"pages": [
+			{
+				"path": "login",
+				"title": "登录",
+				"style": {
+					"navigationBarTitleText": "登录",
+					"navigationStyle": "custom",
+					"navigationBarTextStyle": "white"
+				}
+			},
+			{
+				"path": "mobilelogin",
+				"title": "验证码登录",
+				"style": {
+					"navigationBarTitleText": "验证码登录",
+					"navigationStyle": "custom",
+					"navigationBarTextStyle": "white"
+				}
+			},
+			{
+				"path": "auth",
+				"title": "网页授权",
+				"style": {
+					"navigationBarTitleText": "授权",
+					"navigationStyle": "custom",
+					"navigationBarTextStyle": "white"
+				}
+			},
+			{
+				"path": "forgetpwd",
+				"title": "忘记密码",
+				"style": {
+					"navigationBarTitleText": "忘记密码",
+					"navigationStyle": "custom",
+					"navigationBarTextStyle": "white"
+				}
+			},
+			{
+				"path": "register",
+				"title": "注册",
+				"style": {
+					"navigationBarTitleText": "注册",
+					"navigationStyle": "custom",
+					"navigationBarTextStyle": "white"
+				}
+			},
+			{
+				"path": "wxlogin",
+				"title": "授权",
+				"style": {
+					"navigationBarTitleText": "授权",
+					"navigationStyle": "custom",
+					"navigationBarTextStyle": "white"
+				}
+			}
+		]
+	}],
+	"preloadRule": {
+		"pages/index/index": {
+			"network": "all",
+			"packages": [
+				"__APP__"
+			]
+		}
+	},
+	// #ifdef APP-PLUS
+	 "tabBar": {
+	 	"color": "#ffffff",
+	 	"selectedColor": "#ffffff",
+	 	"backgroundColor": "#FFFFFF",
+	 	"borderStyle": "white",
+	 	"list": [{
+	 			"pagePath": "pages/index/index",
+	 			"iconPath": "static/home.png",
+	 			"selectedIconPath": "static/home.png",
+	 			"text": ""
+	 		},
+	 		{
+	 			"pagePath": "pages/article/article",
+	 			"iconPath": "static/home.png",
+	 			"selectedIconPath": "static/home.png",
+	 			"text": ""
+	 		},
+	 		{
+	 			"pagePath": "pages/product/product",
+	 			"iconPath": "static/home.png",
+	 			"selectedIconPath": "static/home.png",
+	 			"text": ""
+	 		},
+	 		{
+	 			"pagePath": "pages/index/my",
+	 			"iconPath": "static/home.png",
+	 			"selectedIconPath": "static/home.png",
+	 			"text": ""
+	 		}
+	 	]
+	 },
+	// #endif
+	"globalStyle": {
+		"mp-alipay": {
+			/* 支付宝小程序特有相关 */
+			"transparentTitle": "always",
+			"allowsBounceVertical": "NO"
+		},
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "CMS",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"usingComponts": true
+}

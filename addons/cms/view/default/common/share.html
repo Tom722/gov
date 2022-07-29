@@ -1,0 +1,13 @@
+
+{assign name="image" value="$[image]" /}
+{assign name="aid" value="$[aid]" /}
+
+<!-- S 分享 -->
+<div class="social-share text-center mt-2 mb-1" data-initialized="true" data-mode="prepend" data-image="{$image}">
+    <a href="javascript:" class="social-share-icon icon-heart addbookbark" data-type="archives" data-aid="{$aid}" data-action="{:addon_url('cms/ajax/collection')}"></a>
+    <a href="#" class="social-share-icon icon-weibo" target="_blank"></a>
+    <a href="#" class="social-share-icon icon-qq" target="_blank"></a>
+    <a href="#" class="social-share-icon icon-qzone" target="_blank"></a>
+    <a href="javascript:" class="social-share-icon icon-wechat"></a>
+</div>
+<!-- E 分享 -->

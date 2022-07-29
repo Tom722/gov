@@ -1,0 +1,26 @@
+{if $attentionType=='user'}
+<div class="col-xs-4">
+    <div class="thumbnail">
+        <a href="{$attention.expert.url}">
+            <img class="img-circle" style="width:80px;height:80px;margin:30px auto 10px auto;" src="{$attention.expert.avatar|cdnurl}" alt="{$attention.expert.nickname}" data-toggle="popover" data-title="{$attention.expert.nickname}" data-type="user" data-id="{$attention.expert.id}">
+        </a>
+        <div class="caption">
+            <h4 class="text-center"><a href="{$attention.expert.url}" title="{$attention.expert.nickname}">{$attention.expert.nickname}</a></h4>
+            <p class="text-muted text-center" title="{$attention.expert.bio}">{$attention.expert.bio|default="这家伙很懒，什么也没写！"}</p>
+            <p class="text-center">
+                <a class="btn btn-primary btn-sm btn-attention followed" data-type="user" data-id="{$attention.expert.id}" href="javascript:"><i class="fa fa-plus"></i> <span>已关注</span></a>
+                <a class="btn btn-primary btn-sm btn-ask" data-id="{$attention.expert.id}" href="{:addon_url('ask/question/post')}?user_id={$attention.expert.id}">向TA提问</a>
+            </p>
+        </div>
+    </div>
+</div>
+{elseif $attentionType=='question' /}
+<div class="col-xs-12">
+    <div class="comment">
+        <div class="comment-header space-between">
+            <h4 class="title"><a href="{$attention.question.url}"><span class="tag">问</span> {$attention.question.title|htmlentities}</a></h4>
+             <a href="javascript:;" class="btn btn-primary btn-xs btn-attention followed" data-type="question" data-id="{$attention.question.id}"><i class="fa fa-plus"></i> <span>已关注</span></a>
+        </div>
+    </div>
+</div>
+{/if}

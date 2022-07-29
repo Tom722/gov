@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>
+<html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html class="lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class=""> <!--<![endif]-->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <title>{cms:config name="cms.title|htmlentities"/} - {cms:config name="cms.sitename"/}</title>
+    <meta name="keywords" content="{cms:config name='cms.keywords|htmlentities'/}"/>
+    <meta name="description" content="{cms:config name='cms.description|htmlentities'/}"/>
+
+    <link rel="shortcut icon" href="__CDN__/assets/img/favicon.ico" type="image/x-icon"/>
+    <link rel="stylesheet" media="screen" href="__CDN__/assets/css/bootstrap.min.css?v={$site.version}"/>
+    <link rel="stylesheet" media="screen" href="__CDN__/assets/libs/font-awesome/css/font-awesome.min.css?v={$site.version}"/>
+    <link rel="stylesheet" media="screen" href="__CDN__/assets/libs/fastadmin-layer/dist/theme/default/layer.css?v={$site.version}"/>
+    <link rel="stylesheet" media="screen" href="__ADDON__/css/swiper.min.css?v={$site.version}">
+    <link rel="stylesheet" media="screen" href="__ADDON__/css/share.min.css?v={$site.version}">
+    <link rel="stylesheet" media="screen" href="__ADDON__/css/iconfont.css?v={$site.version}">
+    <link rel="stylesheet" media="screen" href="__ADDON__/css/common.css?v={$site.version}"/>
+
+    {__STYLE__}
+
+    <!--@formatter:off-->
+    <style>
+        {if isset($disturbArr) && $disturbArr}
+        {$disturbArr|implode=',',###}{font-size:0;height:0;display:inline-block;line-height:0;float:left;}
+        {/if}
+    </style>
+    <!--@formatter:on-->
+
+    <!--[if lt IE 9]>
+    <script src="__CDN__/libs/html5shiv.js"></script>
+    <script src="__CDN__/libs/respond.min.js"></script>
+    <![endif]-->
+
+    {cms:block name="header" field="content" /}
+</head>
+<body class="group-page skin-white">
+
+<header class="header">
+    <!-- S 导航 -->
+    <nav class="navbar navbar-default navbar-white navbar-fixed-top" role="navigation">
+        <div class="container">
+
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle sidebar-toggle">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{cms:config name='cms.indexurl'/}"><img src="{$Think.config.cms.sitelogo|default='/assets/addons/cms/img/logo.png'|cdnurl}" style="height:100%;" alt=""></a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="navbar-collapse">
+                <ul class="nav navbar-nav" data-current="{$__CHANNEL__.id|default=0}">
+                    <!--如果你需要自定义NAV,可使用channellist标签来完成,这里只设置了2级,如果显示无限级,请使用cms:nav标签-->
+                    {cms:channellist id="nav" type="top" condition="1=isnav"}
+                    <!--判断是否有子级或高亮当前栏目-->
+                    <li class="{if $nav.has_child}dropdown{/if} {if $nav->is_active} active{/if}">
+                        <a href="{$nav.url}" {if $nav.has_child} data-toggle="dropdown" {/if}>{$nav.name|htmlentities}{if $nav.has_nav_child} <b class="caret"></b>{/if}</a>
+                        <ul class="dropdown-menu {if !$nav.has_nav_child}hidden{/if}" role="menu">
+                            {cms:channellist id="sub" type="son" typeid="nav['id']" condition="1=isnav"}
+                            <li><a href="{$sub.url}">{$sub.name|htmlentities}</a></li>
+                            {/cms:channellist}
+                        </ul>
+                    </li>
+                    {/cms:channellist}
+
+                    <!--如果需要无限级请使用cms:nav标签-->
+                    {//cms:nav maxlevel="4" cache="86400" /}
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <form class="form-inline navbar-form" action="{:addon_url('cms/search/index')}" method="get">
+                            <div class="form-search hidden-sm hidden-md">
+                                <input class="form-control" name="q" data-suggestion-url="{:addon_url('cms/search/suggestion')}" type="search" id="searchinput" value="{$Think.request.q|default=''|htmlentities}" placeholder="搜索">
+                                <div class="search-icon"></div>
+                            </div>
+                            {:token('__searchtoken__')}
+                        </form>
+                    </li>
+                    {if config('fastadmin.usercenter')}
+                    <li class="dropdown navbar-userinfo">
+                        {if $user}
+                        <a href="{:url('index/user/index')}" class="dropdown-toggle" data-toggle="dropdown">
+                            <span class="avatar-img pull-left"><img src="{$user.avatar|cdnurl|htmlentities}" style="width:27px;height:27px;border-radius:50%;" alt=""></span>
+                            <span class="visible-xs pull-left ml-2 pt-1">{$user.nickname|htmlentities} <b class="caret"></b></span>
+                        </a>
+                        {else /}
+                        <a href="{:url('index/user/index')}" class="dropdown-toggle" data-toggle="dropdown">会员<span class="hidden-sm">中心</span> <b class="caret"></b></a>
+                        {/if}
+                        <ul class="dropdown-menu">
+                            {if $user}
+                            <li><a href="{:url('index/user/index')}"><i class="fa fa-user fa-fw"></i> 会员中心</a></li>
+                            <li><a href="{:addon_url('cms/user/index', [':id'=>$user['id']])}"><i class="fa fa-user-circle fa-fw"></i> 我的个人主页</a></li>
+                            {php}$sidenav = array_filter(explode(',', config('cms.usersidenav')));{/php}
+                            {if in_array('myarchives', $sidenav)}
+                            <li><a href="{:url('index/cms.archives/my')}"><i class="fa fa-list fa-fw"></i> 我发布的文档</a></li>
+                            {/if}
+                            {if in_array('postarchives', $sidenav)}
+                            <li><a href="{:url('index/cms.archives/post')}"><i class="fa fa-pencil fa-fw"></i> 发布文档</a></li>
+                            {/if}
+                            {if in_array('myorder', $sidenav)}
+                            <li><a href="{:url('index/cms.order/index')}"><i class="fa fa-shopping-bag fa-fw"></i> 我的消费订单</a></li>
+                            {/if}
+                            {if in_array('mycomment', $sidenav)}
+                            <li><a href="{:url('index/cms.comment/index')}"><i class="fa fa-comments fa-fw"></i> 我发表的评论</a></li>
+                            {/if}
+                            {if in_array('mycollection', $sidenav)}
+                            <li><a href="{:url('index/cms.collection/index')}"><i class="fa fa-bookmark fa-fw"></i> 我的收藏</a></li>
+                            {/if}
+                            <li><a href="{:url('index/user/logout')}"><i class="fa fa-sign-out fa-fw"></i> 注销</a></li>
+                            {else /}
+                            <li><a href="{:url('index/user/login')}"><i class="fa fa-sign-in fa-fw"></i> 登录</a></li>
+                            <li><a href="{:url('index/user/register')}"><i class="fa fa-user-o fa-fw"></i> 注册</a></li>
+                            {/if}
+                        </ul>
+                    </li>
+                    {/if}
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+    <!-- E 导航 -->
+
+</header>
+
+<main class="main-content">
+    {__CONTENT__}
+</main>
+
+<footer>
+    <div id="footer">
+        <div class="container">
+            <div class="row footer-inner">
+                <div class="col-xs-12">
+                    <div class="footer-logo pull-left mr-4">
+                        <a href="{:addon_url('cms/index/index')}"><i class="fa fa-bookmark"></i></a>
+                    </div>
+                    <div class="pull-left">
+                        Copyright&nbsp;©&nbsp;{:date("Y")} All rights reserved. {cms:config name="cms.sitename"/}
+                        <a href="https://beian.miit.gov.cn" target="_blank">{$site.beian|htmlentities}</a>
+
+                    <ul class="list-unstyled list-inline mt-2">
+                        <li><a href="{:addon_url('cms/page/index', [':diyname'=>'aboutus'])}">关于我们</a></li>
+                        <li><a href="{:addon_url('cms/page/index', [':diyname'=>'agreement'])}">用户协议</a></li>
+                        {if config('fastadmin.usercenter')}
+                        <li><a href="{:url('index/user/index')}">会员中心</a></li>
+                        {/if}
+                    </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<div id="floatbtn">
+    <!-- S 浮动按钮 -->
+
+    {if isset($config.wxapp)&&$config.wxapp}
+    <a href="javascript:;">
+        <i class="iconfont icon-wxapp"></i>
+        <div class="floatbtn-wrapper">
+            <div class="qrcode"><img src="{$config.wxapp|cdnurl|htmlentities}"></div>
+            <p>微信小程序</p>
+            <p>微信扫一扫体验</p>
+        </div>
+    </a>
+    {/if}
+
+    {if in_array('postarchives', explode(',', config('cms.usersidenav'))) && config('fastadmin.usercenter')}
+    <a class="hover" href="{:url('index/cms.archives/post')}" target="_blank">
+        <i class="iconfont icon-pencil"></i>
+        <em>立即<br>投稿</em>
+    </a>
+    {/if}
+
+    <div class="floatbtn-item floatbtn-share">
+        <i class="iconfont icon-share"></i>
+        <div class="floatbtn-wrapper" style="height:50px;top:0">
+            <div class="social-share" data-initialized="true" data-mode="prepend">
+                <a href="#" class="social-share-icon icon-weibo" target="_blank"></a>
+                <a href="#" class="social-share-icon icon-qq" target="_blank"></a>
+                <a href="#" class="social-share-icon icon-qzone" target="_blank"></a>
+                <a href="#" class="social-share-icon icon-wechat"></a>
+            </div>
+        </div>
+    </div>
+
+    {if $config.qrcode}
+    <a href="javascript:;">
+        <i class="iconfont icon-qrcode"></i>
+        <div class="floatbtn-wrapper">
+            <div class="qrcode"><img src="{$config.qrcode|cdnurl|htmlentities}"></div>
+            <p>微信公众账号</p>
+            <p>微信扫一扫加关注</p>
+        </div>
+    </a>
+    {/if}
+
+    {if isset($__ARCHIVES__)}
+    <a id="feedback" class="hover" href="#comments">
+        <i class="iconfont icon-feedback"></i>
+        <em>发表<br>评论</em>
+    </a>
+    {/if}
+
+    <a id="back-to-top" class="hover" href="javascript:;">
+        <i class="iconfont icon-backtotop"></i>
+        <em>返回<br>顶部</em>
+    </a>
+    <!-- E 浮动按钮 -->
+</div>
+
+
+<script type="text/javascript" src="__CDN__/assets/libs/jquery/dist/jquery.min.js?v={$site.version}"></script>
+<script type="text/javascript" src="__CDN__/assets/libs/bootstrap/dist/js/bootstrap.min.js?v={$site.version}"></script>
+<script type="text/javascript" src="__CDN__/assets/libs/fastadmin-layer/dist/layer.js?v={$site.version}"></script>
+<script type="text/javascript" src="__CDN__/assets/libs/art-template/dist/template-native.js?v={$site.version}"></script>
+<script type="text/javascript" src="__ADDON__/js/jquery.autocomplete.js?v={$site.version}"></script>
+<script type="text/javascript" src="__ADDON__/js/swiper.min.js?v={$site.version}"></script>
+<script type="text/javascript" src="__ADDON__/js/share.min.js?v={$site.version}"></script>
+<script type="text/javascript" src="__ADDON__/js/cms.js?v={$site.version}"></script>
+
+{if $isWechat}
+<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+{/if}
+
+<script type="text/javascript" src="__ADDON__/js/common.js?v={$site.version}"></script>
+
+{__SCRIPT__}
+
+{cms:block name="footer" field="content" /}
+</body>
+</html>

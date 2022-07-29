@@ -1,0 +1,73 @@
+<div class="container">
+    <h3>
+        搜索 <span class="text-danger">{$keyword|htmlentities}</span> 结果
+    </h3>
+
+    <div class="p-3 my-3" style="background:#fff;">
+        <a href="?module=question&type=new&keyword={$keyword|htmlentities}" class="btn mr-1 {$module=='question'?'btn-primary':'btn-outline-primary'}">问题</a>
+        <a href="?module=article&type=new&keyword={$keyword|htmlentities}" class="btn {$module=='article'?'btn-primary':'btn-outline-primary'}">文章</a>
+    </div>
+
+    <div class="row" id="questionlist">
+        <div class="col-md-8 col-sm-12">
+            {if $module=='question'}
+            <!-- S 问题列表 -->
+            <ul class="nav nav-tabs nav-noborder mb-10 mt-20">
+                <li class="{:$type=='new'?'active':''}"><a href="?module={$module}&type=new&keyword={$keyword|htmlentities}">最新</a></li>
+                <li class="{:$type=='hot'?'active':''}"><a href="?module={$module}&type=hot&keyword={$keyword|htmlentities}">热门</a></li>
+                <li class="{:$type=='price'?'active':''}"><a href="?module={$module}&type=price&keyword={$keyword|htmlentities}">悬赏</a></li>
+                <li class="{:$type=='unsolved'?'active':''}"><a href="?module={$module}&type=unsolved&keyword={$keyword|htmlentities}">未解决</a></li>
+                <li class="{:$type=='solved'?'active':''}"><a href="?module={$module}&type=solved&keyword={$keyword|htmlentities}">已解决</a></li>
+                <li class="{:$type=='unanswer'?'active':''}"><a href="?module={$module}&type=unanswer&keyword={$keyword|htmlentities}">未回答</a></li>
+            </ul>
+
+            <div class="tab-inner" style="background:#fff;padding:15px;">
+                <div class="question-list" data-page="{$Think.get.page|default=1|intval}" data-more="{$searchList->hasPages()}">
+                    {foreach name="searchList" id="question"}
+                    {include file="common/questionitem" /}
+                    {/foreach}
+
+                    <div class="pager text-center">
+                        {$searchList->render()}
+                    </div>
+
+                    {if $searchList->isEmpty()}
+                    <div class="loadmore loadmore-line loadmore-nodata"><span class="loadmore-tips">暂无数据</span></div>
+                    {/if}
+                </div>
+            </div>
+            <!-- E 问题列表 -->
+            {else /}
+            <!-- S 文章列表 -->
+            <ul class="nav nav-tabs nav-noborder mb-10 mt-20">
+                <li class="{:$type=='new'?'active':''}"><a href="?module={$module}&type=new&keyword={$keyword|htmlentities}">最新</a></li>
+                <li class="{:$type=='hot'?'active':''}"><a href="?module={$module}&type=hot&keyword={$keyword|htmlentities}">热门</a></li>
+                <li class="{:$type=='price'?'active':''}"><a href="?module={$module}&type=price&keyword={$keyword|htmlentities}">付费</a></li>
+            </ul>
+
+            <div class="tab-inner" style="background:#fff;padding:15px;">
+                <div class="question-list" data-page="{$Think.get.page|default=1|intval}" data-more="{$searchList->hasPages()}">
+                    {foreach name="searchList" id="article"}
+                    {include file="common/articleitem" /}
+                    {/foreach}
+
+                    <div class="pager text-center">
+                        {$searchList->render()}
+                    </div>
+
+                    {if $searchList->isEmpty()}
+                    <div class="loadmore loadmore-line loadmore-nodata"><span class="loadmore-tips">暂无数据</span></div>
+                    {/if}
+                </div>
+            </div>
+            <!-- E 文章列表 -->
+            {/if}
+        </div>
+        <div class="col-md-4 col-sm-12">
+            <div class="article-sidebar">
+                {include file="common/sidebar" /}
+            </div>
+        </div>
+    </div>
+
+</div>

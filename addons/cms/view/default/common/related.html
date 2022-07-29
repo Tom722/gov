@@ -1,0 +1,16 @@
+<div class="related-article">
+    <div class="row">
+        <!-- S 相关文章 -->
+        {cms:arclist id="relate" tags="__ARCHIVES__.tags" model="__ARCHIVES__.model_id" row="4"}
+        <div class="col-sm-3 col-xs-6">
+            <a href="{$relate.url}" class="img-zoom">
+                <div class="embed-responsive embed-responsive-4by3">
+                    <img src="{$relate.image}" alt="{$relate.title|htmlentities}" class="embed-responsive-item">
+                </div>
+            </a>
+            <h5 class="text-center"><a href="{$relate.url}">{$relate.title|htmlentities}</a></h5>
+        </div>
+        {/cms:arclist}
+        <!-- E 相关文章 -->
+    </div>
+</div>

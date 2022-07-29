@@ -1,0 +1,11 @@
+<!--@formatter:off-->
+{if stripos(config('cms.paytypelist'),'wechat')!==false}
+    <a href="{:addon_url('cms/order/submit', ['id'=>$__ARCHIVES__.id,'paytype'=>'wechat'])}" {if !$isWechat}target="_blank"{/if} class="btn btn-success btn-paynow"><i class="fa fa-wechat"></i> 微信支付</a>
+{/if}
+{if stripos(config('cms.paytypelist'),'alipay')!==false}
+    <a href="{:addon_url('cms/order/submit', ['id'=>$__ARCHIVES__.id,'paytype'=>'alipay'])}" {if !$isWechat}target="_blank"{/if} class="btn btn-primary btn-paynow"><i class="fa fa-money"></i> 支付宝支付</a>
+{/if}
+{if stripos(config('cms.paytypelist'),'balance')!==false}
+    <a href="{:addon_url('cms/order/submit', ['id'=>$__ARCHIVES__.id,'paytype'=>'balance'])}" class="btn btn-warning btn-balance" data-price="{cms:archives name='price' /}"><i class="fa fa-dollar"></i> 余额支付</a>
+{/if}
+<!--@formatter:on-->

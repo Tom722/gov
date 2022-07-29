@@ -1,0 +1,284 @@
+<style data-render="style">
+    .question-summary {
+        border-radius: 3px;
+        padding: 15px 17px;
+        margin-top: 15px;
+        margin-bottom: 15px;
+        font-size: 14px;
+        border: none;
+        background: #f5f9ff;
+    }
+
+    .comment-footer .comment-list .media {
+        border-bottom: 1px solid #eee;
+        background: none;
+        padding-bottom: 15px;
+    }
+
+    .comment-footer .comment-list .media:last-child {
+        border-bottom: none;
+    }
+
+    .comment-footer .comment-list .media .media-footer .btn-light, .comment-footer .comment-list .media .media-footer .label-primary {
+        background: none;
+    }
+
+    .comment-footer .comment-list .voted, .comment-footer .comment-list .btn-light:hover {
+        color: inherit;
+        border-color: transparent;
+    }
+
+    .comment-footer .comment-list .btn-light:hover {
+        text-decoration: underline;
+    }
+
+    .comment-footer .comment-list .media .wysiwyg {
+        margin-bottom: 5px;
+    }
+
+    .question-title {
+        margin-bottom: 15px;
+    }
+
+    .article-detail {
+        background: #fff;
+        padding: 20px;
+    }
+</style>
+
+<div class="container" itemscope="" itemType="http://schema.org/Article">
+    <meta itemProp="name" content="{$__article__.title|htmlentities}"/>
+    <meta itemProp="url" content="{$__article__.fullurl}"/>
+    <meta itemProp="keywords" content="{$__article__.tags_text|htmlentities}"/>
+    <meta itemProp="commentCount" content="{$__article__.comments}"/>
+    <meta itemProp="dateCreated" content="{$__article__.createtime|date='c',###}"/>
+    <meta itemProp="dateModified" content="{$__article__.updatetime|date='c',###}"/>
+    <div class="row" style="margin-top:20px;">
+        <div class="col-md-8 col-sm-12">
+            <div class="article-detail">
+                <div class="row">
+                    <div class="col-xs-12">
+                        {if $__article__.tags}
+                        <div class="tags">
+                            {foreach name="__article__.tags" id="tag"}
+                            <a href="{$tag.url}" class="tag">{if $tag.icon}<img src="{$tag.icon}" alt="">{/if}{$tag.name|htmlentities}</a>
+                            {/foreach}
+                        </div>
+                        {/if}
+
+                        <h1 class="question-title">
+                            {if $__article__.price>0}
+                            <span class="question-price-tag" data-toggle="tooltip" data-title="此文章需要支付{$__article__.price}元才能查看"><i class="fa fa-rmb"></i> {$__article__.price}</span>
+                            {/if}
+                            {if $__article__.score>0}
+                            <span class="question-price-tag" data-toggle="tooltip" data-title="此文章需要消耗{$__article__.score}积分才能查看"><i class="fa fa-database"></i> {$__article__.score}</span>
+                            {/if}
+                            <span style="{$__article__.style_text}">{$__article__.title|htmlentities}</span>
+
+                            {if $__article__->trashed()}
+                            <span class="label label-danger px-1 btn-xs" style="font-size:12px;" data-toggle="tooltip" data-title="已经删除的文章前台不可见，请在后台恢复">已删除</span>
+                            {/if}
+                        </h1>
+
+                        <div class="question-date text-muted my-2">
+                            发布于 {:date("Y-m-d H:i:s", $__article__.createtime)}
+                        </div>
+
+                        <div class="question-richtext wysiwyg" itemprop="text">
+                            {if $__article__.paid_status=='noneed' || $__article__.paid_status=='paid'}
+                                {$__article__.content_fmt}
+                            {elseif $__article__.paid_status=='unpaid'}
+                                {if $__article__.is_paid_part_of_content}
+                                    {$__article__.content_fmt_part}
+                                {else /}
+                                    {if $__article__.summary}
+                                        <div class="question-summary">
+                                            {$__article__.summary}
+                                        </div>
+                                    {/if}
+
+                                    <div class="alert alert-info mt-2" style="font-size:14px;">
+                                        {if $__article__.price>0}
+                                        <strong>温馨提示!</strong> 你需要支付 <b>￥{$__article__.price}</b> 元后才能查看付费内容
+                                        {else/}
+                                        <strong>温馨提示!</strong> 你需要使用 <b>{$__article__.score}</b> 积分查看付费内容
+                                        {/if}
+                                        <a href="javascript:" class="btn btn-primary btn-paynow" style="color:white" data-id="{$__article__.id}" data-type="article" data-price="{$__article__.price}" data-score="{$__article__.score}" data-currency="{:$__article__.price>0?'money':'score'}" data-money="{$user.money}">点击付费</a>
+                                    </div>
+                                {/if}
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+                <div class="comment-footer">
+                    <div class="comment-toolbar">
+                        <a href="javascript:" class="btn btn-vote {if $__article__.vote=='up'}btn-primary voted{else /}btn-outline-primary{/if}" data-id="{$__article__.id}" data-type="article" data-value="up"><i class="fa fa-thumbs-o-up"></i> <span>{$__article__.voteup}</span>人点赞</a>
+                        <a href="javascript:" class="btn btn-outline-primary btn-postcomment">发表评论</a>
+                        <a href="javascript:" class="btn btn-expand"><i class="fa fa-ellipsis-h"></i></a>
+                        <span class="expand">
+                        <a href="javascript:" class="action btn-share" data-title="{$__article__.title|htmlentities}" data-url="{$__article__.fullurl|urlencode}"><i class="fa fa-share-alt"></i> 分享</a>
+                        <a href="javascript:" class="action btn-collection {:$__article__.collected?'collected':''}" data-id="{$__article__.id}" data-type="article"><i class="fa fa-bookmark-o"></i> <span>{:$__article__.collected?'已收藏':'收藏'}</span></a>
+                        <a href="javascript:" class="action btn-thanks" data-id="{$__article__.id}" data-type="article" data-user-id="{$__article__.user.id}" data-user-url="{$__article__.user.url}" data-user-nickname="{$__article__.user.nickname}" data-user-avatar="{$__article__.user.avatar|cdnurl}" data-toggle="popover" data-title="感谢" data-url="{:addon_url('ask/ajax/get_thanks_list')}"><i class="fa fa-heart"></i> 感谢{if $__article__.thanks}({$__article__.thanks}){/if}</a>
+                        <a href="javascript:" class="action btn-report" data-id="{$__article__.id}" data-type="article"><i class="fa fa-exclamation-triangle"></i> <span>举报</span></a>
+                        {if $isAdmin || ($user && $user.id==$__article__.user_id)}
+                        <a href="{:addon_url('ask/article/update',[],false)}/id/{$__article__.id}" class="action btn-edit" data-id="{$__article__.id}" data-type="article" data-toggle="tooltip" data-title="编辑更新文章"><i class="fa fa-pencil"></i> 编辑</a>
+                        <a href="{:addon_url('ask/article/delete',[],false)}/id/{$__article__.id}" class="action btn-delete" data-id="{$__article__.id}" data-type="article" data-toggle="tooltip" data-title="删除该文章"><i class="fa fa-times"></i> 删除</a>
+                        <a href="{:addon_url('ask/article/config',[],false)}/id/{$__article__.id}" class="action btn-config" data-id="{$__article__.id}" data-type="question" data-toggle="tooltip" data-title="更多设置"><i class="fa fa-cog"></i> 更多</a>
+                        {/if}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background:#fff;padding:20px;" class="mt-3">
+                <div class="answer-nav row">
+                    <div class="col-xs-10">
+                        <div class="title btn-comment-nums"><span>{$__article__.comments}</span> 条评论</div>
+                    </div>
+                    <div class="col-xs-2">
+                        <select name="order" class="form-control pull-right">
+                            <option value="default" {:$Think.get.order=='default'?'selected':''}>默认排序</option>
+                            <option value="date" {:$Think.get.order=='date'?'selected':''}>按发布时间排序</option>
+                        </select>
+                    </div>
+
+                </div>
+                <div class="comment-footer">
+                    <!-- S 评论列表 -->
+                    <div class="row">
+
+                        <div class="col-xs-12 my-3">
+                            {include file="ajax/get_comment_list" /}
+                        </div>
+
+                    </div>
+                    <!-- E 评论列表 -->
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-12">
+            <div class="article-sidebar">
+                <!-- S 关于作者 -->
+                <div class="panel panel-default about-author" data-id="{$__article__.user.id}" itemProp="author" itemscope="" itemType="http://schema.org/Person">
+                    <meta itemProp="name" content="{$__article__.user.nickname}"/>
+                    <meta itemProp="image" content="{$__article__.user.avatar|cdnurl}"/>
+                    <meta itemProp="url" content="{$__article__.user.url}"/>
+                    <div class="panel-heading">
+                        <h3 class="panel-title">关于作者</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="media">
+                            <div class="media-left">
+                                <a href="{$__article__.user.url}" data-toggle="popover" data-title="{$__article__.user.nickname}" data-placement="left" data-type="user" data-id="{$__article__.user_id}">
+                                    <img class="media-object img-circle" style="width: 64px; height: 64px;"
+                                         src="{$__article__.user.avatar|cdnurl}"
+                                         data-holder-rendered="true">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h3 style="margin-top:10px;" class="media-heading">
+                                    <a href="{$__article__.user.url}">{$__article__.user.nickname}</a>
+                                </h3>
+                                {$__article__.user.bio|default=__("This guy hasn't written anything yet")}
+                            </div>
+                        </div>
+                        <div class="row statistics">
+                            <div class="col-xs-4">
+                                <div class="statistics-text">文章</div>
+                                <div class="statistics-nums"><a href="{$__article__.user.url}/article">{$__article__.user.articles}</a></div>
+                            </div>
+                            <div class="col-xs-4">
+                                <div class="statistics-text">回答</div>
+                                <div class="statistics-nums"><a href="{$__article__.user.url}/answer">{$__article__.user.answers}</a></div>
+                            </div>
+                            <div class="col-xs-4">
+                                <div class="statistics-text">被采纳</div>
+                                <div class="statistics-nums">{$__article__.user.adoptions}</div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="col-xs-6">
+                                <a href="javascript:;" class="btn btn-primary btn-block btn-attention {if $__article__.user.followed}followed{/if}" data-id="{$__article__.user.id}" data-type="user"><i class="fa fa-plus"></i> <span>{if $__article__.user.followed}已关注{else/}关注TA{/if}</span></a>
+                            </div>
+                            <div class="col-xs-6">
+                                <a href="javascript:;" class="btn btn-outline-primary btn-block btn-message" data-id="{$__article__.user.id}"><i class="fa fa-comments-o"></i> 发私信</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- E 关于作者 -->
+
+                <!-- S 相关文章 -->
+                <div class="panel panel-default hot-article">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">相关文章</h3>
+                    </div>
+                    <div class="panel-body">
+                        {foreach name="relatedArticleList" id="item"}
+                        <div class="media media-number">
+                            <div class="media-left">
+                                <span class="num">{:$key+1}</span>
+                            </div>
+                            <div class="media-body">
+                                <a class="link-dark" href="{$item.url}" title="{$item.title|htmlentities}">{$item.title|htmlentities}</a>
+                            </div>
+                        </div>
+                        {/foreach}
+                    </div>
+                </div>
+                <!-- E 相关文章 -->
+
+                {include file="common/sidebar" /}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script data-render="script" src="__ADDON__/js/jquery.colorpicker.min.js?v={$site.version}"></script>
+<script data-render="script">
+    $(function () {
+        //编辑器
+        ASK.render.editor($("textarea[name=content]", $(".comment-post")));
+
+        //发表评论
+        ASK.api.form(".postcomment", function (data, ret) {
+            var footer = $(this).closest(".comment-footer");
+            $(".comment-list", footer).append(data);
+            $(".comment-nodata", footer).remove();
+            $(".btn-comment-nums span").text(parseInt($(".btn-comment-nums span").text()) + 1);
+            $("textarea", this).val('');
+            if (Config.editormode !== 'markdown') {
+                $("textarea[name='content']", this).summernote("code", "");
+            }
+        }, function (data, ret) {
+
+        });
+
+        //发表评论
+        $(document).on("click", ".btn-postcomment", function () {
+            $(".postcomment textarea[name=content]").focus();
+        });
+
+        //切换排序
+        $("select[name='order']").change(function () {
+            location.href = "?order=" + $(this).val();
+        });
+
+        //打赏提示
+        if (!ASK.api.storage("tips.thanks") && Config.user.id != $(".about-author").data("id")) {
+            setTimeout(function () {
+                $(".article-detail .comment-toolbar .btn-thanks").popover({
+                    placement: 'bottom',
+                    html: true,
+                    title: '',
+                    content: '<p>如果小伙伴的文章有帮到你，欢迎给小伙伴打赏</p><div class="text-right"><a href="javascript:;" class="btn btn-primary btn-xs btn-closetips">关闭</a></div>',
+                    trigger: 'manual'
+                }).popover('show');
+                $(document).on("click", ".btn-closetips", function () {
+                    ASK.api.storage("tips.thanks", true);
+                    $(this).closest(".popover").prev().popover("destroy");
+                });
+            }, 100);
+        }
+    });
+</script>

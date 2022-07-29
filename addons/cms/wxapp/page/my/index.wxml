@@ -1,0 +1,124 @@
+<view class="container" style="padding-top:{{userInfo.vip>0?450:408}}rpx;">
+  <view class="header" style="height:{{userInfo.vip>0?450:408}}rpx;">
+    <view class="avatar">
+      <image bindtap="uploadAvatar" src='{{ userInfo.avatar }}'></image>
+    </view>
+    <view wx:if="{{userInfo.vip>0}}" class="user-level">
+      <view class="level">
+        {{userInfo.vipInfo.name}}
+      </view>
+    </view>
+    <view class="account">
+      <navigator url="profile">
+        <view class="zan-font-16 nickname">
+          {{ userInfo.nickname }}
+        </view>
+      </navigator>
+      <view class="zan-font-12 u-line-2" style="padding:0 30rpx;" wx:if="{{ userInfo.id }}">{{ userInfo.bio ?
+        userInfo.bio : '写点什么介绍下自己吧!' }}</view>
+      <button wx:if="{{ userInfo.id==0 }}" bindtap="login" class="zan-btn zan-btn--mini btn-auth">立即登录</button>
+    </view>
+  </view>
+  <view class="zan-panel">
+    <view class="zan-row my-statistics">
+      <view class="zan-col zan-col-8">
+        <view bindtap="showTips" data-type="balance">
+          <view class="nums">￥{{ userInfo.money || 0 }}</view>
+          <view class="placeholder">余额</view>
+        </view>
+      </view>
+      <view class="zan-col zan-col-8">
+        <view bindtap="showTips" data-type="score">
+          <view class="nums">{{ userInfo.score }}</view>
+          <view class="placeholder">积分</view>
+        </view>
+      </view>
+      <view class="zan-col zan-col-8">
+        <view bindtap="showTips" data-type="level">
+          <view class="nums">Lv.{{ userInfo.level }}</view>
+          <view class="placeholder">等级</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="zan-panel my-menu">
+    <view class="zan-cell zan-cell--access" data-url="/page/my/comment" bindtap="goPage" >
+      <view class="zan-cell__icon zan-c-gray-darker">
+        <view class="fa-stack fa-lg">
+          <i class="fa fa-square fa-stack-2x zan-c-green"></i>
+          <i class="fa fa-comment fa-stack-1x fa-inverse"></i>
+        </view>
+      </view>
+      <view class="zan-cell__bd">我发表的评论</view>
+      <view class="zan-cell__ft"></view>
+    </view>
+
+    <view class="zan-cell zan-cell--access" data-url="/page/my/profile" bindtap="goPage" >
+      <view class="zan-cell__icon zan-c-gray-darker">
+        <view class="fa-stack fa-lg">
+          <i class="fa fa-square fa-stack-2x zan-c-blue"></i>
+          <i class="fa fa-user fa-stack-1x fa-inverse"></i>
+        </view>
+      </view>
+      <view class="zan-cell__bd">个人资料</view>
+      <view class="zan-cell__ft"></view>
+    </view>
+
+    <view class="zan-cell zan-cell--access" data-url="/page/vips/vips" bindtap="goVip">
+      <view class="zan-cell__icon zan-c-gray-darker">
+        <view class="fa-stack fa-lg">
+          <i class="fa fa-square fa-stack-2x zan-c-red"></i>
+          <i class="fa fa-diamond fa-stack-1x fa-inverse"></i>
+        </view>
+      </view>
+      <view class="zan-cell__bd">我的VIP会员</view>
+      <view class="zan-cell__ft"></view>
+    </view>
+
+    <view class="zan-cell zan-cell--access" data-url="/page/my/password" bindtap="goPage" wx:if="{{ isWxapp==false }}">
+      <view class="zan-cell__icon zan-c-gray-darker">
+        <view class="fa-stack fa-lg">
+          <i class="fa fa-square fa-stack-2x zan-c-red"></i>
+          <i class="fa fa-lock fa-stack-1x fa-inverse"></i>
+        </view>
+      </view>
+      <view class="zan-cell__bd">修改密码</view>
+      <view class="zan-cell__ft"></view>
+    </view>
+
+    <view class="zan-cell zan-cell--access" data-url="/page/my/bind" bindtap="goPage" wx:if="{{ isWxapp }}">
+      <view class="zan-cell__icon zan-c-gray-darker">
+        <view class="fa-stack fa-lg">
+          <i class="fa fa-square fa-stack-2x zan-c-red"></i>
+          <i class="fa fa-user fa-stack-1x fa-inverse"></i>
+        </view>
+      </view>
+      <view class="zan-cell__bd">绑定账号</view>
+      <view class="zan-cell__ft"></view>
+    </view>
+
+    <navigator url="aboutus" class="zan-cell zan-cell--access">
+      <view class="zan-cell__icon zan-c-gray-darker">
+        <view class="fa-stack fa-lg">
+          <i class="fa fa-square fa-stack-2x zan-c-blue"></i>
+          <i class="fa fa-users fa-stack-1x fa-inverse"></i>
+        </view>
+      </view>
+      <view class="zan-cell__bd">关于我们</view>
+      <view class="zan-cell__ft"></view>
+    </navigator>
+
+    <view url="logout" class="zan-cell zan-cell--access" wx:if="{{ userInfo && userInfo.id!==0 }}" bindtap="logout">
+      <view class="zan-cell__icon zan-c-gray-darker">
+        <view class="fa-stack fa-lg">
+          <i class="fa fa-square fa-stack-2x zan-c-red"></i>
+          <i class="fa fa-sign-out fa-stack-1x fa-inverse"></i>
+        </view>
+      </view>
+      <view class="zan-cell__bd">退出登录</view>
+      <view class="zan-cell__ft"></view>
+    </view>
+
+  </view>
+</view>

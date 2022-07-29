@@ -1,0 +1,63 @@
+<div class="container-fluid" style="padding:50px 0;background:#fff;">
+    <header class="space-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-4 col-sm-4 col-md-2">
+                    <a class="text-left" href="{$__user__.url}"><img class="img-circle img-responsive" src="{$__user__.avatar|cdnurl}" style="width:150px;height:150px;" alt="{$__user__.nickname}"></a>
+                </div>
+                <div class="col-xs-8 col-sm-8 col-md-6">
+                    <div class="h3">
+                        {$__user__.nickname}
+                        {if $__user__.title}
+                        <small> - {$__user__.title}</small>
+                        {/if}
+                    </div>
+                    <div class="text-muted"><small>{$__user__.bio|default=__("This guy hasn't written anything yet")}</small></div>
+                    <hr>
+                    <div class="text-muted">
+                        <span><i class="fa fa-calendar"></i> 注册于 {$__user__.jointime|human_date}</span>
+                    </div>
+                    <div class="mt-3"><p></p></div>
+                </div>
+                <div class="col-xs-12 col-sm-8 col-md-4">
+                    <div class="row statistics pt-1" style="border-top:none;">
+                        <div class="col-xs-4">
+                            <div class="statistics-text">回答</div>
+                            <div class="statistics-nums">{$__user__.answers}</div>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="statistics-text">文章</div>
+                            <div class="statistics-nums">{$__user__.articles}</div>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="statistics-text">关注者</div>
+                            <div class="statistics-nums">{$__user__.followers}</div>
+                        </div>
+                    </div>
+                    {if $user && $user.id==$__user__.id}
+                    <div>
+                        <div class="col-xs-6">
+                            <a href="{:addon_url('ask/question/post',[],false)}" class="btn btn-primary btn-block"><i class="fa fa-question-circle"></i> <span>发布问题</span></a>
+                        </div>
+                        <div class="col-xs-6">
+                            <a href="{:addon_url('ask/article/post',[],false)}" class="btn btn-warning btn-block"><i class="fa fa-pencil"></i> 发布文章</a>
+                        </div>
+                    </div>
+                    {else /}
+                    <div>
+                        <div class="col-xs-4">
+                            <a href="javascript:" class="btn btn-primary btn-block btn-attention {if $__user__.followed}followed{/if}" data-id="{$__user__.id}" data-type="user"><i class="fa fa-plus"></i> <span>{if $__user__.followed}已关注{else/}关注TA{/if}</span></a>
+                        </div>
+                        <div class="col-xs-4">
+                            <a href="{:addon_url('ask/question/post',[],false)}?user_id={$__user__.id}" class="btn btn-warning btn-block"><i class="fa fa-question-circle"></i> 向TA提问</a>
+                        </div>
+                        <div class="col-xs-4">
+                            <a href="javascript:" class="btn btn-outline-primary btn-block btn-message" data-id="{$__user__.id}"><i class="fa fa-comments-o"></i> 发私信</a>
+                        </div>
+                    </div>
+                    {/if}
+                </div>
+            </div>
+        </div>
+    </header>
+</div>

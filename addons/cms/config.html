@@ -1,0 +1,254 @@
+<style>
+    #config-form div a.btn {
+        color: #fff;
+        text-decoration: none;
+    }
+    #config-form .alert-info-light .dropdown-menu li a {
+        text-decoration: none;
+    }
+</style>
+<!--@formatter:off-->
+{php}
+$groupList = [
+    'config'=>'system_user_id,sitename,sitelogo,title,keywords,description,indexpagesize,theme,qrcode,wxapp,donateimage,userpage,openedsite,searchtype,autopinyin,baidupush,usersidenav,loadmode,pagemode,indexloadmode,indexpagemode,cachelifetime,urlsuffix',
+    'thumb'=>'default_archives_img,default_channel_img,default_block_img,default_page_img,default_special_img',
+    'wxapp'=>'wxappid,wxappsecret',
+    'rewrite'=>'domain,rewrite,urlsuffix,moduleurlsuffix',
+    'audit'=>'isarchivesaudit,iscommentaudit,audittype,nlptype,aip_appid,aip_apikey,aip_secretkey',
+    'dict'=>'downloadtype,spiders,flagtype,autolinks',
+    'other'=>'archivesratio,score,limitscore,ispaylogin,paytypelist,apikey,archiveseditmode,auditnotice,noticetemplateid,channelallocate,archivesdatalimit,specialdatalimit,pagedatalimit,diyformdatalimit',
+];
+$group = [];
+foreach($groupList as $k=>$v){
+   $item = explode(',', $v);
+   $item = array_flip($item);
+   $group = array_merge($group, array_map(function($value) use($k){return $k;}, $item));
+}
+{/php}
+<form id="config-form" class="edit-form form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+    <div class="alert {$addon.tips.extend|default='alert-info-light'}" style="margin-bottom:10px;">
+        <div style="margin-top:10px;">
+            <a href="{:addon_url('cms/index/index')}" class="btn btn-warning" target="_blank"><i class="fa fa-home"></i> CMS首页</a>
+            <a href="__PUBLIC__index/user/index" class="btn btn-info" target="_blank"><i class="fa fa-user"></i> 会员中心</a>
+            <div class="btn-group">
+                <a class="btn btn-primary" href="{:addon_url('cms/sitemap/index', [], false, false)}/type/all.xml" target="_blank"><i class="fa fa-sitemap fa-fw"></i> Sitemap</a>
+                <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="javascript:;" aria-expanded="true">
+                    <span class="fa fa-caret-down"></span></a>
+                <ul class="dropdown-menu">
+                    <li role="presentation"><a href="{:addon_url('cms/sitemap/index', [], false, false)}/type/all.xml" target="_blank">全部</a></li>
+                    <li role="presentation" class="divider"></li>
+                    <li><a href="{:addon_url('cms/sitemap/index', [], false, false)}/type/archives.xml" target="_blank">文档</a></li>
+                    <li><a href="{:addon_url('cms/sitemap/index', [], false, false)}/type/tags.xml" target="_blank">标签</a></li>
+                    <li><a href="{:addon_url('cms/sitemap/index', [], false, false)}/type/users.xml" target="_blank">会员</a></li>
+                    <li><a href="{:addon_url('cms/sitemap/index', [], false, false)}/type/specials.xml" target="_blank">专题</a></li>
+                    <li><a href="{:addon_url('cms/sitemap/index', [], false, false)}/type/pages.xml" target="_blank">单页</a></li>
+                    <li><a href="{:addon_url('cms/sitemap/index', [], false, false)}/type/diyforms.xml" target="_blank">自定义表单</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default panel-intro">
+        <div class="panel-heading">
+            <ul class="nav nav-tabs nav-group">
+                <li class="active"><a href="#all" data-toggle="tab">全部</a></li>
+                <li><a href="#config" data-toggle="tab">基础</a></li>
+                <li><a href="#thumb" data-toggle="tab">缩略图</a></li>
+                <li><a href="#wxapp" data-toggle="tab">微信小程序</a></li>
+                <li><a href="#rewrite" data-toggle="tab">伪静态</a></li>
+                <li><a href="#audit" data-toggle="tab">审核</a></li>
+                <li><a href="#dict" data-toggle="tab">字典</a></li>
+                <li><a href="#other" data-toggle="tab">其它</a></li>
+                <li class="pull-right"><a href="{:url('cms/ajax/config?name=signin')}" title="签到配置" class="dialogit">签到</a></li>
+                <li class="pull-right"><a href="{:url('cms/ajax/config?name=sms')}" title="短信配置" class="dialogit">短信</a></li>
+                <li class="pull-right"><a href="{:url('cms/ajax/config?name=third')}" title="登录配置" class="dialogit">登录</a></li>
+                <li class="pull-right"><a href="{:url('cms/ajax/config?name=oss')}" title="云存储配置" class="dialogit">云存储</a></li>
+                <li class="pull-right"><a href="{:url('cms/ajax/config?name=epay')}" title="支付配置" class="dialogit">支付</a></li>
+            </ul>
+        </div>
+
+        <div class="panel-body">
+            <div id="myTabContent" class="tab-content">
+                <div class="tab-pane fade active in" id="one">
+
+                    <table class="table table-striped table-config">
+                        <tbody>
+                        {foreach $addon.config as $item}
+                        <tr data-type="{:isset($group[$item['name']])?$group[$item['name']]:'other'}">
+                            <td width="15%">
+                                {$item.title}
+                                {if $item.type=='array' && $item.tip}
+                                <a href="javascript:" class="text-info" data-toggle="popover" data-content="{$item.tip}" data-trigger="click" data-title="配置提示" data-html="true"><i class="fa fa-info-circle"></i></a>
+                                {/if}
+                            </td>
+                            <td>
+                                <div class="row">
+                                    <div class="col-sm-8 col-xs-12">
+                                        {switch $item.type}
+                                        {case string}
+                                        <input {$item.extend} type="text" name="row[{$item.name}]" value="{$item.value|htmlentities}" class="form-control" data-rule="{$item.rule}" data-tip="{$item.tip}"/>
+                                        {/case}
+                                        {case password}
+                                        <input {$item.extend} type="password" name="row[{$item.name}]" value="{$item.value|htmlentities}" class="form-control" data-rule="{$item.rule}" data-tip="{$item.tip}"/>
+                                        {/case}
+                                        {case text}
+                                        <textarea {$item.extend} name="row[{$item.name}]" class="form-control" data-rule="{$item.rule}" rows="5" data-tip="{$item.tip}">{$item.value|htmlentities}</textarea>
+                                        {/case}
+                                        {case array}
+                                        <dl class="fieldlist" data-name="row[{$item.name}]">
+                                            <dd>
+                                                <ins>{:__('Array key')}</ins>
+                                                <ins>{:__('Array value')}</ins>
+                                            </dd>
+                                            <dd><a href="javascript:;" class="btn btn-sm btn-success btn-append"><i class="fa fa-plus"></i> {:__('Append')}</a></dd>
+                                            <textarea name="row[{$item.name}]" cols="30" rows="5" class="hide">{$item.value|json_encode|htmlentities}</textarea>
+                                        </dl>
+                                        {/case}
+                                        {case date}
+                                        <input {$item.extend} type="text" name="row[{$item.name}]" value="{$item.value|htmlentities}" class="form-control datetimepicker" data-date-format="YYYY-MM-DD" data-tip="{$item.tip}" data-rule="{$item.rule}"/>
+                                        {/case}
+                                        {case time}
+                                        <input {$item.extend} type="text" name="row[{$item.name}]" value="{$item.value|htmlentities}" class="form-control datetimepicker" data-date-format="HH:mm:ss" data-tip="{$item.tip}" data-rule="{$item.rule}"/>
+                                        {/case}
+                                        {case datetime}
+                                        <input {$item.extend} type="text" name="row[{$item.name}]" value="{$item.value|htmlentities}" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-tip="{$item.tip}" data-rule="{$item.rule}"/>
+                                        {/case}
+                                        {case number}
+                                        <input {$item.extend} type="number" name="row[{$item.name}]" value="{$item.value|htmlentities}" class="form-control" data-tip="{$item.tip}" data-rule="{$item.rule}"/>
+                                        {/case}
+                                        {case checkbox}
+                                        {foreach name="item.content" item="vo"}
+                                        <label for="row[{$item.name}][]-{$key}"><input id="row[{$item.name}][]-{$key}" name="row[{$item.name}][]" type="checkbox" value="{$key}" data-tip="{$item.tip}" {in name="key" value="$item.value" }checked{/in} /> {$vo}</label>
+                                        {/foreach}
+                                        <span class="msg-box n-right" for="c-{$item.name}"></span>
+                                        {/case}
+                                        {case radio}
+                                        {foreach name="item.content" item="vo"}
+                                        <label for="row[{$item.name}]-{$key}"><input id="row[{$item.name}]-{$key}" name="row[{$item.name}]" type="radio" value="{$key}" data-tip="{$item.tip}" {in name="key" value="$item.value" }checked{/in} /> {$vo}</label>
+                                        {/foreach}
+                                        <span class="msg-box n-right" for="c-{$item.name}"></span>
+                                        {/case}
+                                        {case value="select" break="0"}{/case}
+                                        {case value="selects"}
+                                        {if $item.name==='spiderfollow'}
+                                        {php}$item['content'] = get_addon_config('cms')['spiders']??[];{/php}
+                                        {/if}
+                                        <select {$item.extend} name="row[{$item.name}]{$item.type=='selects'?'[]':''}" class="form-control selectpicker" data-tip="{$item.tip}" {$item.type=='selects'?'multiple':''}>
+                                            {foreach name="item.content" item="vo"}
+                                            <option value="{$key}" {in name="key" value="$item.value" }selected{/in}>{$vo}</option>
+                                            {/foreach}
+                                        </select>
+                                        {/case}
+                                        {case value="image" break="0"}{/case}
+                                        {case value="images"}
+                                        <div class="form-inline">
+                                            <input id="c-{$item.name}" class="form-control" size="35" name="row[{$item.name}]" type="text" value="{$item.value|htmlentities}" data-tip="{$item.tip}">
+                                            <span><button type="button" id="plupload-{$item.name}" class="btn btn-danger plupload" data-input-id="c-{$item.name}" data-mimetype="image/*" data-multiple="{$item.type=='image'?'false':'true'}" data-preview-id="p-{$item.name}"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
+                                            <span><button type="button" id="fachoose-{$item.name}" class="btn btn-primary fachoose" data-input-id="c-{$item.name}" data-mimetype="image/*" data-multiple="{$item.type=='image'?'false':'true'}"><i class="fa fa-list"></i> {:__('Choose')}</button></span>
+                                            <ul class="row list-inline plupload-preview" id="p-{$item.name}"></ul>
+                                        </div>
+                                        {/case}
+                                        {case value="file" break="0"}{/case}
+                                        {case value="files"}
+                                        <div class="form-inline">
+                                            <input id="c-{$item.name}" class="form-control" size="35" name="row[{$item.name}]" type="text" value="{$item.value|htmlentities}" data-tip="{$item.tip}">
+                                            <span><button type="button" id="plupload-{$item.name}" class="btn btn-danger plupload" data-input-id="c-{$item.name}" data-multiple="{$item.type=='file'?'false':'true'}"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
+                                            <span><button type="button" id="fachoose-{$item.name}" class="btn btn-primary fachoose" data-input-id="c-{$item.name}" data-multiple="{$item.type=='file'?'false':'true'}"><i class="fa fa-list"></i> {:__('Choose')}</button></span>
+                                        </div>
+                                        {/case}
+                                        {case bool}
+                                        <label for="row[{$item.name}]-yes"><input id="row[{$item.name}]-yes" name="row[{$item.name}]" type="radio" value="1" {$item.value?'checked':''} data-tip="{$item.tip}" /> {:__('Yes')}</label>
+                                        <label for="row[{$item.name}]-no"><input id="row[{$item.name}]-no" name="row[{$item.name}]" type="radio" value="0" {$item.value?'':'checked'} data-tip="{$item.tip}" /> {:__('No')}</label>
+                                        {/case}
+                                        {default /}{$item.value}
+                                        {/switch}
+                                    </div>
+                                    <div class="col-sm-4"></div>
+                                </div>
+
+                            </td>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+                    <div class="form-group layer-footer">
+                        <label class="control-label col-xs-12 col-sm-2" style="width:15%;"></label>
+                        <div class="col-xs-12 col-sm-8">
+                            <button type="submit" class="btn btn-primary btn-embossed disabled">{:__('OK')}</button>
+                            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<!--@formatter:on-->
+<script>
+    require.callback = function () {
+        var tabevent = function () {
+            $(document).on("click", ".nav-group li a[data-toggle='tab']", function () {
+                var type = $(this).attr("href").substring(1);
+                if (type == 'all') {
+                    $(".table-config tr").show();
+                } else {
+                    $(".table-config tr").hide();
+                    $(".table-config tr[data-type='" + type + "']").show();
+                }
+            });
+        };
+
+        var customrule = function () {
+            $.validator.config({
+                rules: {
+                    config: function (element) {
+                        if (this.key == "row[archivesratio]") {
+                            var valueArr = this.value.split(/:/);
+                            if (isNaN(valueArr[0]) || isNaN(valueArr[1])) {
+                                return '格式不正确';
+                            }
+                            if (parseFloat(valueArr[0]) + parseFloat(valueArr[1]) != 1) {
+                                return '分成占比相加必须等于1';
+                            }
+                        } else if (this.key == "row[cachelifetime]") {
+                            if (isNaN(this.value) && ['true', 'false'].indexOf(this.value) < 0) {
+                                return "格式不正确,只支持 数字/true";
+                            }
+                        } else if (this.key == "row[theme]") {
+                            if (!/^([a-zA-Z0-9\-_]+)$/.test(this.value)) {
+                                return "只支持字母数字下划线";
+                            }
+                        }
+                        return true;
+                        return $.ajax({
+                            url: 'cms/ajax/check_config_available',
+                            type: 'POST',
+                            data: {name: element.name, value: element.value},
+                            dataType: 'json'
+                        });
+                    },
+                }
+            });
+        };
+        define('backend/addon', ['jquery', 'form'], function ($, Form) {
+            var Controller = {
+                config: function () {
+                    customrule();
+                    Form.api.bindevent($("form[role=form]"));
+                    tabevent();
+                }
+            };
+            return Controller;
+        });
+        define('backend/cms/config', ['jquery', 'form'], function ($, Form) {
+            var Controller = {
+                index: function () {
+                    customrule();
+                    Form.api.bindevent($("form[role=form]"));
+                    tabevent();
+                }
+            };
+            return Controller;
+        });
+    }
+</script>

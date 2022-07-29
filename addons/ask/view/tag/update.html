@@ -1,0 +1,62 @@
+<form id="update-tag" class="p-3" role="form" method="POST" action="{:addon_url('ask/tag/update')}">
+    {:token()}
+    <input type="hidden" name="id" value="{$__tag__.id}">
+
+    <div class="form-group">
+        <div class="control-label">话题名称</div>
+        <div class="mt-1">
+            <input id="c-name" name="name" class="form-control" placeholder="话题名称" value="{$__tag__.name}"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="control-label">话题分类</div>
+        <div class="mt-1">
+            <select name="category_id" class="form-control">
+                <option value="0" {:$__tag__.category_id==0?'selected':''}>选择分类</option>
+                {foreach name="categoryList" id="item"}
+                <option value="{$item.id}" {:$__tag__.category_id==$item.id?'selected':''}>{$item.name}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="control-label">话题图标 <span class="text-muted small">请上传24*24的图片</span></div>
+        <div class="mt-1">
+            <div class="input-group">
+                <input id="c-icon" name="icon" class="form-control" placeholder="话题图标" value="{:$__tag__->getData('icon')}"/>
+                <span class="input-group-btn">
+                    <span class="md-relative pull-right">
+                    <a href="javascript:" class="btn btn-primary"><i class="fa fa-upload"></i></a>
+                    <input type="file" name="icon-upload" class="uploadimage"/>
+                    </span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="control-label">话题图片 <span class="text-muted small">请上传128*128的图片</span></div>
+        <div class="mt-1">
+            <div class="input-group">
+                <input id="c-image" name="image" class="form-control" placeholder="话题图片" value="{:$__tag__->getData('image')}"/>
+                <span class="input-group-btn">
+                    <span class="md-relative pull-right">
+                    <a href="javascript:" class="btn btn-primary"><i class="fa fa-upload"></i></a>
+                    <input type="file" name="icon-upload" class="uploadimage"/>
+                    </span>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="control-label">话题描述</div>
+        <div class="mt-1">
+            <textarea id="c-intro" name="intro" rows="3" class="form-control" placeholder="话题描述">{$__tag__.intro}</textarea>
+        </div>
+    </div>
+    <div class="form-group mb-0">
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary btn-embossed">提交保存</button>
+        </div>
+    </div>
+</form>

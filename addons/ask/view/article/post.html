@@ -1,0 +1,186 @@
+<div class="p-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-10 col-md-offset-1">
+                <div class="article-section">
+                    <div class="clearfix">
+                        <div class="row">
+                            <div class="col-xs-12 col-md-8 col-md-offset-2">
+                                <div class=" mb-3">
+                                    <h3><span>{$title}</span></h3>
+                                </div>
+                                <hr>
+                                {if $user.score<$config.limitscore.postarticle}
+                                <div class="alert alert-warning">
+                                    <i class="fa fa-info-circle"></i> 积分大于{$config.limitscore.postarticle}才能够发布文章，当前你有{$user.score}积分，
+                                </div>
+                                {/if}
+
+                                <form id="post-article" class="post-form" role="form" method="POST">
+                                    {:token()}
+                                    <input type="hidden" name="price" value="{$__article__.price|default='0'}"/>
+                                    <input type="hidden" name="score" value="{$__article__.score|default='0'}"/>
+                                    <div class="form-group">
+                                        <label for="c-title" class="control-label">问题分类</label>
+                                        <div class="">
+                                            <select name="category_id" id="category_id" class="form-control" data-rule="required" style="height:40px;line-height:40px;">
+                                                <option value="">请选择分类</option>
+                                                {foreach name="categoryList" id="item"}
+                                                <option value="{$item.id}" {:$categoryId==$item.id?'selected':''}>{$item.name}</option>
+                                                {/foreach}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="c-title" class="control-label">文章标题</label>
+                                        <div class="">
+                                            <input id="c-title" placeholder="请输入文章的标题" class="form-control" data-rule="required" autocomplete="off" name="title" type="text" value="{$__article__.title|default=''|htmlentities}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="c-tags" class="control-label">文章标签<em>(最多输入3个，空格或回车确认添加)</em></label>
+                                        <div class="">
+                                            <input id="c-tags" class="form-control" data-rule="required" name="tags" type="text" placeholder="" style="height:42px;line-height:42px;" value="{:$__article__?htmlentities($__article__.tags_text):($__tag__?htmlentities($__tag__.name):'')}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="c-tags" class="control-label">所属专区<em>(可以为空)</em></label>
+                                        <div class="">
+                                            <select name="zone_id" id="zone_id" class="form-control">
+                                                <option value="0" {:$__zone__?"":"selected"}>不关联专区</option>
+                                                {foreach name="zoneList" id="item"}
+                                                <option value="{$item.id}" {:$__zone__&&$item->id==$__zone__->id?"selected":""}>{$item.name}</option>
+                                                {/foreach}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="c-content" class="control-label">文章摘要(可选)</label>
+                                        <div class="">
+                                            <textarea id="c-summary" name="summary" rows="5" class="form-control" placeholder="请输入文章的摘要，如果是付费文章可以作为试看部分">{$__article__.summary|default=''|htmlentities}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="c-content" class="control-label">文章内容</label>
+                                        <div class="">
+                                            <textarea id="c-content" name="content" rows="15" class="form-control" data-rule="required" data-autosave-key="post-article-{$__article__.id|default=0}" placeholder="请输入文章的内容">{$__article__.content|default=''|htmlentities}</textarea>
+                                        </div>
+                                    </div>
+                                    {include file="common/markdowntips" /}
+
+                                    <!-- S 付费阅读 -->
+                                    <div class="form-group mb-0">
+                                        <label class="control-label ">
+                                            {if $config.awardtype=='both'}
+                                            <select name="switpricetype" class="form-control form-selecttype" style="display:inline-block;width:75px;">
+                                                <option value="price" {if $__article__.price>0}selected{/if}>付费金额</option>
+                                                <option value="score" {if $__article__.score>0}selected{/if}>付费积分</option>
+                                            </select>
+                                            {else /}
+                                            付费{:$config.awardtype=='score'?'积分':'金额'}
+                                            {/if}<em>(需要用户支付一定的费用后才可查看)</em>
+                                            <a href="javascript:" data-toggle="popover" data-content="<i class='fa fa-info-circle'></i> 温馨提示<br>1、用户需要支付设定的费用后才可以查看付费内容<br>2、平台会统一扣除30%的技术服务费<br>3、收入明细可以在会员中心->余额日志中查看<br>4、只有认证专家可以发布付费阅读文章">
+                                                <span class="ml-1 text-primary small"><i class="fa fa-question-circle"></i> 付费规则</span>
+                                            </a>
+                                        </label>
+                                        {php}$config['awardtype']=$__article__ && $__article__['price']>0?'money':$config['awardtype'];{/php}
+                                        {php}$config['awardtype']=$__article__ && $__article__['score']>0?'score':$config['awardtype'];{/php}
+                                        <div class="pricelist">
+                                            <div class="row row-recharge row-price {if $config.awardtype=='score'}hidden{/if}" data-type="price">
+                                                <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+                                                    <label class="{:$__article__.price==0?'active':''}" data-type="fixed" data-value="0">
+                                                        无 </label>
+                                                </div>
+                                                {foreach name="config.pricelist" id="price"}
+                                                <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+                                                    <label data-type="fixed" data-value="{$price}" class="{:$price==$__article__.price?'active':''}">{$key}</label>
+                                                </div>
+                                                {/foreach}
+                                                {if $config.iscustomprice}
+                                                <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+                                                    {if $__article__.price>0 && !in_array($__article__.price, $config.pricelist)}
+                                                    <label data-type="custom" data-value="" class="active">
+                                                        <input type="number" name="customprice" class="form-control customprice" value="{$__article__.price}">
+                                                    </label>
+                                                    {else/}
+                                                    <label data-type="custom" data-value="">
+                                                        其它金额
+                                                    </label>
+                                                    {/if}
+                                                </div>
+                                                {/if}
+                                            </div>
+                                            <div class="row row-recharge row-price {if $config.awardtype!='score'}hidden{/if}" data-type="score">
+                                                <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+                                                    <label class="{:$__article__.score==0?'active':''}" data-type="fixed" data-value="0">
+                                                        无 </label>
+                                                </div>
+                                                {foreach name="config.scorelist" id="score"}
+                                                <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+                                                    <label data-type="fixed" data-value="{$score}" class="{:$score==$__article__.score?'active':''}">{$key}</label>
+                                                </div>
+                                                {/foreach}
+                                                {if $config.iscustomscore}
+                                                <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+                                                    {if $__article__.score>0 && !in_array($__article__.score, $config.scorelist)}
+                                                    <label data-type="custom" data-value="" class="active">
+                                                        <input type="number" name="customprice" class="form-control customprice" value="{$__article__.score}">
+                                                    </label>
+                                                    {else/}
+                                                    <label data-type="custom" data-value="">
+                                                        其它积分
+                                                    </label>
+                                                    {/if}
+                                                </div>
+                                                {/if}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- E 付费阅读 -->
+
+                                    {if false && $config.isanonymous}
+                                    <!-- S 匿名发贴 -->
+                                    <div class="form-group mb-0">
+                                        <div class="" style="margin-left:20px;">
+                                            <label class="checkbox" style="font-weight:400;">
+                                                <input type="checkbox" id="c-isanonymous" name="isanonymous" value="1" {:$__article__&&$__article__.isanonymous?'checked':''}>匿名发文
+                                                <span id="anonymoustips" class="text-danger hidden">付费阅读的文章不允许匿名发文</span>
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                    <!-- E 推荐资讯 -->
+                                    {/if}
+
+                                    {if in_array('postarticle', explode(',', $askConfig['captchaparts']??''))}
+                                    <div class="form-group">
+                                        <label class="control-label">验证码</label>
+                                        <div class="controls">
+                                            <div class="input-group" style="width:345px;">
+                                                <input type="text" name="captcha" class="form-control input-lg" placeholder="请输入验证码" autocomplete="off" data-rule="required;length(4)"/>
+                                                <span class="input-group-btn" style="padding:0;border:none;">
+                                                    <img src="{:captcha_src()}" width="100" height="40" onclick="this.src = '{:captcha_src()}?r=' + Math.random();"/>
+                                                </span>
+                                            </div>
+                                            <p class="help-block"></p>
+                                        </div>
+                                    </div>
+                                    {/if}
+
+                                    <div class="form-group mb-2" style="margin-bottom:0">
+                                        <div class="text-center">
+                                            <button type="submit" class="btn btn-primary btn-lg btn-embossed" style="height:40px;border-radius:3px;">{:$__article__?'更新文章':'发布文章'}</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script data-render="script" src="__ADDON__/js/post.js?v={$site.version}"></script>

@@ -1,0 +1,30 @@
+{include file="user/header" /}
+<div class="container">
+    <div class="row" style="margin-top:20px;">
+        <div class="col-md-8 col-sm-12">
+            <ul class="nav nav-tabs nav-noborder mb-10 mt-20">
+                <li class="{:$collectionType=='question'?'active':''}"><a href="?type=question">{:$__user__.me?'我':'TA'}收藏的问题</a></li>
+                <li class="{:$collectionType=='answer'?'active':''}"><a href="?type=answer">{:$__user__.me?'我':'TA'}收藏的回答</a></li>
+                <li class="{:$collectionType=='article'?'active':''}"><a href="?type=article">{:$__user__.me?'我':'TA'}收藏的文章</a></li>
+            </ul>
+            <div class="tab-inner" style="background:#fff;padding:15px;">
+                <div class="question-list row" data-page="{$Think.get.page|default=1|intval}" data-more="{$collectionList->hasPages()}">
+                    {foreach name="collectionList" id="collection"}
+                    {include file="user/common/collectionitem" /}
+                    {/foreach}
+
+                    <div class="pager text-center">
+                        {$collectionList->render()}
+                    </div>
+
+                    {if $collectionList->isEmpty()}
+                    <div class="loadmore loadmore-line loadmore-nodata"><span class="loadmore-tips">暂无数据</span></div>
+                    {/if}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-12">
+            {include file="user/sidebar" /}
+        </div>
+    </div>
+</div>

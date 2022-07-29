@@ -1,0 +1,293 @@
+<style>
+    #post-question .form-group .checkbox {
+        display: inline-block;
+        margin-top: 0;
+    }
+</style>
+<div class="p-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-10 col-md-offset-1">
+                <div class="article-section">
+                    <div class="clearfix">
+                        <div class="row">
+                            <div class="col-xs-12 col-md-8 col-md-offset-2">
+                                <div class="mb-3">
+                                    <h3>
+                                        <span>{$title}</span>
+                                        <div class="pull-right">
+                                            {if !$__question__}
+                                            <a href="javascript:" class="label label-danger btn-postinvite" style="font-size:60%;">邀请回答</a>
+                                            {/if}
+                                        </div>
+                                    </h3>
+                                </div>
+                                <hr>
+                                {if $user.score<$config.limitscore.postquestion}
+                                <div class="alert alert-warning">
+                                    <i class="fa fa-info-circle"></i> 积分大于{$config.limitscore.postquestion}才能够发布问题，当前你有{$user.score}积分，
+                                </div>
+                                {/if}
+                                {if !$__question__}
+                                <div class="alert alert-warning mt-1" role="alert">
+                                    此处只允许发布提问，发布文章请到 <a href="{:addon_url('ask/article/post')}" target="_blank">文章投稿</a> 版块<br>
+                                </div>
+                                {/if}
+                                <form id="post-question" class="post-form" role="form" method="POST">
+                                    {:token()}
+                                    <input type="hidden" name="price" value="0"/>
+                                    <input type="hidden" name="score" value="0"/>
+                                    <input type="hidden" id="ccc" name="ccc" value=""/>
+
+                                    <div class="alert alert-danger {if !$__user__}hidden{/if}" id="invitebody">
+                                        你正在向 <span id="inviteuser">{if $__user__}<a href="{$__user__.url}" data-toggle="popover" data-title="{$__user__.nickname}" data-placement="right" data-type="user" data-id="{$__user__.id}" target="_blank">{$__user__.nickname}</a>{/if}</span> 提问，
+                                        <span id="invitetips"></span>
+                                        <a href="javascript:" class="btn btn-danger btn-xs btn-invite-user-pay">付费邀请</a> <a href="javascript:" class="btn btn-success btn-xs btn-invite-cancel">取消邀请</a>
+                                    </div>
+                                    <input type="hidden" name="to_user_id" value="{$__user__.id|default=0}"/>
+                                    <input type="hidden" name="inviteprice" value="0"/>
+
+                                    <div class="form-group">
+                                        <label for="c-title" class="control-label">问题分类</label>
+                                        <div class="">
+                                            <select name="category_id" id="category_id" class="form-control" data-rule="required" style="height:40px;line-height:40px;">
+                                                <option value="">请选择分类</option>
+                                                {foreach name="categoryList" id="item"}
+                                                <option value="{$item.id}" {:$categoryId==$item.id?'selected':''}>{$item.name}</option>
+                                                {/foreach}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="c-title" class="control-label">问题标题</label>
+                                        <div class="">
+                                            <input id="c-title" placeholder="请输入问题的标题，并以问号结尾" class="form-control" data-rule="required" autocomplete="off" name="title" type="text" data-type="post" data-header="headertpl" value="{$__question__.title|default=''|htmlentities}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="c-tags" class="control-label">问题标签<em>(最多输入3个，空格或回车确认添加)</em></label>
+                                        <div class="">
+                                            <input id="c-tags" class="form-control" data-rule="required" name="tags" type="text" placeholder="" style="height:42px;line-height:42px;" value="{:$__question__?htmlentities($__question__.tags_text):($__tag__?htmlentities($__tag__.name):'')}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="c-tags" class="control-label">所属专区<em>(可以为空)</em></label>
+                                        <div class="">
+                                            <select name="zone_id" id="zone_id" class="form-control">
+                                                <option value="0" {:$__zone__?
+                                                "":"selected"}>不关联专区</option>
+                                                {foreach name="zoneList" id="item"}
+                                                <option value="{$item.id}" {:$__zone__&&$item->id==$__zone__->id?"selected":""}>{$item.name}</option>
+                                                {/foreach}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="c-content" class="control-label">问题内容</label>
+                                        <div class="">
+                                            <textarea id="c-content" name="content" rows="15" class="form-control" data-rule="required" data-autosave-key="post-question-{$__question__.id|default=0}" placeholder="请详细描述你的问题，清晰明了的问题才能更好的让小伙伴准确回答">{$__question__.content|default=''|htmlentities}</textarea>
+                                            <span class="post-question-status pull-right"></span>
+                                        </div>
+                                    </div>
+                                    {include file="common/markdowntips" /}
+
+                                    {if !$__question__ && $config.awardtype!=='none'}
+                                    <!-- S 悬赏发贴 -->
+                                    <div class="form-group mb-0">
+                                        <label class="control-label">
+                                            {if $config.awardtype=='both'}
+                                            <select name="switpricetype" class="form-control form-selecttype" style="display:inline-block;width:75px;">
+                                                <option value="price">悬赏金额</option>
+                                                <option value="score">悬赏积分</option>
+                                            </select>
+                                            {else /}
+                                            悬赏{:$config.awardtype=='score'?'积分':'金额'}
+                                            {/if}
+                                            <em>(价值越高越快得到高质量的回答哦)</em>
+                                            <a href="javascript:" data-toggle="popover" data-content="<i class='fa fa-info-circle'></i> 温馨提示<br>1、悬赏金额将在提问者采纳最佳答案后增加到最佳回答者账户余额<br>2、如果 {$config.adoptdays} 天内没有任何回答者，悬赏金额将返回到提问者余额<br>3、如果提问者在 {$config.adoptdays} 天内仍未采纳最佳答案，将由平台管理员选定最佳答案">
+                                                <span class="ml-1 text-primary small"><i class="fa fa-question-circle"></i> 悬赏规则</span>
+                                            </a>
+                                        </label>
+                                        <div class="pricelist">
+                                            <div class="row row-recharge row-price {if $config.awardtype=='score'}hidden{/if}" data-type="price">
+                                                <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+                                                    <label class="active" data-type="fixed" data-value="0">
+                                                        无 </label>
+                                                </div>
+                                                {foreach name="config.pricelist" id="price"}
+                                                <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+                                                    <label data-type="fixed" data-value="{$price}">{$key}</label>
+                                                </div>
+                                                {/foreach}
+                                                {if $config.iscustomprice}
+                                                <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+                                                    <label data-type="custom" data-value="">
+                                                        其它金额
+                                                    </label>
+                                                </div>
+                                                {/if}
+                                            </div>
+                                            <div class="row row-recharge row-price {if $config.awardtype!='score'}hidden{/if}" data-type="score">
+                                                <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+                                                    <label class="active" data-type="fixed" data-value="0">
+                                                        无 </label>
+                                                </div>
+                                                {foreach name="config.scorelist" id="score"}
+                                                <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+                                                    <label data-type="fixed" data-value="{$score}">{$key}</label>
+                                                </div>
+                                                {/foreach}
+                                                {if $config.iscustomscore}
+                                                <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+                                                    <label data-type="custom" data-value="">
+                                                        其它积分
+                                                    </label>
+                                                </div>
+                                                {/if}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- E 悬赏发贴 -->
+                                    {/if}
+
+                                    {if $config.isanonymous}
+                                    <!-- S 匿名提问 -->
+                                    <div class="form-group mb-0">
+                                        <div class="" style="margin-left:20px;">
+                                            <label class="checkbox" style="font-weight:400;">
+                                                <input type="checkbox" id="c-isanonymous" name="isanonymous" value="1" {:$__question__&&$__question__.isanonymous?'checked':''}>匿名提问
+                                            </label>
+                                            <span class="text-muted">如果设定为匿名提问则不会展示提问者信息</span>
+                                        </div>
+                                    </div>
+                                    <!-- E 匿名提问 -->
+                                    {/if}
+
+                                    {if $config.isprivate}
+                                    <!-- S 是否私有答案 -->
+                                    <div class="form-group mb-0">
+                                        <div class="" style="margin-left:20px;">
+                                            <label class="checkbox" style="font-weight:400;">
+                                                <input type="checkbox" id="c-isprivate" name="isprivate" value="1" {:$__question__&&$__question__.isprivate?'checked':''}>私有答案
+                                            </label>
+                                            <span class="text-muted">如果设定为私有答案则只有提问者和管理员可以查看答案</span>
+                                        </div>
+                                    </div>
+                                    <!-- E 是否私有答案 -->
+                                    {/if}
+
+                                    {if in_array('postquestion', explode(',', $askConfig['captchaparts']??''))}
+                                    <div class="form-group">
+                                        <label class="control-label">验证码</label>
+                                        <div class="controls">
+                                            <div class="input-group" style="width:345px;">
+                                                <input type="text" name="captcha" class="form-control input-lg" placeholder="请输入验证码" autocomplete="off" data-rule="required;length(4)"/>
+                                                <span class="input-group-btn" style="padding:0;border:none;">
+                                                    <img src="{:captcha_src()}" width="100" height="40" onclick="this.src = '{:captcha_src()}?r=' + Math.random();"/>
+                                                </span>
+                                            </div>
+                                            <p class="help-block"></p>
+                                        </div>
+                                    </div>
+                                    {/if}
+
+                                    <div class="form-group mb-2" style="margin-bottom:0">
+                                        <div class="text-center">
+                                            <button type="submit" class="btn btn-primary btn-lg btn-embossed" style="height:40px;border-radius:3px;">提交问题</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!--搜索模板-->
+<script type="text/html" id="headertpl">
+    <div class="px-2">
+        <div class="row">
+            <div class="col-12">
+                <div class="alert mb-0" style="border-radius: 0;color: #0084ff; background: rgba(0, 132, 255, 0.1);">
+                    你可以先看看以下问题是否能帮到你:
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<!--邀请模板-->
+<script type="text/html" id="postinvitetpl">
+    <style>
+        .table-userlist > tbody > tr > td {
+            vertical-align: middle;
+        }
+    </style>
+    <div class="p-4">
+        <form action="/addons/ask/invite/post/id/1224" method="post">
+            <input type="hidden" name="type" value="site"/>
+            <input type="hidden" name="user" value=""/>
+            <input type="hidden" name="price" value="0"/>
+            <div class="alert alert-warning" role="alert">
+                邀请好友来解答问题吧！每天可以发送10次邀请！付费邀请无限制
+            </div>
+
+            <div class="">
+                <ul class="nav nav-tabs nav-invite" style="margin-bottom: 15px;">
+                    <li class="active"><a href="#site-invite" data-type="site" data-toggle="tab">站内会员</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade active in" id="site-invite">
+                        <div>
+                            <input type="text" class="form-control" id="search-account" placeholder="请输入会员的用户名或昵称进行搜索"/>
+                        </div>
+                        <table class="table table-striped table-userlist mt-2 mb-0">
+                            <thead>
+                            <tr>
+                                <th>头像</th>
+                                <th>昵称</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="qq-invite">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="qq" placeholder="请输入好友QQ号码"/>
+                            <span class="input-group-btn">
+                            <button class="btn btn-primary" type="submit">发送邀请</button>
+                        </span>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="weixin-invite">
+                        <div class="clearfix">
+                            <div class="row">
+                                <div class="col-xs-12 text-center">
+                                    <img src="/addons/ask/qrcode/build.html?text=http%3A%2F%2Fwww.fa.com%2Fask%2Fquestion%2F1224.html" width="250">
+                                    <div class="text-center">让好友扫描二维码帮忙回答</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="email-invite">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="email" placeholder="请输入好友邮箱"/>
+                            <span class="input-group-btn">
+                            <button class="btn btn-primary" type="submit">发送邀请</button>
+                        </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</script>
+
+<script data-render="script" src="__ADDON__/js/post.js?v={$site.version}"></script>

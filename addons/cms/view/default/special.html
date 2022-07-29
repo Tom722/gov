@@ -1,0 +1,139 @@
+{layout name="common/layout" /}
+<style>
+    .special-headline {
+        margin-top: 15px;
+    }
+
+    .special-headline blockquote {
+        border-radius: 3px;
+        padding: 15px 17px;
+        border: none;
+        background: #f5f9ff;
+        font-family: 'Open Sans', sans-serif !important;
+    }
+
+    .special-headline blockquote:before {
+        content: ' ';
+    }
+
+    .special-headline blockquote h3 {
+        line-height: 35px !important;
+        margin-bottom: 0px;
+        margin-top: 0 !important;
+        font-size: 16px !important;
+        font-weight: 400;
+        color: #777;
+    }
+
+    .special-headline blockquote h3::before {
+        content: "“";
+        font-size: 100px;
+        display: block;
+        float: left;
+        line-height: 1;
+        height: 35px;
+        opacity: .4;
+        padding-right: 10px;
+    }
+
+    .special-banner {
+        background-image: url({cms:special name= 'banner' /});
+        background-size: cover;
+        background-attachment: scroll;
+        background-position: center;
+        height: 300px;
+        position: relative;
+    }
+
+    .special-title {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding-top: 10px;
+        background: linear-gradient(-180deg, rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.50));
+    }
+
+    .special-title .label {
+        margin-left: 20px;
+    }
+
+    .special-title h1 {
+        font-size: 22px;
+        color: #fff;
+        line-height: 30px;
+        padding-left: 20px;
+        margin-bottom: 20px;
+    }
+
+    @media (max-width: 767px) {
+        .special-banner {
+            height: 180px;
+        }
+        .special-headline blockquote h3 {
+            font-size: 14px !important;
+        }
+
+        .special-headline blockquote h3::before {
+            font-size: 80px;
+        }
+    }
+</style>
+<div class="container" id="content-container">
+
+    <div class="row">
+
+        <main class="col-xs-12">
+            <div class="panel panel-default article-content">
+                <div class="panel-body">
+                    <div class="special-banner">
+                        <div class="special-title">
+                            <div class="label label-primary">
+                                {cms:special name="label|default='热门专题'" /}
+                            </div>
+                            <h1>{cms:special name="title|htmlentities" /}</h1>
+                        </div>
+                    </div>
+
+                    <div class="special-headline">
+                        <blockquote>
+                            <h3>{cms:special name="intro" /}</h3>
+                        </blockquote>
+                    </div>
+
+                    <div class="special-body">
+                        <div class="article-list">
+                            <!-- S 专题文章列表 -->
+                            {cms:pagelist id="item"}
+                            {include file="common/item"}
+                            {/cms:pagelist}
+                            <!-- E 专题文章列表 -->
+                        </div>
+
+                        <!-- S 分页 -->
+                        {include file="common/pageinfo" /}
+                        <!-- E 分页 -->
+                    </div>
+
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+
+            <div class="panel panel-default" id="comments">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{:__('Comment list')}
+                        <small>共有 <span>{cms:special name="comments" /}</span> 条评论</small>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    {if $__SPECIAL__.iscomment}
+                    {include file="common/comment" type="special" aid="__SPECIAL__.id"}
+                    {else/}
+                    <div class="text-muted text-center">评论功能已关闭</div>
+                    {/if}
+                </div>
+            </div>
+
+        </main>
+    </div>
+</div>

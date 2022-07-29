@@ -1,0 +1,49 @@
+<div class="comment">
+    <div class="media media-user">
+        <div class="media-left">
+            <a href="{$notification.from.url}" data-toggle="popover" data-type="user" data-id="{$notification.from.id}" data-title="{$notification.from.nickname}" target="_blank">
+                <img class="media-object img-circle" src="{$notification.from.avatar|cdnurl}" alt="{$notification.from.nickname}" style="width:40px;height:40px;">
+            </a>
+        </div>
+        <div class="media-body">
+            <p class="text-muted">
+                <a target="_blank" href="{$notification.from.url}" data-toggle="popover" data-type="user" data-id="{$notification.from.id}" data-title="{$notification.from.nickname}"> {$notification.from.nickname|default='匿名小伙伴'}</a>
+                {if $notification['action']=='post_answer'}
+                    对问题发布了答案
+                {elseif $notification['action']=='adopt' /}
+                    采纳了你的最佳答案
+                {elseif $notification['action']=='at' /}
+                    在{:$notification['type']=='question'?'问题':($notification['type']=='article'?'文章':'答案')}中 @ 了你
+                {elseif $notification['action']=='post_comment'}
+                    评论了你发表的{:$notification['type']=='question'?'问题':($notification['type']=='article'?'文章':'答案')}
+                {elseif $notification['action']=='collection' /}
+                    收藏了你发表的{:$notification['type']=='question'?'问题':($notification['type']=='article'?'文章':'答案')}
+                {elseif $notification['action']=='attention' /}
+                    关注了你发表的{:$notification['type']=='question'?'问题':($notification['type']=='article'?'文章':'答案')}
+                {elseif $notification['action']=='thanks' /}
+                    感谢了你发表的{:$notification['type']=='question'?'问题':($notification['type']=='article'?'文章':'答案')}
+                {/if}
+                <div class="text-muted">
+                    <span>{$notification.createtime|human_date} </span>
+                </div>
+            </p>
+            <h2 class="h4 title"><a href="{$notification.url}" class="btn-mark" data-id="{$notification.id}">{$notification.title|htmlentities}</a></h2>
+            {if $notification.content}
+            <div class="text-muted">
+                <blockquote>{$notification.content|strip_tags|mb_substr=0,500}</blockquote>
+            </div>
+            {/if}
+
+        </div>
+        <div class="media-right text-right">
+            <div style="min-width:140px;">
+                {if $notification.isread}
+                <a href="javascript:" class="btn btn-xs btn-primary disabled">已读</a>
+                {else /}
+                <a href="javascript:" class="btn btn-xs btn-primary btn-markone" data-id="{$notification.id}">标记为已读</a>
+                {/if}
+                <a href="javascript:" class="btn btn-xs btn-danger btn-delone" data-id="{$notification.id}">删除</a>
+            </div>
+        </div>
+    </div>
+</div>

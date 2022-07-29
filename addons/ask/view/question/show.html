@@ -1,0 +1,447 @@
+<style data-render="style">
+    .question-richtext {
+        max-height: 480px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .question-richtext .read-more {
+        display: block;
+        position: absolute;
+        top: 386px;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        margin: 0;
+        padding: 55px 0 15px 0;
+        /*background-image: linear-gradient(to bottom, rgba(100, 100, 100, 0) 0%, #ffffff 75%);*/
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 75%);
+    }
+
+    .question-title .expired, .question-title .countdown {
+        font-size: 14px;
+        color: #fb5746;
+    }
+
+    .article-header {
+        background: #fff;
+        padding: 20px;
+    }
+
+    @media (max-width: 480px) {
+        .article-header {
+            padding: 15px 0;
+        }
+    }
+
+</style>
+<div class="article-header" itemscope="" itemType="http://schema.org/Question">
+    <meta itemProp="name" content="{$__question__.title|htmlentities}"/>
+    <meta itemProp="url" content="{$__question__.fullurl}"/>
+    <meta itemProp="keywords" content="{$__question__.tags_text|htmlentities}"/>
+    <meta itemProp="answerCount" content="{$__question__.answers}"/>
+    <meta itemProp="commentCount" content="{$__question__.comments}"/>
+    <meta itemProp="dateCreated" content="{$__question__.createtime|date='c',###}"/>
+    <meta itemProp="dateModified" content="{$__question__.updatetime|date='c',###}"/>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-8">
+
+                <!-- S 问题标签 -->
+                {if $__question__.tags}
+                <div class="tags">
+                    {foreach name="__question__.tags" id="tag"}
+                    <a href="{$tag.url}" class="tag">{if $tag.icon}<img src="{$tag.icon}" alt="">{/if}{$tag.name|htmlentities}</a>
+                    {/foreach}
+                </div>
+                {/if}
+                <!-- E 问题标签 -->
+
+                <!-- S 问题标题 -->
+                <h1 class="question-title">
+                    {if $__question__.price>0}
+                    <span class="question-price-tag" data-toggle="tooltip" data-title="如果回答被采纳，回答者将获得{$__question__.price}元"><i class="fa fa-rmb"></i> {$__question__.price}</span>
+                    {/if}
+                    {if $__question__.score>0}
+                    <span class="question-price-tag" data-toggle="tooltip" data-title="如果回答被采纳，回答者将获得{$__question__.score}积分"><i class="fa fa-database"></i> {$__question__.score}</span>
+                    {/if}
+
+                    <span style="{$__question__.style_text}">{$__question__.title|htmlentities}</span>
+                    {if $__question__.price>0 && !$__question__.best_answer_id}
+                    {if !$__question__.is_reward_expired}
+                    <span class="countdown" data-seconds="{$__question__.reward_remain_seconds}" data-toggle="tooltip" data-title="超时将无法采纳最佳答案，没有答案将返还悬赏金额给提问者">
+                                {$__question__.reward_remain_text}
+                            </span>
+                    {else /}
+                    <span class="expired small" data-toggle="tooltip" data-title="已过期的悬赏将没有任何的悬赏金">悬赏已过期</span>
+                    {/if}
+                    {/if}
+                    {if $__question__.status=='closed'}
+                    <span class="label label-danger px-1 btn-xs" style="font-size:12px;" data-toggle="tooltip" data-title="已经关闭的问题无法进行回答等相关操作">已关闭</span>
+                    {/if}
+                    {if $__question__->trashed()}
+                    <span class="label label-danger px-1 btn-xs" style="font-size:12px;" data-toggle="tooltip" data-title="已经删除的问题前台不可见，请在后台恢复">已删除</span>
+                    {/if}
+                </h1>
+                <!-- E 问题标题 -->
+
+                <div class="question-date text-muted my-2">
+                    发布于 {:date("Y-m-d H:i:s", $__question__.createtime)}
+                </div>
+
+                <!-- S 问题内容 -->
+                <div class="question-richtext wysiwyg" itemprop="text">
+                    {$__question__.content_fmt}
+                    <p class="read-more"><a href="javascript:;" title="点击查看全文"><span class="text-primary"><i class="fa fa-angle-down"></i> 查看更多</span></a></p>
+                </div>
+                <!-- E 问题内容 -->
+            </div>
+            <div class="col-xs-12 col-md-4 text-center">
+
+                <!-- S 问题统计 -->
+                <div class="row statistics withline">
+                    <div class="col-xs-6">
+                        <div class="statistics-text">关注者</div>
+                        <div class="statistics-nums">{$__question__.followers}</div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="statistics-text">被浏览</div>
+                        <div class="statistics-nums">{$__question__.views_format}</div>
+                    </div>
+                </div>
+                <!-- E 问题统计 -->
+            </div>
+        </div>
+
+        <div class="comment-footer">
+            <!-- S 问题操作 -->
+            <div class="comment-toolbar">
+                <a href="javascript:" class="btn btn-primary btn-attention {if $__question__.followed}followed{/if}" data-id="{$__question__.id}" data-type="question"><span>{if $__question__.followed}已关注{else/}关注问题{/if}</span></a>
+                {if !$user || $user.id!=$__question__.user_id}
+                <a href="javascript:" class="btn btn-outline-primary btn-answer">我来回答</a>
+                {else /}
+                <a href="javascript:" class="btn btn-outline-primary btn-invite">邀请回答</a>
+                {/if}
+                <!--<a href="javascript:" class="action btn-comment" data-type="question" data-id="{$__question__.id}"><i class="fa fa-comment-o"></i> {$__question__.comments} 条评论</a>-->
+
+                <a href="javascript:" class="btn btn-expand"><i class="fa fa-ellipsis-h"></i></a>
+                <span class="expand">
+                <a href="javascript:" class="action btn-share ml-3" data-title="{$__question__.title|htmlentities}" data-url="{$__question__.fullurl|urlencode}"><i class="fa fa-share-alt"></i> 分享</a>
+                <a href="javascript:" class="action btn-collection {:$__question__.collected?'collected':''}" data-id="{$__question__.id}" data-type="question"><i class="fa fa-bookmark-o"></i> <span>{:$__question__.collected?'已收藏':'收藏'}</span></a>
+                {if !$__question__.isanonymous || $isAdmin}
+                <a href="javascript:" class="action btn-thanks" data-id="{$__question__.id}" data-type="question" data-user-id="{$__question__.user.id}" data-user-url="{$__question__.user.url}" data-user-nickname="{$__question__.user.nickname}" data-user-avatar="{$__question__.user.avatar|cdnurl}" data-toggle="popover" data-title="感谢" data-url="{:addon_url('ask/ajax/get_thanks_list')}"><i class="fa fa-heart"></i> 感谢{if $__question__.thanks}({$__question__.thanks}){/if}</a>
+                {/if}
+                <a href="javascript:" class="action btn-report" data-id="{$__question__.id}" data-type="question"><i class="fa fa-exclamation-triangle"></i> <span>举报</span></a>
+                {if $isAdmin||($user && $user.id==$__question__.user_id&&!$__question__.best_answer_id)}
+                <a href="{:addon_url('ask/question/reward',[],false)}/id/{$__question__.id}" class="action btn-reward" data-id="{$__question__.id}" data-type="question" data-toggle="tooltip" data-title="追加金额"><i class="fa fa-cny"></i> 追加悬赏</a>
+                <a href="{:addon_url('ask/question/update',[],false)}/id/{$__question__.id}" class="action btn-edit" data-id="{$__question__.id}" data-type="question" data-toggle="tooltip" data-title="补充完善问题"><i class="fa fa-pencil"></i> 补充问题</a>
+                <a href="{:addon_url('ask/question/delete',[],false)}/id/{$__question__.id}" class="action btn-delete" data-id="{$__question__.id}" data-type="question" data-toggle="tooltip" data-title="删除问题"><i class="fa fa-times"></i> 删除</a>
+                {/if}
+                {if $isAdmin}
+                    {if $__question__.status != 'closed'}
+                    <a href="{:addon_url('ask/question/close',[],false)}/id/{$__question__.id}" class="action btn-close" data-id="{$__question__.id}" data-type="question" data-toggle="tooltip" data-title="关闭"><i class="fa fa-ban"></i> 关闭</a>
+                    {else /}
+                    <a href="{:addon_url('ask/question/open',[],false)}/id/{$__question__.id}" class="action btn-open" data-id="{$__question__.id}" data-type="question" data-toggle="tooltip" data-title="开启"><i class="fa fa-check"></i> 开启</a>
+                    {/if}
+
+                    <a href="{:addon_url('ask/question/config',[],false)}/id/{$__question__.id}" class="action btn-config" data-id="{$__question__.id}" data-type="question" data-toggle="tooltip" data-title="更多设置"><i class="fa fa-cog"></i> 更多</a>
+                {/if}
+                </span>
+            </div>
+            <!-- E 问题操作 -->
+
+            <!-- S 问题评论 -->
+            <div class="row">
+                <div class="col-xs-12 col-md-8 sub-comments hidden">
+                </div>
+            </div>
+            <!-- E 问题评论 -->
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row" style="margin-top:20px;">
+        <div class="col-md-8 col-sm-12">
+            <!-- S 最佳回答 -->
+            {if $bestAnswerList}
+            <div class="article-section best-answer">
+                {foreach name="bestAnswerList" id="answer"}
+                {include file="common/answeritem" /}
+                {/foreach}
+            </div>
+            {/if}
+            <!-- E 最佳回答 -->
+
+            <!-- S 回答列表 -->
+            <div class="article-section answer-list">
+                <div class="answer-nav row">
+                    <div class="col-xs-10">
+                        <div class="title"><span class="answer-nums">{$__question__.answers}</span> 个回答</div>
+                    </div>
+                    <div class="col-xs-2">
+                        <select name="order" class="form-control pull-right">
+                            <option value="default" {:$Think.get.order=='default'?'selected':''}>默认排序</option>
+                            <option value="date" {:$Think.get.order=='date'?'selected':''}>按发布时间排序</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                {foreach name="answerList" id="answer"}
+                {include file="common/answeritem" /}
+                {/foreach}
+
+                {if $__question__.answers==0}
+                <div class="my-2 answer-nodata">暂无答案，快来添加答案吧</div>
+                {/if}
+            </div>
+            <!-- E 回答列表 -->
+
+            <!-- S 加载更多 -->
+            {if $__question__.answers>$askConfig.pagesize.answer}
+            <div class="article-section">
+                <div class="text-center">
+                    <a href="javascript:;" class="action-answer" data-id="{$__question__.id}" data-page="2">
+                        查看 <span>{:$__question__.answers-$askConfig.pagesize.answer}</span> 个回答
+                    </a>
+                </div>
+            </div>
+            {/if}
+            <!-- E 加载更多 -->
+
+            <!-- S 撰写答案 -->
+            <div class="article-section">
+                <div id="post-comment">
+                    <h3 class="mt-1 mb-2">撰写答案
+                        {if $__question__.price>0&&!$__question__.is_reward_expired&&!$__question__.best_answer_id}
+                        <small>当前问题悬赏金额为<span class="text-danger">￥{$__question__.price}</span> 元，被提问者采纳后将获得赏金</small>
+                        {/if}
+                    </h3>
+                    {include file="common/answerpost" /}
+                </div>
+            </div>
+            <!-- E 撰写答案 -->
+        </div>
+        <div class="col-md-4 col-sm-12">
+            <div class="article-sidebar">
+                {if !$__question__.isanonymous || $isAdmin}
+                <!-- S 关于作者 -->
+                <div class="panel panel-default about-author" data-id="{$__question__.user.id}" itemProp="author" itemscope="" itemType="http://schema.org/Person">
+                    <meta itemProp="name" content="{$__question__.user.nickname}"/>
+                    <meta itemProp="image" content="{$__question__.user.avatar|cdnurl}"/>
+                    <meta itemProp="url" content="{$__question__.user.url}"/>
+                    <div class="panel-heading">
+                        <h3 class="panel-title">关于作者</h3>
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="media">
+                            <div class="media-left">
+                                <a href="{$__question__.user.url}" data-toggle="popover" data-title="{$__question__.user.nickname}" data-placement="left" data-type="user" data-id="{$__question__.user_id}">
+                                    <img class="media-object img-circle img-medium" src="{$__question__.user.avatar|cdnurl}"
+                                         data-holder-rendered="true">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h3 style="margin-top:10px;" class="media-heading">
+                                    <a href="{$__question__.user.url}">{$__question__.user.nickname}</a>
+                                </h3>
+                                {$__question__.user.bio|default=__("This guy hasn't written anything yet")}
+                            </div>
+                        </div>
+                        <div class="row statistics">
+                            <div class="col-xs-4">
+                                <div class="statistics-text">提问</div>
+                                <div class="statistics-nums"><a href="{$__question__.user.url}/question">{$__question__.user.questions}</a></div>
+                            </div>
+                            <div class="col-xs-4">
+                                <div class="statistics-text">回答</div>
+                                <div class="statistics-nums"><a href="{$__question__.user.url}/answer">{$__question__.user.answers}</a></div>
+                            </div>
+                            <div class="col-xs-4">
+                                <div class="statistics-text">被采纳</div>
+                                <div class="statistics-nums">{$__question__.user.adoptions}</div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="col-xs-6">
+                                <a href="javascript:;" class="btn btn-primary btn-block btn-attention {if $__question__.user.followed}followed{/if}" data-id="{$__question__.user.id}" data-type="user"><i class="fa fa-plus"></i> <span>{if $__question__.user.followed}已关注{else/}关注TA{/if}</span></a>
+                            </div>
+                            <div class="col-xs-6">
+                                <a href="javascript:;" class="btn btn-outline-primary btn-block btn-message" data-id="{$__question__.user.id}"><i class="fa fa-comments-o"></i> 发私信</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- E 关于作者 -->
+                {/if}
+
+                <!-- S 相关问题 -->
+                <div class="panel panel-default hot-article">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">相关问题</h3>
+                    </div>
+                    <div class="panel-body">
+                        {foreach name="relatedQuestionList" id="item"}
+                        <div class="media media-number">
+                            <div class="media-left">
+                                <span class="num">{:$key+1}</span>
+                            </div>
+                            <div class="media-body">
+                                <a class="link-dark" href="{$item.url}" title="{$item.title|htmlentities}">{$item.title|htmlentities}</a>
+                            </div>
+                        </div>
+                        {/foreach}
+                    </div>
+                </div>
+                <!-- E 相关问题 -->
+
+                {include file="common/sidebar" /}
+            </div>
+        </div>
+    </div>
+</div>
+
+{if $user}
+<!--追加悬赏-->
+<script id="rewardtpl" type="text/html">
+    <div class="" style="padding:20px;">
+        {if $__question__.score>0||$config.awardtype=='score'}
+        <div class="alert alert-warning" role="alert">
+            <small><span class="text-danger">当前问题悬赏积分为：{$__question__.score} 分</span><br>
+                你可以继续追加悬赏积分，悬赏积分越高，越快得到高质量的回答哦！
+            </small>
+        </div>
+
+        <div class="">
+            <form action="{:addon_url('ask/question/reward',[],false)}" id="reward-form" method="post" target="_blank">
+                <input type="hidden" name="id" value="{$__question__.id}"/>
+                <input type="hidden" name="money" value="{:reset($config.appendscorelist)}"/>
+                <div class="row">
+                    {volist name="config.appendscorelist" id="item"}
+                    <div class="col-xs-4">
+                        <button type="button" class="btn btn-light btn-block btn-money my-2 {:$i==1?'active':''}" data-money="{$item}">{$key}</button>
+                    </div>
+                    {/volist}
+                </div>
+                <hr>
+                <span class="text-muted"><small>你当前账户积分为:{$user.score}分</small></span>
+                <hr>
+                <div class="row mt-2">
+                    <div class="col text-center">
+                        <button type="submit" class="btn btn-primary">确认追加</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        {elseif $__question__.price>0||$config.awardtype!='score' /}
+        <div class="alert alert-warning" role="alert">
+            <small><span class="text-danger">当前问题悬赏金额为：￥{$__question__.price} 元</span><br>
+                你可以继续追加悬赏金额，悬赏金额越高，越快得到高质量的回答哦！
+            </small>
+        </div>
+
+        <div class="">
+            <form action="{:addon_url('ask/question/reward',[],false)}" id="reward-form" method="post" target="_blank">
+                <input type="hidden" name="id" value="{$__question__.id}"/>
+                <input type="hidden" name="money" value="{:reset($config.appendpricelist)}"/>
+                <div class="row">
+                    {volist name="config.appendpricelist" id="item"}
+                    <div class="col-xs-4">
+                        <button type="button" class="btn btn-light btn-block btn-money my-2 {:$i==1?'active':''}" data-money="{$item}">{$key}</button>
+                    </div>
+                    {/volist}
+                </div>
+                <hr>
+                <span class="text-muted"><small>你当前账户余额为:￥{$user.money}元</small> <a href="{:url('index/recharge/recharge')}" class="btn btn-xs btn-outline-primary ml-2"><i class="fa fa-cny"></i> 去充值</a></span>
+                <hr>
+                <div class="row mt-2">
+                    <div class="col text-center">
+                        <button type="submit" class="btn btn-primary">确认追加</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        {/if}
+    </div>
+</script>
+{/if}
+
+<!--邀请模板-->
+<script type="text/html" id="invitetpl">
+    <style>
+        .table-userlist > tbody > tr > td {
+            vertical-align: middle;
+        }
+    </style>
+    <div class="p-4">
+        <form action="{:addon_url('ask/invite/post',[],false)}/id/{$__question__.id}" method="post">
+            <input type="hidden" name="type" value="site"/>
+            <input type="hidden" name="user" value=""/>
+            <input type="hidden" name="price" value="0"/>
+            <div class="alert alert-warning" role="alert">
+                邀请好友来解答问题吧！每天可以发送10次邀请！！付费邀请无限制
+            </div>
+
+            <div class="">
+                <ul class="nav nav-tabs nav-invite" style="margin-bottom: 15px;">
+                    <li class="active"><a href="#site-invite" data-type="site" data-toggle="tab">站内会员</a></li>
+                    <li><a href="#qq-invite" data-type="qq" data-toggle="tab">QQ邀请</a></li>
+                    <li class=""><a href="#weixin-invite" data-type="weixin" data-toggle="tab">微信邀请</a></li>
+                    <li class=""><a href="#email-invite" data-type="email" data-toggle="tab">邮箱邀请</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade active in" id="site-invite">
+                        <div>
+                            <input type="text" class="form-control" id="search-account" placeholder="请输入会员的用户名或昵称进行搜索"/>
+                        </div>
+                        <table class="table table-striped table-userlist mt-2 mb-0">
+                            <thead>
+                            <tr>
+                                <th>头像</th>
+                                <th>昵称</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="qq-invite">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="qq" placeholder="请输入好友QQ号码"/>
+                            <span class="input-group-btn">
+                            <button class="btn btn-primary" type="submit">发送邀请</button>
+                        </span>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="weixin-invite">
+                        <div class="clearfix">
+                            <div class="row">
+                                <div class="col-xs-12 text-center">
+                                    <img src="{:addon_url('ask/qrcode/build')}?text={$__question__.fullurl|urlencode}" width="250">
+                                    <div class="text-center">让好友扫描二维码帮忙回答</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="email-invite">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="email" placeholder="请输入好友邮箱"/>
+                            <span class="input-group-btn">
+                            <button class="btn btn-primary" type="submit">发送邀请</button>
+                        </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</script>
+
+<script data-render="script" src="__ADDON__/js/jquery.colorpicker.min.js?v={$site.version}"></script>
+<script data-render="script" src="__ADDON__/js/question.js?v={$site.version}"></script>
+{:hook('prismhook')}

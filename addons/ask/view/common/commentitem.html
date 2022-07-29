@@ -1,0 +1,43 @@
+<div class="media">
+    <div class="media-left">
+        <a href="{$comment.user.url}" data-toggle="popover" data-title="{$comment.user.nickname}" data-type="user" data-id="{$comment.user_id}">
+            <img class="media-object img-circle {if $Think.get.type=='answer'}img-tiny{else/}img-small{/if}" alt="{$comment.user.nickname}" src="{$comment.user.avatar|cdnurl}">
+        </a>
+    </div>
+    <div class="media-body">
+        <div class="media-heading">
+            <div>
+                <a href="{$comment.user.url}" class="mr-5"><b>{$comment.user.nickname}</b></a>
+                <span class="comment-title pull-right text-muted small">{$comment.create_date}</span>
+            </div>
+            <div class="comment-title text-muted">{$comment.user.bio|default=__("This guy hasn't written anything yet")}</div>
+        </div>
+        <div class="wysiwyg">
+            <!--@formatter:off-->
+            {if isset($__question__) && $__question__.isprivate}
+                {if $user && ($__question__.user_id==$user.id || $isAdmin)}
+                    {$comment.content_fmt}
+                {else/}
+                    <div class="text-muted">此评论仅提问者可以查看</div>
+                {/if}
+            {else/}
+                {$comment.content_fmt}
+            {/if}
+            <!--@formatter:on-->
+        </div>
+        <div class="media-footer">
+            <div class="row">
+                <div class="col-xs-12 text-muted">
+                    <a class="btn btn-light btn-xs btn-vote {if $comment.vote=='up'}voted{/if}" data-id="{$comment.id}" data-type="comment" data-value="up"><i class="fa fa-thumbs-o-up"></i> <span>{$comment.voteup}</span></a>
+                    <a class="btn btn-light btn-xs btn-reply" data-user-id="{$comment.user_id}" data-user-username="{$comment.user.username}" data-user-nickname="{$comment.user.nickname}" data-user-url="{$comment.user.url}" data-type="comment" data-id="{$comment.id}"><i class="fa fa-reply"></i> 回复</a>
+                    <a class="btn btn-light btn-xs btn-report" data-type="comment" data-id="{$comment.id}"><i class="fa fa-exclamation-triangle"></i> 举报</a>
+                    {if $isAdmin}
+                    <a href="javascript:" class="btn btn-light btn-xs btn-editcomment" data-id="{$comment.id}" data-type="comment" data-toggle="tooltip" data-title="编辑评论"><i class="fa fa-pencil"></i> 编辑</a>
+                    <a href="{:addon_url('ask/comment/delete',[],false)}/id/{$comment.id}" class="btn btn-light btn-xs btn-delete" data-toggle="tooltip" data-title="删除回复"><i class="fa fa-times"></i> 删除</a>
+                    {/if}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

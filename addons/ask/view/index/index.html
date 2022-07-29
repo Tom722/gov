@@ -1,0 +1,198 @@
+<style data-render="style">
+    @media (max-width: 480px) {
+        h3.search-title {
+            font-size: 28px;
+        }
+
+        form.index-search-form .search-term {
+            width: 60%;
+        }
+
+        .swiper-recommend .swiper-slide {
+            margin-right: 0px;
+        }
+    }
+
+    .signin-rank-table > tbody > tr > td {
+        vertical-align: middle;
+    }
+</style>
+<div class="full-section search-section-listing">
+    <div class="search-area container">
+        <h3 class="search-title">你提问，我们来为你解答?</h3>
+        <p class="search-tag-line">如果你有任何问题你可以问下面的小伙伴或输入你需要解决的问题!</p>
+        <form autocomplete="off" action="{:addon_url('ask/search/index')}" method="get" class="index-search-form clearfix" id="search-form">
+            <input type="text" placeholder="请输入你遇到的问题进行搜索" name="keyword" class="search-term" id="searchquestion" autocomplete="off">
+            <button type="submit" class="search-btn">搜索问题</button>
+        </form>
+    </div>
+</div>
+
+<div class="container" id="mainbody">
+    <!-- S 专家推荐 -->
+    <h2 style="font-size:18px;">专家推荐</h2>
+    <div class="swiper-container swiper-recommend" style="margin:20px 0;">
+        <div class="swiper-wrapper">
+            {ask:userlist id="item" cache="3600" limit="10" condition="1=isexpert" orderby="rand" orderway="desc"}
+            <div class="swiper-slide">
+                <div class="thumbnail">
+                    <a href="{$item.url}" data-toggle="popover" data-title="{$item.nickname}" data-placement="auto right" data-type="user" data-id="{$item.id}">
+                        <img class="img-circle" style="width:80px;height:80px;margin:30px auto 10px auto;" src="{$item.avatar|cdnurl}" alt="{$item.nickname}">
+                    </a>
+                    <div class="caption">
+                        <h4 class="text-center"><a href="{$item.url}" title="{$item.nickname}">{$item.nickname}</a></h4>
+                        <p class="text-muted text-center" title="{$item.experttitle}">{$item.title|default="认证专家"}</p>
+                        <p class="text-center"><a class="btn btn-primary btn-sm" href="{:addon_url('ask/question/post')}?user_id={$item.id}">向TA提问</a></p>
+                    </div>
+                </div>
+            </div>
+            {/ask:userlist}
+        </div>
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+    <!-- E 专家推荐 -->
+
+    <div class="row" id="questionlist">
+        <div class="col-md-8 col-sm-12">
+            <!-- S 首页问题列表 -->
+            <ul class="nav nav-tabs nav-noborder mb-10 mt-20">
+                <li class="{:$questionType=='new'?'active':''}"><a href="{:addon_url('ask/question/index')}?type=new">最新</a></li>
+                <li class="{:$questionType=='hot'?'active':''}"><a href="{:addon_url('ask/question/index')}?type=hot">热门</a></li>
+                <li class="{:$questionType=='price'?'active':''}"><a href="{:addon_url('ask/question/index')}?type=price">悬赏</a></li>
+                <li class="{:$questionType=='unsolved'?'active':''}"><a href="{:addon_url('ask/question/index')}?type=unsolved">未解决</a></li>
+                <li class="{:$questionType=='unanswer'?'active':''}"><a href="{:addon_url('ask/question/index')}?type=unanswer">未回答</a></li>
+                <li class="{:$questionType=='solved'?'active':''}"><a href="{:addon_url('ask/question/index')}?type=solved">已解决</a></li>
+                {if $isAdmin}
+                <li class="{:$questionType=='unsettled'?'active':''}"><a href="{:addon_url('ask/question/index')}?type=unsettled" title="已经过期的悬赏">已过期</a></li>
+                {/if}
+            </ul>
+
+            <div class="tab-inner" style="background:#fff;padding:15px;">
+                <div class="question-list" data-page="{$Think.get.page|default=1|intval}" data-more="{$questionList->hasPages()}">
+
+                    {foreach name="questionList" id="question"}
+                    {include file="common/questionitem" /}
+                    {/foreach}
+
+                    <!-- S 分页 -->
+                    {include file="common/pageinfo" autoload="true"}
+                    <!-- E 分页 -->
+                </div>
+            </div>
+            <!-- E 首页问题列表 -->
+        </div>
+        <div class="col-md-4 col-sm-12">
+            <div class="article-sidebar">
+                <!-- S 每日签到 -->
+                <div class="panel panel-default recommend-article">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            每日签到
+                            <div class="pull-right">
+                                <a class="btn btn-link btn-xs btn-rank" style="font-size:12px;" href="javascript:">排行榜</a>
+                            </div>
+                        </h3>
+                    </div>
+                    <div class="panel-body text-center">
+                        {if !isset($signinconfig)}
+                        <a href="{:url('index/user/login')}" class="btn btn-danger disabled" disabled=""><i class="fa fa-info-circle"></i> 请在后台安装会员签到插件并启用</a>
+                        {elseif !$user /}
+                        <a href="{:url('index/user/login')}" class="btn btn-primary"><i class="fa fa-user"></i> 请登录后签到</a>
+                        <a href="{:url('index/user/register')}" class="btn btn-outline-primary">注册</a>
+                        {elseif isset($signin) && $signin /}
+                        <a href="javascript:" class="btn btn-primary disabled"><i class="fa fa-location-arrow"></i> 今日已签到, 连续签到 {$signin.successions} 天</a>
+                        {else /}
+                        <a href="javascript:" class="btn btn-primary btn-signin"><i class="fa fa-location-arrow"></i> 立即签到</a>
+                        {/if}
+                    </div>
+                </div>
+                <!-- E 每日签到 -->
+                {include file="common/sidebar" /}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" id="ranktpl">
+    <div style="padding:20px;min-height:300px;">
+        <table class="table table-striped table-hover signin-rank-table">
+            <thead>
+            <tr>
+                <th>头像</th>
+                <th width="50%">昵称</th>
+                <th class="text-center">连续签到</th>
+            </tr>
+            </thead>
+            <tbody>
+            <%for(var i=0;i< ranklist.length;i++){%>
+            <tr>
+                <td><a href="<%=ranklist[i]['user']['url']%>"><img src="<%=ranklist[i]['user']['avatar']%>" height="30" width="30" alt="" class="img-circle"/></a></td>
+                <td><a href="<%=ranklist[i]['user']['url']%>"><%=ranklist[i]['user']['nickname']%></a></td>
+                <td class="text-center"><%=ranklist[i]['days']%> 天</td>
+            </tr>
+            <%}%>
+            </tbody>
+        </table>
+    </div>
+</script>
+
+<script data-render="script" src="__ADDON__/js/jquery.swiper.min.js"></script>
+
+<script data-render="script">
+    $(function () {
+        ASK.render.question("#searchquestion");
+        var mySwiper = new Swiper('.swiper-container', {
+            nextButton: '.swiper-button-next',
+            prevButton: '.swiper-button-prev',
+            slidesPerView: 5,
+            paginationClickable: true,
+            spaceBetween: 30,
+            breakpoints: {
+                1200: {
+                    slidesPerView: 4,
+                    spaceBetween: 40
+                },
+                970: {
+                    slidesPerView: 3,
+                    spaceBetween: 50
+                },
+                640: {
+                    slidesPerView: 2,
+                    spaceBetween: 20
+                },
+                320: {
+                    slidesPerView: 1,
+                    spaceBetween: 10
+                }
+            }
+        });
+        $(document).on("click", ".btn-signin,.today", function () {
+            ASK.api.ajax("{:url('index/signin/dosign')}", function () {
+                ASK.api.msg("签到成功!", function () {
+                    location.reload();
+                });
+            });
+            return false;
+        });
+        $(document).on("click", ".btn-rank", function () {
+            if (!parseInt("{:isset($signinconfig)?'1':'0'}")) {
+                layer.msg("请在后台安装会员签到插件并启用后重试", {icon: 2});
+                return false;
+            }
+            ASK.api.ajax("{:url('index/signin/rank')}", function (data) {
+                layer.open({
+                    title: '签到排行榜',
+                    type: 1,
+                    zIndex: 88,
+                    area: isMobile ? 'auto' : ["400px"],
+                    content: template("ranktpl", data),
+                    btn: []
+                });
+                return false;
+            });
+            return false;
+        });
+    })
+</script>

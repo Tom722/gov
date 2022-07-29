@@ -1,0 +1,31 @@
+<div class="comment">
+    <div class="comment-header">
+        <h4 class="title"><a href="{$answer.question.url}"><span class="tag">问</span> {$answer.question.title|htmlentities}</a></h4>
+    </div>
+    <div class="comment-body">
+
+        <div class="content">
+            {if $answer.question.isprivate}
+            <div class="text-muted">此回答仅提问者可以查看</div>
+            {else/}
+            <div class="text-fmt wysiwyg mt-10 mb-10"><p>{$answer.content_fmt}</p></div>
+            {/if}
+        </div>
+
+    </div>
+    <div class="comment-footer clearfix">
+        <div class="">
+            <a href="javascript:" class="action btn-comment" data-type="answer" data-id="{$answer.id}"><i class="fa fa-comment-o"></i> <span>{$answer.comments}</span> 条评论</a>
+            <a href="javascript:" class="action btn-collection {:$answer.collected?'collected':''}" data-id="{$answer.id}" data-type="answer"><i class="fa fa-bookmark-o"></i> <span>{:$answer.collected?'已收藏':'收藏'}</span></a>
+            <a href="javascript:" class="action btn-thanks" data-id="{$answer.id}" data-type="answer" data-user-id="{$answer.user.id}" data-user-url="{$answer.user.url}" data-user-nickname="{$answer.user.nickname}" data-user-avatar="{$answer.user.avatar|cdnurl}" data-toggle="popover" data-title="感谢" data-url="{:addon_url('ask/ajax/get_thanks_list')}"><i class="fa fa-heart"></i> <span>感谢</span></a>
+            {if $isAdmin || ($user && $user.id==$answer.user_id&&$answer.question.best_answer_id!=$answer.id)}
+            <a href="javascript:" class="action btn-editanswer" data-id="{$answer.id}" data-type="answer" data-toggle="tooltip" data-title="补充完善回答"><i class="fa fa-pencil"></i> 补充回答</a>
+            {/if}
+            {if $isAdmin}
+            <a href="{:addon_url('ask/answer/delete',[],false)}/id/{$answer.id}" class="action btn-delete" data-toggle="tooltip" data-title="删除回答"><i class="fa fa-times"></i> 删除</a>
+            {/if}
+        </div>
+        <div class="sub-comments hidden">
+        </div>
+    </div>
+</div>

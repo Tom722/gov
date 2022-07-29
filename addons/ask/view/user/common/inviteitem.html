@@ -1,0 +1,38 @@
+<div class="comment">
+    <div class="media media-user">
+        <div class="media-left">
+            <a href="{$invite.user.url}" data-toggle="popover" data-type="user" data-id="{$invite.user.id}" data-title="{$invite.user.nickname}" target="_blank">
+                <img class="media-object img-circle" src="{$invite.user.avatar|cdnurl}" alt="{$invite.user.nickname}" style="width:40px;height:40px;">
+            </a>
+        </div>
+        <div class="media-body">
+            <p class="text-muted">
+                <a target="_blank" href="{$invite.user.url}" data-toggle="popover" data-type="user" data-id="{$invite.user.id}" data-title="{$invite.user.nickname}"> {$invite.user.nickname}</a>
+                邀请于 <span>{$invite.createtime|human_date} </span>
+            </p>
+            <div class="media-content">
+                <h4>
+                    <a href="{$invite.question.url}" data-id="{$invite.id}">
+                        {if $invite.question.price>0}
+                        <span class="price-tag" data-toggle="tooltip" data-title="如果回答被采纳，回答者将获得{$invite.question.price}元">￥{$invite.question.price}</span>
+                        {/if}
+                        {$invite.question.title}
+                    </a>
+                </h4>
+            </div>
+        </div>
+        <div class="media-right text-right">
+            <div style="min-width:190px;">
+                {if $invite.isanswered}
+                <a href="javascript:" class="btn btn-xs btn-primary disabled">已回答</a>
+                {else /}
+                    {if $invite.price>0}
+                    <a href="{$invite.question.url}" data-id="{$invite.id}" data-toggle="tooltip" data-title="与提问者是否采纳无关，回答后即可获赏金￥{$invite.price}元" class="label label-danger">赏金:{$invite.price}元</a>
+                    {/if}
+                <a href="{$invite.question.url}" data-id="{$invite.id}" class="btn btn-xs btn-primary">去回答</a>
+                {/if}
+                <a href="javascript:" class="btn btn-xs btn-danger btn-delone" data-id="{$invite.id}">删除</a>
+            </div>
+        </div>
+    </div>
+</div>

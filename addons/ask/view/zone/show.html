@@ -1,0 +1,94 @@
+<style>
+    ul.nav-noborder li a .tag {
+        border-radius: 3px;
+    }
+
+    #faq-list .panel-default {
+        padding: 0px;
+        margin: 0;
+    }
+
+    #faq-list .panel-default > .panel-heading {
+
+        border-radius: 3px;
+        padding: 20px 15px;
+    }
+
+    #faq-list .panel-default .panel-body {
+        color: #888;
+    }
+
+    #faq-list .panel-default .panel-body img {
+        max-width: 100%;
+    }
+</style>
+<div class="container">
+    <div class="row" style="margin-top:20px;">
+        <div class="col-md-8 col-sm-12">
+            <div class="article-section taginfo-section">
+                <div class="media">
+                    <div class="media-left pr-3">
+                        <img class="media-object img-rounded" src="{$__zone__.image|cdnurl}" alt="{$__zone__.name}" style="width:120px;height:120px;">
+                    </div>
+                    <div class="media-body">
+                        <h2 class="media-heading">{$__zone__.name}</h2>
+                        <div class="media-intro text-muted">
+                            {$__zone__.intro}
+                        </div>
+
+                        <div class="mt-2">
+                            <a href="{:addon_url('ask/question/post',[],false)}?zone_id={$__zone__.id}" class="btn btn-primary" data-title="在此专区下创建问题" data-toggle="tooltip"><i class="fa fa-comments-o"></i> 创建问题</a>
+                            <a href="{:addon_url('ask/article/post',[],false)}?zone_id={$__zone__.id}" class="btn btn-outline-primary" data-title="在此专区下发布文章" data-toggle="tooltip"><i class="fa fa-pencil"></i> 发布文章</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <ul class="nav nav-tabs nav-noborder mb-10 mt-20">
+                <li class="{:$zoneType=='question'?'active':''}"><a href="{$__zone__.url}?type=question">问题 <span class="tag tag-xs">{$__zone__.questions}</span></a></li>
+                <li class="{:$zoneType=='article'?'active':''}"><a href="{$__zone__.url}?type=article">文章 <span class="tag tag-xs tag-danger">{$__zone__.articles}</span></a></li>
+            </ul>
+            <div class="tab-inner" style="background:#fff;padding:15px;">
+                {if $zoneType == 'question'}
+                    <div class="question-list" data-page="{$Think.get.page|default=1|intval}" data-more="{$questionList->hasPages()}">
+
+                        {ask:questionlist id="question" flag="top" row="5" orderby="views" condition="`zone_id` = $__zone__->id"}
+                        {include file="common/questionitem" /}
+                        {/ask:questionlist}
+
+                        {foreach name="questionList" id="question"}
+                        {include file="common/questionitem" /}
+                        {/foreach}
+
+                        <!-- S 分页 -->
+                        {include file="common/pageinfo"}
+                        <!-- E 分页 -->
+                    </div>
+                {elseif $zoneType == 'article'}
+                    <div class="question-list" data-page="{$Think.get.page|default=1|intval}" data-more="{$articleList->hasPages()}">
+                        {ask:articleList id="article" flag="top" row="5" orderby="views" condition="`zone_id` = $__zone__->id"}
+                        {include file="common/articleitem" /}
+                        {/ask:articleList}
+
+                        {foreach name="articleList" id="article"}
+                        {include file="common/articleitem" /}
+                        {/foreach}
+
+                        <!-- S 分页 -->
+                        {include file="common/pageinfo"}
+                        <!-- E 分页 -->
+                    </div>
+                {else /}
+
+                {/if}
+            </div>
+
+        </div>
+        <div class="col-md-4 col-sm-12">
+            <div class="article-sidebar">
+                {include file="common/sidebar" /}
+            </div>
+        </div>
+    </div>
+</div>

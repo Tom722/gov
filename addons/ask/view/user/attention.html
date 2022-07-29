@@ -1,0 +1,40 @@
+{include file="user/header" /}
+
+<style>
+    .attention-list .caption p.text-muted {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -webkit-box-orient: vertical;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        min-height: 20px;
+    }
+</style>
+<div class="container">
+    <div class="row" style="margin-top:20px;">
+        <div class="col-md-8 col-sm-12">
+            <ul class="nav nav-tabs nav-noborder mb-10 mt-20">
+                <li class="{:$attentionType=='user'?'active':''}"><a href="?type=user">{:$__user__.me?'我':'TA'}关注的会员</a></li>
+                <li class="{:$attentionType=='question'?'active':''}"><a href="?type=question">{:$__user__.me?'我':'TA'}关注的问题</a></li>
+            </ul>
+            <div class="tab-inner" style="background:#fff;padding:15px;">
+                <div class="row question-list attention-list" data-page="{$Think.get.page|default=1|intval}" data-more="{$attentionList->hasPages()}">
+                    {foreach name="attentionList" id="attention"}
+                    {include file="user/common/attentionitem" /}
+                    {/foreach}
+
+                    <div class="pager text-center">
+                        {$attentionList->render()}
+                    </div>
+
+                    {if $attentionList->isEmpty()}
+                    <div class="loadmore loadmore-line loadmore-nodata"><span class="loadmore-tips">暂无数据</span></div>
+                    {/if}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-12">
+            {include file="user/sidebar" /}
+        </div>
+    </div>
+</div>

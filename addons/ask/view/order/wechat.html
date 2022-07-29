@@ -1,0 +1,110 @@
+<style>
+    .wechat {
+        margin-top: 20px;
+    }
+
+    .wechat h2 {
+        margin: 0 0 15px 0;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .wechat-qrcode {
+        margin-bottom: 20px;
+    }
+
+    .wechat-qrcode img {
+        width: 100%;
+        border: 1px solid #eee;
+    }
+
+    .wechat-scan {
+        padding: 0;
+    }
+
+    .wechat-scan img {
+        width: 100%;
+    }
+
+    .wechat-tips {
+        height: 60px;
+        padding: 8px 0 8px 125px;
+        background: #ff7674 url(__ADDON__/img/icon-red.png) 50px 8px no-repeat
+    }
+
+    .wechat-tips p {
+        margin: 0;
+        font-size: 14px;
+        line-height: 22px;
+        color: #fff;
+        font-weight: 700
+    }
+
+    .wechat-time {
+        font-size: 14px;
+        margin-bottom: 15px;
+    }
+
+    .wechat-time span {
+        color: red;
+    }
+</style>
+
+<div class="p-4">
+    <div class="container">
+        <div class="col-xs-12 col-md-10 col-md-offset-1">
+            <div class="article-section">
+                <div class="mb-4 clearfix">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-10 col-md-offset-1">
+                            <div class=" mb-3">
+                                <h3><span><img src="__ADDON__/img/logo-wechat.png" alt="" height="22" class="pull-left" style="margin-right:5px;"> 微信支付</span></h3>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="wechat-time">
+                                        请在 <span class="countdown" data-seconds="{$__order__.remain_seconds}"></span> 内完成支付
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-10">
+                                            <div class="wechat-qrcode">
+                                                <img src="{:addon_url('ask/qrcode/build')}?text={$code_url|urlencode}&logo=1">
+                                            </div>
+                                            <div class="wechat-tips">
+                                                <p>请使用微信扫一扫</p>
+                                                <p>扫描二维码支付</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="wechat-scan">
+                                        <img src="__ADDON__/img/tips.png" class="img-responsive" alt=""/>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script data-render="script">
+    $(function () {
+        setInterval(function () {
+            ASK.api.ajax({
+                url: "",
+            }, function (data, ret) {
+                ASK.api.msg(ret.msg, ret.url);
+                return false;
+            }, function (data, ret) {
+                return false;
+            })
+        }, 3000);
+    });
+</script>

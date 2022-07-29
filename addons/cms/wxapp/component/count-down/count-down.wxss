@@ -1,0 +1,34 @@
+.u-countdown {
+	display: inline-flex;
+	align-items: center;
+}
+
+.u-countdown-item {	
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 2rpx;
+	border-radius: 6rpx;
+	white-space: nowrap;
+	transform: translateZ(0);
+}
+
+.u-countdown-time {
+	margin: 0;
+	padding: 0;
+	line-height: 1;
+}
+
+.u-countdown-colon {
+	display: flex;
+	justify-content: center;
+	padding: 0 5rpx;
+	line-height: 1;
+	align-items: center;
+	padding-bottom: 4rpx;
+}
+
+.u-countdown-scale {
+	transform: scale(0.9);
+	transform-origin: center center;
+}

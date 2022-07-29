@@ -1,0 +1,9 @@
+{__NOLAYOUT__}
+
+{foreach name="attentionList" id="attention"}
+{include file="user/common/attentionitem" /}
+{/foreach}
+
+<div class="pager text-center">
+    {$attentionList->render()}
+</div>

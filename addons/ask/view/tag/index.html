@@ -1,0 +1,55 @@
+<style>
+    .tag-item .tag-intro {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 5;
+        -webkit-box-orient: vertical;
+    }
+</style>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <h2 style="font-size:18px;">话题列表</h2>
+            <div class="mb-3">
+                话题是用于将相似的问题进行归类，正确的使用话题能更快的发现和解决你的问题
+            </div>
+            <div class="category-list mb-2">
+                <a href="?" class="btn btn-{:$categoryId?'light':'primary'} btn-labeled">
+                    <span class="btn-label"><i class="fa fa-home"></i></span> 全部
+                </a>
+                {foreach name="categoryList" id="category"}
+                <a class="btn btn-{:$category.id==$categoryId?'primary':'light'} btn-labeled" href="?category={$category.id}" role="button">
+                    {if $category.icon}<span class="btn-label"><i class="{$category.icon}"></i></span> {/if}{$category.name}</a>
+                {/foreach}
+            </div>
+            <div class="tag-list">
+                <div class="row">
+                    {foreach name="tagList" id="item"}
+                    <div class="col-xs-6 col-sm-4 col-md-3">
+                        <div class="tag-item">
+                            <h2>
+                                <a href="{$item.url}" class="">{if $item.icon}<img src="{$item.icon}" alt="">{/if}{$item.name|htmlentities}</a>
+                            </h2>
+                            <p class="tag-intro text-muted">{:$item.intro?$item.intro:'暂无介绍'}</p>
+                            <div class="tag-action">
+
+                                <a href="javascript:" class="btn btn-default btn-xs btn-attention {if $item.followed}followed btn-outline-primary{/if}" data-id="{$item.id}" data-type="tag"><i class="fa fa-plus"></i> <span>{:$item.followed?'已关注':'关注'}</span></a>
+                                <div class="pull-right mt-1">
+                                    <strong class="follows">{$item.followers}</strong> <span class="text-muted">关注</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {/foreach}
+                </div>
+            </div>
+
+            <div class="pager text-center">{$tagList->render()}</div>
+
+            {if $tagList->isEmpty()}
+            <div class="loadmore loadmore-line loadmore-nodata"><span class="loadmore-tips">暂无数据</span></div>
+            {/if}
+        </div>
+    </div>
+</div>

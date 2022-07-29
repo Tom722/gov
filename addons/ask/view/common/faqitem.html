@@ -1,0 +1,12 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#faq-list" href="#c_{$key}_accordion">{:$key+1}.{$faq.title}</a>
+        </h4>
+    </div>
+    <div id="c_{$key}_accordion" class="panel-collapse collapse">
+        <div class="panel-body">
+            {$faq.content_fmt}
+        </div>
+    </div>
+</div>

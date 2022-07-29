@@ -1,0 +1,47 @@
+<style>
+    .tag-item .tag-intro {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 5;
+        -webkit-box-orient: vertical;
+    }
+</style>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <h2 style="font-size:18px;">专区列表</h2>
+            <div class="mb-3">
+                专区仅针对具有相关授权的用户开放访问
+            </div>
+            <div class="tag-list">
+                <div class="row">
+                    {foreach name="zoneList" id="item"}
+                    <div class="col-xs-6 col-sm-4 col-md-3">
+                        <div class="tag-item">
+                            <h2>
+                                <a href="{$item.url}" class="">{$item.name}</a>
+                            </h2>
+                            <p class="tag-intro text-muted">{:$item.intro?$item.intro:'暂无介绍'}</p>
+                            <div class="tag-action">
+
+                                <div class="pull-left ml-1">
+
+                                </div>
+                                <div class="pull-right mt-1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {/foreach}
+                </div>
+            </div>
+
+            <div class="page text-center">{$zoneList->render()}</div>
+
+            {if $zoneList->isEmpty()}
+            <div class="loadmore loadmore-line loadmore-nodata"><span class="loadmore-tips">暂无数据</span></div>
+            {/if}
+        </div>
+    </div>
+</div>

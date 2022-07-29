@@ -1,0 +1,29 @@
+<div class="comment">
+    <div class="media media-user">
+        <div class="media-left">
+            <a href="{$message.from.url}" data-toggle="popover" data-type="user" data-id="{$message.from.id}" data-title="{$message.from.nickname}" target="_blank">
+                <img class="media-object img-circle" src="{$message.from.avatar|cdnurl}" alt="{$message.from.nickname}" style="width:40px;height:40px;">
+            </a>
+        </div>
+        <div class="media-body">
+            <p class="text-muted">
+                <a target="_blank" href="{$message.from.url}" data-toggle="popover" data-type="user" data-id="{$message.from.id}" data-title="{$message.from.nickname}"> {$message.from.nickname}</a>
+                发送于 <span>{$message.createtime|human_date} </span>
+            </p>
+            <div class="media-content">
+                <p>{$message.content}</p>
+            </div>
+        </div>
+        <div class="media-right text-right">
+            <div style="min-width:200px;">
+                <a href="javascript:" class="btn btn-xs btn-primary btn-message" data-id="{$message.from.id}"><i class="fa fa-comments-o"></i> 发私信</a>
+                {if $message.isread}
+                <a href="javascript:" class="btn btn-xs btn-primary disabled">已读</a>
+                {else /}
+                <a href="javascript:" class="btn btn-xs btn-primary btn-markone" data-id="{$message.id}">标记为已读</a>
+                {/if}
+                <a href="javascript:" class="btn btn-xs btn-danger btn-delone" data-id="{$message.id}">删除</a>
+            </div>
+        </div>
+    </div>
+</div>

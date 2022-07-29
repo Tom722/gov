@@ -1,0 +1,17 @@
+<div>
+    <div class="text-center">
+        <a href="javascript:" class="btn btn-primary btn-thanks" data-id="{$__model__.id}" data-type="{$type}" data-user-id="{$__model__.user.id}" data-user-url="{$__model__.user.url}" data-user-nickname="{$__model__.user.nickname}" data-user-avatar="{$__model__.user.avatar|cdnurl}">感谢TA</a>
+    </div>
+    <div class="thanks-list">
+        {foreach name="thanksList" id="thanks"}
+        <a href="{$thanks.user.url}" class="btn btn-light btn-md" data-toggle="tooltip" data-title="打赏金额：￥{$thanks.money}" style="margin:10px;">
+            {if $thanks.user}
+                <img src="{$thanks.user.avatar|cdnurl}" class="img-circle" alt="" style="width:16px;">
+                {$thanks.user.nickname}
+            {else /}
+                匿名小伙伴
+            {/if}
+        </a>
+        {/foreach}
+    </div>
+</div>

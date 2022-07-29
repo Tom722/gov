@@ -1,0 +1,31 @@
+<?php
+
+return [
+    'Type'                 => '类型',
+    'Source_id'            => '来源ID',
+    'User_id'              => '会员ID',
+    'Reply_user_id'        => '回复会员ID',
+    'Content'              => '回答内容',
+    'Content_fmt'          => '富文本内容',
+    'Voteup'               => '点赞次数',
+    'Votedown'             => '点踩次数',
+    'Comments'             => '评论数量',
+    'Shares'               => '分享次数',
+    'Collections'          => '收藏次数',
+    'Thanks'               => '感谢次数',
+    'Reports'              => '举报次数',
+    'Createtime'           => '添加时间',
+    'Updatetime'           => '更新时间',
+    'Deletetime'           => '删除时间',
+    'Recycle bin'          => '回收站',
+    'Restore'              => '还原',
+    'Restore all'          => '还原全部',
+    'Destroy'              => '销毁',
+    'Destroy all'          => '清空回收站',
+    'Nothing need restore' => '没有需要还原的数据',
+    'Question'             => '问题',
+    'Answer'               => '回答',
+    'Article'              => '文章',
+    'Comment'              => '评论',
+    'Status'               => '状态'
+];

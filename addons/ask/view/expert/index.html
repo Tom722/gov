@@ -1,0 +1,126 @@
+<style data-render="style">
+    @media (max-width: 480px) {
+        .expert-list {
+            margin: 0 -10px;
+        }
+
+        .expert-list .thumbnail {
+            width: 44%;
+            margin: 5px 10px;
+        }
+    }
+
+    .category-list .tag {
+         border-radius:3px;
+     }
+     .btn-label {position: relative;left: -12px;display: inline-block;padding: 6px 12px;background: rgba(0,0,0,0.15);border-radius: 3px 0 0 3px;}
+    .btn-labeled {padding-top: 0;padding-bottom: 0;}
+     .category-list .btn { margin-bottom:10px; margin-right:10px;}
+     .btn-light .btn-label {background:#0076ff;color:#fff;}
+</style>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <h2 style="font-size:18px;">
+                专家推荐
+                <a href="{:addon_url('ask/expert/post')}" class="btn btn-outline-primary pull-right btn-apply"><i class="fa fa-id-card-o"></i> 申请专家认证</a>
+            </h2>
+            <div class="mb-3">
+                这里展示的是由我们为你推荐的资深小伙伴，你可以向TA提问，快速解答你的问题。
+            </div>
+
+            <div class="category-list mb-2">
+                <a href="?" class="btn btn-{:$categoryId?'light':'primary'} btn-labeled">
+                    <span class="btn-label"><i class="fa fa-home"></i></span>全部
+                </a>
+                {foreach name="categoryList" id="category"}
+                <a class="btn btn-{:$category.id==$categoryId?'primary':'light'} btn-labeled" href="?category={$category.id}" role="button">
+                    {if $category.icon}<span class="btn-label"><i class="{$category.icon}"></i></span>{/if}{$category.name}</a>
+                {/foreach}
+            </div>
+
+            <div class="expert-list clearfix">
+                {foreach name="expertList" id="item"}
+                <div class="thumbnail">
+                    <a href="{$item.url}">
+                        <img class="img-circle" style="width:80px;height:80px;margin:30px auto 10px auto;" src="{$item.avatar|cdnurl}" alt="{$item.nickname}" data-toggle="popover" data-title="{$item.nickname}" data-placement="auto right" data-type="user" data-id="{$item.id}">
+                    </a>
+                    <div class="caption">
+                        <h4 class="text-center"><a href="{$item.url}" title="{$item.nickname}">{$item.nickname}</a></h4>
+                        <p class="text-muted text-center" title="{$item.experttitle}">{$item.title|default="认证专家"}</p>
+                        <p class="text-center">
+                            <a class="btn btn-primary btn-sm" href="{:addon_url('ask/question/post')}?user_id={$item.id}">向TA提问</a>
+                        </p>
+                    </div>
+                </div>
+                {/foreach}
+            </div>
+
+            <div class="pager text-center">{$expertList->render()}</div>
+
+            {if $expertList->isEmpty()}
+            <div class="loadmore loadmore-line loadmore-nodata"><span class="loadmore-tips">暂无数据</span></div>
+            {/if}
+        </div>
+    </div>
+</div>
+<script id="applytpl" type="text/html">
+    <div class="p-4">
+
+        <div class="">
+            <form action="{:addon_url('ask/expert/create')}" id="apply-form" method="post">
+
+                <div class="form-group">
+                    <label class="control-label">技能
+                        <small class="text-muted">(你比较善长于的)</small>
+                    </label>
+                    <input class="form-control" type="text" name="ability" placeholder="例如：php/javascript/linux">
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">个人介绍
+                        <small class="text-muted">(将会显示在头像右侧)</small>
+                    </label>
+                    <textarea name="intro" cols="30" rows="3" class="form-control" placeholder="建议不超过10个汉字">{$user.bio|default=''}</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">作品集网址
+                        <small class="text-muted">(博客/Github/Gitee等)</small>
+                    </label>
+                    <textarea name="works" cols="30" rows="5" class="form-control" placeholder="请输入你的博客或Github相关地址"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">QQ号
+                        <small class="text-muted">(用于应急联系)</small>
+                    </label>
+                    <input class="form-control" type="number" name="qq" placeholder="请输入你的QQ号">
+                </div>
+                <hr>
+                <div class="row mt-2">
+                    <div class="col text-center">
+                        <button type="submit" class="btn btn-primary btn-submit-thanks">提交申请</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</script>
+
+<script data-render="script">
+    $(function () {
+        $(document).on("click", ".btn-apply", function () {
+            layer.open({
+                title: '申请专家认证',
+                area: ["400px", "520px"],
+                type: 1,
+                content: template("applytpl", {})
+            });
+            return false;
+        });
+        ASK.api.form("#apply-form", function (data, ret) {
+            ASK.api.msg(ret.msg, ret.url);
+            return false;
+        });
+    });
+</script>

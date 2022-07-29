@@ -1,0 +1,174 @@
+{layout name="common/layout" /}
+
+<link rel="stylesheet" href="__CDN__/assets/libs/toastr/toastr.min.css">
+<link rel="stylesheet" href="__CDN__/assets/libs/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css">
+<link rel="stylesheet" href="__CDN__/assets/libs/bootstrap-daterangepicker/daterangepicker.css">
+<link rel="stylesheet" href="__CDN__/assets/libs/nice-validator/dist/jquery.validator.css">
+<link rel="stylesheet" href="__CDN__/assets/libs/fastadmin-selectpage/selectpage.css">
+<link rel="stylesheet" href="__CDN__/assets/libs/bootstrap-select/dist/css/bootstrap-select.min.css">
+
+<style>
+    #post-form .input-group-addon {
+        background: none;
+    }
+
+    #post-form .panel-default {
+        padding: 0;
+    }
+
+    #post-form input.form-control, #post-form textarea.form-control {
+        border-radius: 2px;
+    }
+
+    .faupload-preview li {
+        margin-top: 15px;
+    }
+
+    .input-group > .msg-box.n-right {
+        position: absolute;
+    }
+
+    @media (max-width: 767px) {
+        .n-bootstrap .col-xs-12 > .n-right .msg-wrap {
+            margin-right: 15px;
+        }
+
+        .n-bootstrap .n-right {
+            margin-top: 0;
+            top: -20px;
+            position: absolute;
+            left: 0;
+            text-align: right;
+            width: 100%;
+        }
+
+        .n-bootstrap .n-right .msg-wrap {
+            position: relative;
+        }
+    }
+</style>
+
+{if $Think.get.noframe}
+<style>
+    header, footer, .main-content:after {
+        display: none;
+    }
+
+    body {
+        padding-top: 0 !important;
+    }
+
+    main.main-content {
+        padding-bottom: 0;
+    }
+
+    .article-metas, .article-metas + hr {
+        display: none;
+    }
+
+    #content-container {
+        width: 100%;
+    }
+
+    #content-container > .row > .col-md-12 > .panel-default {
+        margin-bottom: 0;
+    }
+</style>
+{/if}
+<!--@formatter:off-->
+<script type="text/javascript">
+    var require = {
+        config: {$jsconfig|json_encode}
+    };
+</script>
+<!--@formatter:on-->
+
+<div class="container" id="content-container">
+
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <section class="article-content">
+                        <div class="article-metas text-center">
+                            <h1 class="metas-title">
+                                {$__DIYFORM__['posttitle']}
+                            </h1>
+                        </div>
+                        <hr>
+                        <div class="py-4">
+                            <!-- S 正文 -->
+
+                            <div class="row">
+                                <div class="col-xs-12 col-md-8 col-md-offset-2">
+                                    <form id="post-form" class="form-horizontal" role="form" data-toggle="validator" method="POST">
+                                        <input type="hidden" name="__diyname__" value="{$__DIYFORM__['diyname']}">
+                                        {:token()}
+
+                                        {cms:diyform name="fieldslist" /}
+
+                                        {if $__DIYFORM__->iscaptcha}
+                                        <div class="form-group">
+                                            <div class="control-label col-xs-12 col-sm-2">验证码</div>
+                                            <div class="col-xs-12 col-sm-8">
+                                                <a href="javascript:" class="hidden" data-event data-url></a>
+                                                <div class="input-group">
+                                                    <input type="text" name="captcha" id="c-captcha" class="form-control" data-rule="required;length({$Think.config.captcha.length})"/>
+                                                    <span class="input-group-btn" style="padding:0;border:none;">
+                                                        <img src="{:captcha_src()}" width="100" height="31" onclick="this.src = '{:captcha_src()}?r=' + Math.random();"/>
+                                                    </span>
+                                                    <span class="msg-box n-right" for="c-captcha"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {/if}
+
+                                        <div class="form-group normal-footer">
+                                            <label class="control-label col-xs-12 col-sm-2"></label>
+                                            <div class="col-xs-12 col-sm-8 text-center">
+                                                <button type="submit" class="btn btn-primary btn-embossed disabled">{:__('OK')}</button>
+                                                <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+                                            </div>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- E 正文 -->
+                        </div>
+
+                        <div class="clearfix"></div>
+                    </section>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script data-render="script">
+    $(function () {
+        //避免Bootstrap和RequireJS中引入的Bootstrap事件冲突
+        $(document).off('click.bs.dropdown.data-api');
+    });
+    require.callback = function () {
+        define('diyform/index', ['jquery', 'bootstrap', 'frontend', 'form'], function ($, undefined, Frontend, Form) {
+            var Controller = {
+                index: function () {
+                    Form.api.bindevent($("form[role=form]"), function (data, ret) {
+                        Layer.alert(ret.msg, {
+                            end: function () {
+                                location.href = ret.url;
+                            }
+                        });
+                        return false;
+                    });
+                }
+            };
+            return Controller;
+        });
+    }
+</script>
+
+<script data-render="script" src="__CDN__/assets/js/require{$Think.config.app_debug?'':'.min'}.js" data-main="__CDN__/assets/js/require-frontend{$Think.config.app_debug?'':'.min'}.js?v={$site.version}"></script>

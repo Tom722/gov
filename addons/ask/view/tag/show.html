@@ -1,0 +1,142 @@
+<style>
+    ul.nav-noborder li a .tag {
+        border-radius:3px;
+    }
+</style>
+<div class="container">
+    <div class="row" style="margin-top:20px;">
+        <div class="col-md-8 col-sm-12">
+            <div class="article-section taginfo-section">
+                <div class="media">
+                    <div class="media-left pr-3">
+                        <img class="media-object img-rounded" src="{$__tag__.image}" alt="{$__tag__.name|htmlentities}" style="width:120px;height:120px;">
+                    </div>
+                    <div class="media-body">
+                        <h2 class="media-heading">{$__tag__.name|htmlentities}</h2>
+                        <div class="media-intro text-muted">
+                            {$__tag__.intro}
+                        </div>
+
+                        <div class="mt-2">
+                            <a href="javascript:" class="btn btn-primary btn-attention {if $__tag__.followed}followed{/if}" data-id="{$__tag__.id}" data-type="tag"><i class="fa fa-plus"></i> <span>{:$__tag__.followed?'已关注':'关注话题'}</span></a>
+
+                            <div class="btn-group">
+                                <a href="{:addon_url('ask/question/post',[],false)}?tag_id={$__tag__.id}" class="btn btn-outline-primary"><i class="fa fa-comments-o"></i> 创建问题</a>
+                                <a class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" href="javascript:;" aria-expanded="true">
+                                    <span class="fa fa-caret-down"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{:addon_url('ask/article/post',[],false)}?tag_id={$__tag__.id}"><i class="fa fa-file-o"></i> 发布文章</a></li>
+                                </ul>
+                            </div>
+                            <a href="javascript:" class="btn btn-report text-muted ml-2 px-1" data-id="{$__tag__.id}" data-type="tag"><i class="fa fa-exclamation-triangle"></i> <span>举报</span></a>
+                            {if $isAdmin}
+                            <a href="javascript:" data-id="{$__tag__.id}" class="btn px-1 btn-update text-muted" data-toggle="tooltip" data-title="编辑话题"><i class="fa fa-pencil"></i> 编辑</a>
+                            <a href="{:addon_url('ask/tag/delete',[],false)}/id/{$__tag__.id}" class="btn px-1 btn-delete text-muted" data-toggle="tooltip" data-title="删除话题"><i class="fa fa-times"></i> 删除</a>
+                            {/if}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <ul class="nav nav-tabs nav-noborder mb-10 mt-20">
+                <li class="{:$tagType=='question'?'active':''}"><a href="{$__tag__.url}?type=question">问题 <span class="tag tag-xs">{$__tag__.questions}</span></a></li>
+                <li class="{:$tagType=='article'?'active':''}"><a href="{$__tag__.url}?type=article">文章 <span class="tag tag-xs tag-danger">{$__tag__.articles}</span></a></li>
+            </ul>
+            <div class="tab-inner" style="background:#fff;padding:15px;">
+                {if $tagType == 'question'}
+                <div class="question-list" data-page="{$Think.get.page|default=1|intval}" data-more="{$questionList->hasPages()}">
+                    {foreach name="questionList" id="question"}
+                    {include file="common/questionitem" /}
+                    {/foreach}
+
+                    <!-- S 分页 -->
+                    {include file="common/pageinfo"}
+                    <!-- E 分页 -->
+                </div>
+                {else /}
+                <div class="question-list" data-page="{$Think.get.page|default=1|intval}" data-more="{$articleList->hasPages()}">
+                    {foreach name="articleList" id="article"}
+                    {include file="common/articleitem" /}
+                    {/foreach}
+
+                    <!-- S 分页 -->
+                    {include file="common/pageinfo"}
+                    <!-- E 分页 -->
+                </div>
+                {/if}
+            </div>
+
+        </div>
+        <div class="col-md-4 col-sm-12">
+            <div class="article-sidebar">
+                <!-- S 关于作者 -->
+                <div class="panel panel-default about-author">
+                    <div class="panel-body py-0">
+                        <div class="row statistics withline">
+                            <div class="col-xs-4">
+                                <div class="statistics-text">问答</div>
+                                <div class="statistics-nums">{$__tag__.questions}</div>
+                            </div>
+                            <div class="col-xs-4">
+                                <div class="statistics-text">文章</div>
+                                <div class="statistics-nums">{$__tag__.articles}</div>
+                            </div>
+                            <div class="col-xs-4">
+                                <div class="statistics-text">关注者</div>
+                                <div class="statistics-nums">{$__tag__.followers}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- E 关于作者 -->
+
+                {include file="common/sidebar" /}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script data-render="script">
+    $(function () {
+        $(document).on('click', '.btn-update', function () {
+            var that = this;
+            ASK.api.ajax({
+                type: 'get',
+                url: "{:addon_url('ask/tag/update')}",
+                data: {id: $(that).data("id")}
+            }, function (data, ret) {
+                layer.open({
+                    type: 1,
+                    area: isMobile ? 'auto' : ["450px", "500px"],
+                    zIndex: 1031,
+                    title: '编辑',
+                    content: data,
+                    success: function (layero, index) {
+                        $.fn.insertToTextArea = function (filename, url) {
+                            $(this).val(url.replace(Config.upload.cdnurl, ''));
+                        };
+
+                        ASK.api.form($("form", layero), function (data, ret) {
+                            ASK.api.msg(ret.msg, function () {
+                                location.reload();
+                            });
+                            return false;
+                        });
+
+                        //手动选择上传图片
+                        $(".uploadimage", $("form", layero)).change(function () {
+                            var that = this;
+                            $.each($(this)[0].files, function (i, file) {
+                                $(that).parent().parent().prev().uploadFile(file, file.name);
+                            });
+                        });
+                    }
+                });
+                return false;
+            });
+            return false;
+        });
+
+    });
+</script>

@@ -1,0 +1,42 @@
+<div class="article-sidebar">
+    <!-- S 会员菜单 -->
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <ul class="nav nav-pills nav-stacked space-nav">
+                <li class="{:$action=='index'?'active':''}"><a href="{$__user__.url}">{:$__user__.me?'我':'TA'}的主页</a></li>
+                <li class="{:$action=='answer'?'active':''}"><a href="{$__user__.url}/answer">{:$__user__.me?'我':'TA'}的回答</a></li>
+                <li class="{:$action=='question'?'active':''}"><a href="{$__user__.url}/question">{:$__user__.me?'我':'TA'}的提问</a></li>
+                <li class="{:$action=='article'?'active':''}"><a href="{$__user__.url}/article">{:$__user__.me?'我':'TA'}的文章</a></li>
+                <li class="{:$action=='follower'?'active':''}"><a href="{$__user__.url}/follower">{:$__user__.me?'我':'TA'}的粉丝</a></li>
+                <li class="{:$action=='attention'?'active':''}"><a href="{$__user__.url}/attention">{:$__user__.me?'我':'TA'}的关注</a></li>
+                {if $__user__.me}
+                <li class="{:$action=='collection'?'active':''}"><a href="{$__user__.url}/collection">我的收藏</a></li>
+                <li class="{:$action=='notification'?'active':''}"><a href="{$__user__.url}/notification">我的通知</a></li>
+                <li class="{:$action=='message'?'active':''}"><a href="{$__user__.url}/message">我的私信</a></li>
+                <li class="{:$action=='invite'?'active':''}"><a href="{$__user__.url}/invite">邀请我回答的</a></li>
+                {/if}
+            </ul>
+        </div>
+    </div>
+    <!-- E 会员菜单 -->
+
+    <!-- S 会员统计 -->
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">会员统计</h3>
+        </div>
+        <div class="panel-body text-muted small">
+            <div class="my-2">
+                注册于 {$__user__.jointime|human_date}
+            </div>
+            <div class="my-2">
+                个人主页被 {$__user__.views} 人浏览
+            </div>
+        </div>
+    </div>
+    <!-- E 会员统计 -->
+
+    <div class="mb-3">
+        {ask:block name="sidebarad1" /}
+    </div>
+</div>

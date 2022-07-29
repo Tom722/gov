@@ -1,0 +1,9 @@
+{if $user}
+<div class="alert alert-warning m-1 mb-3" role="alert">
+    1. 支持@社区用户,被@的用户会收到站内通知消息<br>
+    2. 支持#搜索社区问题或文章<br>
+    {if $config.editormode=='markdown'}
+    3. 支持Markdown标准格式
+    {/if}
+</div>
+{/if}

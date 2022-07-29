@@ -1,0 +1,25 @@
+{if $page>1}
+    {foreach name="commentList" id="comment"}
+    {include file="common/commentitem"/}
+    {/foreach}
+{else/}
+    <div class="comment-list">
+        {foreach name="commentList" id="comment"}
+        {include file="common/commentitem"/}
+        {/foreach}
+    </div>
+
+    {if $page==1&&$commentList->count()==0}
+    <div class="my-2 comment-nodata">暂无评论，快来发表评论吧</div>
+    {/if}
+
+    {if $commentList->hasPages()}
+    <div class="my-2 text-center">
+        <a href="javascript:;" class="btn btn-light btn-block btn-md btn-morecomment" data-id="{$source_id}" data-type="{$type}" data-page="{:$page+1}"><i class="fa fa-angle-down"></i> 加载更多</a>
+    </div>
+    {/if}
+
+    <div class="comment-post">
+        {include file="common/commentpost"/}
+    </div>
+{/if}

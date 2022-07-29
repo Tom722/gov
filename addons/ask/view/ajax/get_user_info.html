@@ -1,0 +1,73 @@
+<div class="panel panel-default about-author" style="width:400px;">
+    <div class="panel-heading py-1">
+        <div class="row">
+            <div class="col-xs-8">
+                <h3 class="panel-title py-2">
+                    关于作者
+                </h3>
+            </div>
+            <div class="col-xs-4">
+                <div class="text-right">
+                    <a href="{:addon_url('ask/question/post',[],false)}?user_id={$__user__.id}" data-title="指定{$__user__.nickname}来为你解答问题" class="btn btn-primary"><i class="fa fa-question-circle-o"></i> 向TA提问</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="media">
+            <div class="media-left">
+                <a href="{$__user__.url}">
+                    <img class="media-object img-circle" style="width: 64px; height: 64px;" src="{$__user__.avatar|cdnurl}" />
+                </a>
+            </div>
+            <div class="media-body">
+                <h3 style="margin-top:10px;" class="media-heading">
+                    <a href="{$__user__.url}">{$__user__.nickname}</a>
+                    {if $__user__.title}
+                    <span class="small"><span class="label label-primary">{$__user__.title}</span></span>
+                    {/if}
+                </h3>
+                {$__user__.bio|default=__("This guy hasn't written anything yet")}
+                {if $__user__.isexpert && $__user__.certification && $__user__.certification.ability}
+                <div class="text-muted small mt-1">{$__user__.certification.ability}</div>
+                {/if}
+            </div>
+        </div>
+        <div class="row statistics">
+            <div class="col-xs-4">
+                <div class="statistics-text">文章</div>
+                <div class="statistics-nums"><a href="{$__user__.url}/article">{$__user__.articles}</a></div>
+            </div>
+            <div class="col-xs-4">
+                <div class="statistics-text">回答</div>
+                <div class="statistics-nums"><a href="{$__user__.url}/answer">{$__user__.answers}</a></div>
+            </div>
+            <div class="col-xs-4">
+                <div class="statistics-text">被采纳</div>
+                <div class="statistics-nums">{$__user__.adoptions}</div>
+            </div>
+            {if $isAdmin}
+            <div class="col-xs-4 mt-2">
+                <div class="statistics-text">积分</div>
+                <div class="statistics-nums">{$__user__.score}</div>
+            </div>
+            <div class="col-xs-4 mt-2">
+                <div class="statistics-text">连续登录</div>
+                <div class="statistics-nums">{$__user__.successions}</div>
+            </div>
+            <div class="col-xs-4 mt-2">
+                <div class="statistics-text">注册时间</div>
+                <div class="statistics-nums">{$__user__.jointime|date="Y-m-d",###}</div>
+            </div>
+            {/if}
+        </div>
+        <div class="row">
+            <div class="col-xs-6">
+                <a href="javascript:;" class="btn btn-primary btn-block btn-attention {if $__user__.followed}followed{/if}" data-id="{$__user__.id}" data-type="user"><i class="fa fa-plus"></i> <span>{if $__user__.followed}已关注{else/}关注TA{/if}</span></a>
+            </div>
+            <div class="col-xs-6">
+                <a href="javascript:;" class="btn btn-outline-primary btn-block btn-message" data-id="{$__user__.id}"><i class="fa fa-comments-o"></i> 发私信</a>
+            </div>
+        </div>
+    </div>
+</div>

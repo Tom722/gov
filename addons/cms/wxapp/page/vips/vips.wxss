@@ -1,0 +1,217 @@
+page{
+  background: #ffffff;
+}
+.u-p-30 {
+  padding: 30rpx;
+}
+.u-p-r-30 {
+  padding-right: 30rpx !important;
+}
+.u-p-t-30 {
+  padding-top: 30rpx !important;
+}
+.u-p-l-30 {
+  padding-left: 30rpx !important;
+}
+.u-m-r-15{
+  margin-right: 15rpx;
+}
+.u-m-t-15{
+  margin-top: 15rpx;
+}
+.u-m-t-10{
+  margin-top: 10rpx;
+}
+.u-m-b-10 {
+  margin-bottom: 10rpx !important;
+}
+.u-font-20 {
+  font-size: 20rpx;
+}
+.u-font-22{
+  font-size: 22rpx;
+}
+.u-font-30 {
+  font-size: 30rpx;
+}
+.u-font-40 {
+  font-size: 40rpx;
+}
+.u-flex {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+.u-flex-column {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  height: 100%;
+}
+.u-row-between {
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+}
+.u-row-center {
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  justify-content:center;
+}
+.u-flex-wrap {
+  -webkit-flex-wrap: wrap;
+          flex-wrap: wrap;
+}
+.u-col-top {
+  -webkit-box-align: start;
+  -webkit-align-items: flex-start;
+  align-items: flex-start;
+}
+.u-col-center {
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+.u-flex-1 {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  flex: 1;
+}
+
+.u-tips-color {
+  color: #909399;
+}
+.u-text-center {
+  text-align: center;
+}
+.u-text-weight {
+  font-weight: bold;
+}
+.center {
+  border-radius: 20rpx;
+  color: #ffffff;
+  box-shadow: 0 0 16rpx 4rpx rgba(51,136,255, 0.3);
+  background-color: #3388FF;
+}
+
+.center image {
+  width: 90rpx;
+  height: 90rpx;
+  border-radius: 100rpx;
+}
+
+.center .nickname {
+  font-weight: bold;
+}
+
+.center .vip-name {
+  font-size: 20rpx;
+  background: #19be6b;
+  color: #ffffff;
+  border-radius: 10rpx;
+  margin-left: 15rpx;
+  padding: 5rpx 15rpx;
+}
+.center .zan-btn{
+    padding: 0 22rpx;
+    height: 52rpx;
+    line-height: 52rpx;
+    font-size: 24rpx;
+}
+.bg-title {
+	background-color: #f3f4f6;
+}
+.vip .zan-tab__item--selected .zan-tab__title {
+  color: #3388FF;
+  border-bottom: 2px solid #3388FF;
+}
+.vip .zan-tab{
+  height: 53px;
+}
+.radius{
+  border-radius: 30rpx;
+}
+.vip .zan-tab__bd{
+  border: none;
+}
+
+
+.price-list .item {
+  border: 1px solid #cccccc;
+  width: calc((100vw - 120rpx) / 3);
+  padding: 40rpx 30rpx;
+  margin-bottom: 30rpx;
+  box-sizing: border-box;
+  border-radius: 10rpx;
+  height:250rpx;
+}
+.price-list .item:nth-child(3n-1) {
+  margin-left: 30rpx;
+  margin-right: 30rpx;
+}
+.price-list .item .price {
+  color: #fc4c57;
+}
+.interests .item {
+  width: calc((100vw - 120rpx) / 3);
+  margin-bottom: 30rpx;
+  height: 250rpx;
+  box-sizing: border-box;
+}
+.interests .item:nth-child(3n-1) {
+  margin-left: 30rpx;
+  margin-right: 30rpx;
+}
+.interests .rightimg{
+  width:80rpx;
+  height:80rpx;
+  border-radius: 100rpx;
+}
+.vip-footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #ffffff;
+  z-index: 999;
+  border-top: 1px solid #e4e7ed;
+  padding: 30rpx;
+  box-sizing: border-box;
+}
+.vip-footer button{
+  border-radius: 100rpx;
+  font-size: 30rpx;
+    height: 88rpx;
+    line-height: 88rpx;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0 44rpx;
+    z-index: 1;
+    box-sizing: border-box;
+    -webkit-transition: all 0.15s;
+    transition: all 0.15s;
+    width: 90vw;
+    color: rgb(255, 255, 255);
+    margin: 0;
+}
+.vip-footer button::after{
+  border: none;
+}

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <title>{cms:config name="cms.title"/} - {cms:config name="cms.sitename"/}</title>
+    <meta name="referrer" content="never">
+
+    <link rel="stylesheet" media="screen" href="__CDN__/assets/css/bootstrap.min.css?v={$site.version}"/>
+    <link rel="stylesheet" media="screen" href="__CDN__/assets/libs/font-awesome/css/font-awesome.min.css?v={$site.version}"/>
+    <link rel="stylesheet" media="screen" href="__ADDON__/css/common.css?v={$site.version}"/>
+</head>
+<body>
+<div class="container" id="content-container">
+    <div class="row">
+        <main class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+
+            <div class="panel panel-default" style="margin-top:200px;padding:15px 20px;">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        即将离开{cms:config name="cms.sitename"/}，请注意账号财产安全
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    {if $redirectseconds>0}
+                    <p><span id="wait">{$redirectseconds}</span>秒后将自动跳转到以下链接</p>
+                    {/if}
+                    <div class="alert alert-warning alert-warning-light">
+                        {$url|htmlentities}
+                    </div>
+                    <div>
+                        {if $redirectseconds>=0}
+                        <a href="javascript:" class="btn btn-danger" id="abort">中止跳转</a>
+                        {/if}
+                        <a href="{$url|htmlentities}" class="btn btn-primary">继续访问</a>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+</div>
+<script type="text/javascript">
+    (function () {
+        var wait = document.getElementById('wait');
+        if (wait && parseInt(wait.innerHTML) > 0) {
+            var interval = setInterval(function () {
+                var time = --wait.innerHTML;
+                if (time <= 0) {
+                    location.href = "{$url|htmlentities}";
+                    clearInterval(interval);
+                }
+            }, 1000);
+            document.getElementById("abort").addEventListener("click", function () {
+                wait.parentNode.remove();
+                this.remove();
+                clearInterval(interval);
+            });
+        }
+    })();
+</script>
+</body>
+</html>

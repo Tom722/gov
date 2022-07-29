@@ -1,0 +1,4 @@
+<?php
+//000000000000
+ exit();?>
+a:11:{s:8:"app_init";a:2:{i:0;s:15:"\addons\ask\Ask";i:1;s:15:"\addons\cms\Cms";}s:11:"view_filter";a:3:{i:0;s:15:"\addons\ask\Ask";i:1;s:29:"\addons\clicaptcha\Clicaptcha";i:2;s:15:"\addons\cms\Cms";}s:23:"user_register_successed";a:1:{i:0;s:15:"\addons\ask\Ask";}s:21:"user_delete_successed";a:1:{i:0;s:15:"\addons\ask\Ask";}s:21:"xunsearch_config_init";a:2:{i:0;s:15:"\addons\ask\Ask";i:1;s:15:"\addons\cms\Cms";}s:21:"xunsearch_index_reset";a:2:{i:0;s:15:"\addons\ask\Ask";i:1;s:15:"\addons\cms\Cms";}s:14:"ask_zone_check";a:1:{i:0;s:15:"\addons\ask\Ask";}s:12:"action_begin";a:1:{i:0;s:29:"\addons\clicaptcha\Clicaptcha";}s:7:"upgrade";a:1:{i:0;s:15:"\addons\cms\Cms";}s:18:"user_sidenav_after";a:2:{i:0;s:15:"\addons\cms\Cms";i:1;s:21:"\addons\signin\Signin";}s:11:"leesignhook";a:1:{i:0;s:23:"\addons\leesign\Leesign";}}

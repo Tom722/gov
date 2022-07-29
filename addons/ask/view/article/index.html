@@ -1,0 +1,98 @@
+<style>
+
+    .article-main {
+    }
+
+    .article-main h2 {
+        border-bottom: 1px solid #eee;
+        padding: 10px 0;
+        font-size: 16px;
+    }
+
+    .article-item {
+        padding: 15px;
+        border-bottom: 1px solid #efefef;
+        margin-bottom: 15px;
+        background: #fff;
+        position: relative;
+        padding-right: 210px;
+    }
+
+    .article-item .media-object {
+        width: 140px;
+    }
+
+    .article-item .article-action {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        width: 200px;
+        margin-top: -15px;
+        text-align: center;
+    }
+
+    .article-item .media-right {
+        min-width: 300px;
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .article-item .media-summary {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+    }
+     .category-list .tag {
+         border-radius:3px;
+     }
+    .btn-label {position: relative;left: -12px;display: inline-block;padding: 6px 12px;background: rgba(0,0,0,0.15);border-radius: 3px 0 0 3px;}
+    .btn-labeled {padding-top: 0;padding-bottom: 0;}
+    .category-list .btn { margin-bottom:10px; margin-right:10px;}
+    .btn-light .btn-label {background:#0076ff;color:#fff;}
+</style>
+
+<div class="container">
+    <div class="row mt-4" id="questionlist">
+        <div class="col-md-8 col-sm-12">
+            <div class="category-list mb-2">
+                <a href="?" class="btn btn-{:$categoryId?'light':'primary'} btn-labeled">
+                    <span class="btn-label"><i class="fa fa-home"></i></span>全部
+                </a>
+                {foreach name="categoryList" id="category"}
+                <a class="btn btn-{:$category.id==$categoryId?'primary':'light'} btn-labeled" href="?category={$category.id}" role="button">
+                    {if $category.icon}<span class="btn-label"><i class="{$category.icon}"></i></span>{/if}{$category.name}</a>
+                {/foreach}
+            </div>
+
+            <!-- S 首页问题列表 -->
+            <ul class="nav nav-tabs nav-noborder mb-10 mt-20">
+                <li class="{:$articleType=='new'?'active':''}"><a href="?category={$categoryId}&type=new">最新</a></li>
+                <li class="{:$articleType=='hot'?'active':''}"><a href="?category={$categoryId}&type=hot">热门</a></li>
+                <li class="{:$articleType=='price'?'active':''}"><a href="?category={$categoryId}&type=price">付费</a></li>
+                <a href="{:addon_url('ask/article/post')}" class="btn btn-light pull-right"><i class="fa fa-pencil"></i> 发布文章</a>
+            </ul>
+
+            <div class="tab-inner" style="background:#fff;padding:15px;">
+                <div class="question-list" data-page="{$Think.get.page|default=1|intval}" data-more="{$articleList->hasPages()}">
+
+                    {foreach name="articleList" id="article"}
+                    {include file="common/articleitem" /}
+                    {/foreach}
+
+                    <!-- S 分页 -->
+                    {include file="common/pageinfo"}
+                    <!-- E 分页 -->
+                </div>
+            </div>
+            <!-- E 首页问题列表 -->
+        </div>
+        <div class="col-md-4 col-sm-12">
+            <div class="article-sidebar">
+
+                {include file="common/sidebar" /}
+            </div>
+        </div>
+    </div>
+</div>

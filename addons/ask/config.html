@@ -1,0 +1,230 @@
+<style>
+    #config-form div a.btn {
+        color: #fff;
+        text-decoration: none;
+    }
+</style>
+<!--@formatter:off-->
+{php}
+$groupList = [
+    'config'=>'system_user_id,admin_user_ids,sitename,sitelogo,title,keywords,description,searchtype,baidupush,loadmode,commentlistmode,editormode,pagesimple,uploadparts,cachelifetime,urlsuffix,isprivate,isanonymous,adoptdays,isstillanswer,isarticlepaidcomment',
+    'thumb'=>'default_question_image,default_tag_image,default_block_image,default_zone_image,default_category_image,default_article_image',
+    'ratio'=>'peepanswerratio,bestanswerratio,articleratio',
+    'wxapp'=>'wxappid,wxappsecret,app_id,app_secret',
+    'rewrite'=>'domain,rewrite',
+    'audit'=>'isaudit,audittype,nlptype,aip_appid,aip_apikey,aip_secretkey',
+    'score'=>'score,scorecyclelimit,limitscore',
+    'peep'=>'peeptype,peepprice,peeppricelist,peepscore,peepscorelist',
+    'award'=>'awardtype,pricelist,appendpricelist,minprice,maxprice,iscustomprice,scorelist,appendscorelist,minscore,maxscore,iscustomscore',
+    'other'=>'',
+];
+$group = [];
+foreach($groupList as $k=>$v){
+   $item = explode(',', $v);
+   $item = array_flip($item);
+   $group = array_merge($group, array_map(function($value) use($k){return $k;}, $item));
+}
+{/php}
+<form id="config-form" class="edit-form form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+    <div class="alert {$addon.tips.extend|default='alert-info-light'}" style="margin-bottom:10px;">
+        <a href="{:addon_url('ask/index/index')}" class="btn btn-warning" target="_blank"><i class="fa fa-home"></i> 问答首页</a>
+        <a href="__PUBLIC__index/user/index" class="btn btn-info" target="_blank"><i class="fa fa-user"></i> 会员中心</a>
+    </div>
+
+    <div class="panel panel-default panel-intro">
+        <div class="panel-heading">
+            <ul class="nav nav-tabs nav-group">
+                <li class="active"><a href="#all" data-toggle="tab">全部</a></li>
+                <li><a href="#config" data-toggle="tab">基础配置</a></li>
+                <li><a href="#thumb" data-toggle="tab">图片配置</a></li>
+                <li><a href="#ratio" data-toggle="tab">分成配置</a></li>
+                <li><a href="#wxapp" data-toggle="tab">小程序&APP</a></li>
+                <li><a href="#rewrite" data-toggle="tab">伪静态配置</a></li>
+                <li><a href="#audit" data-toggle="tab">审核配置</a></li>
+                <li><a href="#score" data-toggle="tab">积分配置</a></li>
+                <li><a href="#peep" data-toggle="tab">付费查看</a></li>
+                <li><a href="#award" data-toggle="tab">悬赏配置</a></li>
+                <li><a href="#other" data-toggle="tab">其它</a></li>
+            </ul>
+        </div>
+
+        <div class="panel-body">
+            <div id="myTabContent" class="tab-content">
+                <div class="tab-pane fade active in" id="one">
+
+                    <table class="table table-striped table-config">
+                        <tbody>
+                        {foreach $addon.config as $item}
+                        <tr data-type="{:isset($group[$item['name']])?$group[$item['name']]:'other'}">
+                            <td width="15%">{$item.title}</td>
+                            <td>
+                                <div class="row">
+                                    <div class="col-sm-8 col-xs-12">
+                                        {switch $item.type}
+                                        {case string}
+                                        <input {$item.extend} type="text" name="row[{$item.name}]" value="{$item.value|htmlentities}" class="form-control" data-rule="{$item.rule}" data-tip="{$item.tip}"/>
+                                        {/case}
+                                        {case password}
+                                        <input {$item.extend} type="password" name="row[{$item.name}]" value="{$item.value|htmlentities}" class="form-control" data-rule="{$item.rule}" data-tip="{$item.tip}"/>
+                                        {/case}
+                                        {case text}
+                                        <textarea {$item.extend} name="row[{$item.name}]" class="form-control" data-rule="{$item.rule}" rows="5" data-tip="{$item.tip}">{$item.value|htmlentities}</textarea>
+                                        {/case}
+                                        {case array}
+                                        {if $item.tip}
+                                            <div class="alert alert-info-light">
+                                                {$item.tip}
+                                                {if in_array($item.name, ['score', 'scorecyclelimit', 'limitscore'])}
+                                                <a href="javascript:" data-toggle="popover" data-title="键(类型)说明" data-trigger="hover" data-html="true" data-content="postquestion:发布问题<br>postanswer:发布答案<br>postarticle:发布文章<br>postcomment:发布评论<br>peepsetting:设定付费答案<br>bestanswer:最佳答案"><i class="fa fa-info-circle"></i> 类型说明</a>
+                                                {/if}
+                                            </div>
+                                        {/if}
+                                        {if $item.name=='scorecyclelimit'}
+                                        <dl {$item.extend} class="fieldlist" data-name="row[{$item.name}]" data-template="scorecyclelimittpl">
+                                            <dd>
+                                                <ins style="width:110px;">类型</ins>
+                                                <ins style="width:70px;">日</ins>
+                                                <ins style="width:70px;">月</ins>
+                                                <ins style="width:70px;">年</ins>
+                                            </dd>
+                                            <dd><a href="javascript:;" class="btn btn-sm btn-success btn-append"><i class="fa fa-plus"></i> {:__('Append')}</a></dd>
+                                            <textarea name="row[{$item.name}]" class="form-control hide" cols="30" rows="5">{$item.value|json_encode|htmlentities}</textarea>
+                                        </dl>
+                                        {else /}
+                                        <dl class="fieldlist" data-name="row[{$item.name}]">
+                                            <dd>
+                                                <ins>键</ins>
+                                                <ins>值</ins>
+                                            </dd>
+                                            <dd><a href="javascript:;" class="btn btn-sm btn-success btn-append"><i class="fa fa-plus"></i> {:__('Append')}</a></dd>
+                                            <textarea name="row[{$item.name}]" cols="30" rows="5" class="hide">{$item.value|json_encode|htmlentities}</textarea>
+                                        </dl>
+                                        {/if}
+
+                                        {/case}
+                                        {case date}
+                                        <input {$item.extend} type="text" name="row[{$item.name}]" value="{$item.value|htmlentities}" class="form-control datetimepicker" data-date-format="YYYY-MM-DD" data-tip="{$item.tip}" data-rule="{$item.rule}"/>
+                                        {/case}
+                                        {case time}
+                                        <input {$item.extend} type="text" name="row[{$item.name}]" value="{$item.value|htmlentities}" class="form-control datetimepicker" data-date-format="HH:mm:ss" data-tip="{$item.tip}" data-rule="{$item.rule}"/>
+                                        {/case}
+                                        {case datetime}
+                                        <input {$item.extend} type="text" name="row[{$item.name}]" value="{$item.value|htmlentities}" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-tip="{$item.tip}" data-rule="{$item.rule}"/>
+                                        {/case}
+                                        {case number}
+                                        <input {$item.extend} type="number" name="row[{$item.name}]" value="{$item.value|htmlentities}" class="form-control" data-tip="{$item.tip}" data-rule="{$item.rule}"/>
+                                        {/case}
+                                        {case checkbox}
+                                        {foreach name="item.content" item="vo"}
+                                        <label for="row[{$item.name}][]-{$key}"><input id="row[{$item.name}][]-{$key}" name="row[{$item.name}][]" type="checkbox" value="{$key}" data-tip="{$item.tip}" {in name="key" value="$item.value" }checked{/in} /> {$vo}</label>
+                                        {/foreach}
+                                        {/case}
+                                        {case radio}
+                                        {foreach name="item.content" item="vo"}
+                                        <label for="row[{$item.name}]-{$key}"><input id="row[{$item.name}]-{$key}" name="row[{$item.name}]" type="radio" value="{$key}" data-tip="{$item.tip}" {in name="key" value="$item.value" }checked{/in} /> {$vo}</label>
+                                        {/foreach}
+                                        {/case}
+                                        {case value="select" break="0"}{/case}
+                                        {case value="selects"}
+                                        <select {$item.extend} name="row[{$item.name}]{$item.type=='selects'?'[]':''}" class="form-control selectpicker" data-tip="{$item.tip}" {$item.type=='selects'?'multiple':''}>
+                                            {foreach name="item.content" item="vo"}
+                                            <option value="{$key}" {in name="key" value="$item.value" }selected{/in}>{$vo}</option>
+                                            {/foreach}
+                                        </select>
+                                        {/case}
+                                        {case value="image" break="0"}{/case}
+                                        {case value="images"}
+                                        <div class="form-inline">
+                                            <input id="c-{$item.name}" class="form-control" size="35" name="row[{$item.name}]" type="text" value="{$item.value|htmlentities}" data-tip="{$item.tip}">
+                                            <span><button type="button" id="plupload-{$item.name}" class="btn btn-danger plupload" data-input-id="c-{$item.name}" data-mimetype="image/*" data-multiple="{$item.type=='image'?'false':'true'}" data-preview-id="p-{$item.name}"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
+                                            <span><button type="button" id="fachoose-{$item.name}" class="btn btn-primary fachoose" data-input-id="c-{$item.name}" data-mimetype="image/*" data-multiple="{$item.type=='image'?'false':'true'}"><i class="fa fa-list"></i> {:__('Choose')}</button></span>
+                                            <ul class="row list-inline plupload-preview" id="p-{$item.name}"></ul>
+                                        </div>
+                                        {/case}
+                                        {case value="file" break="0"}{/case}
+                                        {case value="files"}
+                                        <div class="form-inline">
+                                            <input id="c-{$item.name}" class="form-control" size="35" name="row[{$item.name}]" type="text" value="{$item.value|htmlentities}" data-tip="{$item.tip}">
+                                            <span><button type="button" id="plupload-{$item.name}" class="btn btn-danger plupload" data-input-id="c-{$item.name}" data-multiple="{$item.type=='file'?'false':'true'}"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
+                                            <span><button type="button" id="fachoose-{$item.name}" class="btn btn-primary fachoose" data-input-id="c-{$item.name}" data-multiple="{$item.type=='file'?'false':'true'}"><i class="fa fa-list"></i> {:__('Choose')}</button></span>
+                                        </div>
+                                        {/case}
+                                        {case bool}
+                                        <label for="row[{$item.name}]-yes"><input id="row[{$item.name}]-yes" name="row[{$item.name}]" type="radio" value="1" {$item.value?'checked':''} data-tip="{$item.tip}" /> {:__('Yes')}</label>
+                                        <label for="row[{$item.name}]-no"><input id="row[{$item.name}]-no" name="row[{$item.name}]" type="radio" value="0" {$item.value?'':'checked'} data-tip="{$item.tip}" /> {:__('No')}</label>
+                                        {/case}
+                                        {default /}{$item.value}
+                                        {/switch}
+                                    </div>
+                                    <div class="col-sm-4"></div>
+                                </div>
+
+                            </td>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+                    <div class="form-group layer-footer">
+                        <label class="control-label col-xs-12 col-sm-2"></label>
+                        <div class="col-xs-12 col-sm-8">
+                            <button type="submit" class="btn btn-primary btn-embossed disabled">{:__('OK')}</button>
+                            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<!--@formatter:on-->
+<script>
+    require.callback = function () {
+        var tabevent = function () {
+            $(document).on("click", ".nav-group li a[data-toggle='tab']", function () {
+                var type = $(this).attr("href").substring(1);
+                if (type == 'all') {
+                    $(".table-config tr").show();
+                } else {
+                    $(".table-config tr").hide();
+                    $(".table-config tr[data-type='" + type + "']").show();
+                }
+            });
+            $('body').on('click', function (e) {
+                if ($(e.target).data('toggle') !== 'popover'
+                    && $(e.target).parents('[data-toggle="popover"]').length === 0
+                    && $(e.target).parents('.popover.in').length === 0) {
+                    $('[data-toggle="popover"]').popover('hide');
+                }
+            });
+            $('[data-toggle="popover"]').popover();
+        };
+        define('backend/addon', ['jquery', 'form'], function ($, Form) {
+            var Controller = {
+                config: function () {
+                    Form.api.bindevent($("form[role=form]"));
+                    tabevent();
+                }
+            };
+            return Controller;
+        });
+        define('backend/ask/config', ['jquery', 'form'], function ($, Form) {
+            var Controller = {
+                index: function () {
+                    Form.api.bindevent($("form[role=form]"));
+                    tabevent();
+                }
+            };
+            return Controller;
+        });
+    }
+</script>
+
+<script type="text/html" id="scorecyclelimittpl">
+    <dd class="form-inline">
+        <input type="text" name="<%=name%>[<%=index%>][type]" class="form-control" value="<%=row.type%>" style="width:110px;"/>
+        <input type="text" name="<%=name%>[<%=index%>][day]" id="c-downloadurl-<%=index%>" class="form-control" value="<%=row.day%>" style="width:70px;"/>
+        <input type="text" name="<%=name%>[<%=index%>][month]" class="form-control" value="<%=row.month%>" style="width:70px;"/>
+        <input type="text" name="<%=name%>[<%=index%>][year]" class="form-control" value="<%=row.year%>" style="width:70px;"/>
+        <span class="btn btn-sm btn-danger btn-remove"><i class="fa fa-times"></i></span> <span class="btn btn-sm btn-primary btn-dragsort"><i class="fa fa-arrows"></i></span>
+    </dd>
+</script>

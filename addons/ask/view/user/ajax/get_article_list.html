@@ -1,0 +1,9 @@
+{__NOLAYOUT__}
+
+{foreach name="articleList" id="article"}
+{include file="user/common/articleitem" /}
+{/foreach}
+
+<div class="pager text-center">
+    {$articleList->render()}
+</div>

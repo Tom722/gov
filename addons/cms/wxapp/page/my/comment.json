@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "我发表的评论",
+  "usingComponents": {
+    "mp-html": "mp-html"
+  }
+}

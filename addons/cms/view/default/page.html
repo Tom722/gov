@@ -1,0 +1,85 @@
+{layout name="common/layout" /}
+
+<div class="container" id="content-container">
+
+    <div class="row">
+
+        <main class="col-xs-12 col-md-8">
+            <div class="panel panel-default article-content">
+                <div class="panel-heading">
+                    <ol class="breadcrumb">
+                        <!-- S 面包屑导航 -->
+                        {cms:breadcrumb id="item"}
+                        <li><a href="{$item.url}">{$item.name|htmlentities}</a></li>
+                        {/cms:breadcrumb}
+                        <!-- E 面包屑导航 -->
+                    </ol>
+                </div>
+                <div class="panel-body">
+                    <div class="article-metas">
+                        <h1 class="metas-title">{cms:page name="title|htmlentities" /}</h1>
+                        <!-- S 标题区域 -->
+                        <div class="metas-body">
+                            <span class="views-num">
+                                <i class="fa fa-eye"></i> {cms:page name="views" /} 阅读
+                            </span>
+                            <span class="comment-num">
+                                <i class="fa fa-comments"></i> {cms:page name="comments" /} 评论
+                            </span>
+                            <span class="like-num">
+                                <i class="fa fa-thumbs-o-up"></i>
+                                <span class="js-like-num"> {cms:page name="likes" /} 点赞
+                                </span>
+                            </span>
+                        </div>
+                        <!-- E 标题区域 -->
+                    </div>
+
+                    <div class="article-text">
+                        <!-- S 正文 -->
+                        <p>
+                            {cms:page name="content" /}
+                        </p>
+                        <!-- E 正文 -->
+                    </div>
+
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+
+            <div class="panel panel-default" id="comments">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{:__('Comment list')}
+                        <small>共有 <span>{cms:page name="comments" /}</span> 条评论</small>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    {if $__PAGE__.iscomment}
+                    {include file="common/comment" type="archives" aid="__PAGE__.id"}
+                    {else/}
+                    <div class="text-muted text-center">评论功能已关闭</div>
+                    {/if}
+                </div>
+            </div>
+
+        </main>
+
+        <aside class="col-xs-12 col-md-4">
+            <div class="panel panel-default related-page">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{:__('相关单页')}</h3>
+                </div>
+                <div class="panel-body">
+                    <ul class="list-unstyled">
+                        <!-- S 相关单页 -->
+                        {cms:spagelist name="page" id="item"}
+                        <li class="mb-2 {if $__PAGE__.id==$item.id}active{/if}"><a href="{$item.url}">{$item.title|htmlentities}</a></li>
+                        {/cms:spagelist}
+                        <!-- E 相关单页 -->
+                    </ul>
+                </div>
+            </div>
+
+        </aside>
+    </div>
+</div>

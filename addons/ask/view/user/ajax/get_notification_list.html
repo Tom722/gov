@@ -1,0 +1,9 @@
+{__NOLAYOUT__}
+
+{foreach name="notificationList" id="notification"}
+{include file="user/common/notificationitem" /}
+{/foreach}
+
+<div class="pager text-center">
+    {$notificationList->render()}
+</div>

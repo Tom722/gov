@@ -1,0 +1,9 @@
+{__NOLAYOUT__}
+
+{foreach name="messageList" id="message"}
+{include file="user/common/messageitem" /}
+{/foreach}
+
+<div class="pager text-center">
+    {$messageList->render()}
+</div>

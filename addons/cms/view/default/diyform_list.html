@@ -1,0 +1,112 @@
+{layout name="common/layout" /}
+<style>
+    .article-list .media .media-left a {
+        display: block;
+        width: 120px;
+    }
+</style>
+<div class="container" id="content-container">
+
+    <h1 class="category-title">
+        {$__DIYFORM__.name|htmlentities}
+        <div class="more pull-right">
+            <a href="{$__DIYFORM__.posturl}" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i> {$__DIYFORM__.posttitle|htmlentities}</a>
+        </div>
+    </h1>
+    {if $__FILTERLIST__}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                筛选
+                <div class="more">
+                    <form action="" id="multipleform">
+                        <label for="multiple" class="checkbox-inline">
+                            <input type="checkbox" name="multiple" class="pull-left mt-0" id="multiple" onclick="document.getElementById('multipleform').submit();" value="{:$Think.get.multiple?0:1}" {:$Think.get.multiple?'checked':''}>
+                                                                                                                                                                                                                             多选模式
+                        </label>
+                    </form>
+                </div>
+            </h3>
+        </div>
+        <div class="panel-body pt-1">
+            <div class="tabs-wrapper {:$Think.get.multiple?'tabs-multiple':''}">
+                {cms:pagefilter id="filter" exclude=""}
+                <div class="tabs-group">
+                    <div class="title">{$filter.title|htmlentities}:</div>
+                    <ul class="content clearfix">
+                        {volist name="$filter.content" id="item"}
+                        <li class="{$item.active?'active':''}"><a href="{$item.url}">{$item.title|htmlentities}</a></li>
+                        {/volist}
+                    </ul>
+                </div>
+                {/cms:pagefilter}
+                <!-- E 分类列表 -->
+            </div>
+        </div>
+    </div>
+    {/if}
+
+    <div class="row">
+
+        <main class="col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <span>列表</span>
+
+                        <div class="more">
+                            <ul class="list-unstyled list-inline category-order clearfix">
+                                <!-- S 排序 -->
+                                {cms:pageorder id="order"}
+                                <li><a href="{$order.url}" class="{$order.active?'active':''}">{$order.title|htmlentities}</a></li>
+                                {/cms:pageorder}
+                                <!-- E 排序 -->
+                            </ul>
+                        </div>
+                    </h3>
+                </div>
+                <div class="panel-body py-0">
+                    <div class="article-list">
+                        <!-- S 列表 -->
+                        {cms:pagelist id="item"}
+                        <article class="article-item">
+                            <div class="media">
+                                <div class="">
+                                    <h3 class="article-title">
+                                        <a href="{$item.url}">{:$item.title??($item.name??'无')}</a>
+                                    </h3>
+                                    <div class="text-muted related-article">
+                                        {$item.content|default=''}
+                                        {if isset($item['images']) || isset($item['image'])}
+                                        {php}$imageList = array_filter(explode(',', $item['images']??$item['image']));{/php}
+                                        {if $imageList}
+                                        <div class="row mt-2">
+                                            {foreach name="imageList" id="image"}
+                                            <div class="col-xs-6 col-sm-3 col-md-2">
+                                                <div class="embed-responsive embed-responsive-4by3 img-zoom">
+                                                    <a href="{$image}" target="_blank"><img src="{$image}" alt=""></a>
+                                                </div>
+                                            </div>
+                                            {/foreach}
+                                        </div>
+                                        {/if}
+                                        {/if}
+                                    </div>
+                                    <div class="mt-2">
+                                        <span itemprop="date">{$item.createtime|human_date}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                        {/cms:pagelist}
+                        <!-- E 列表 -->
+                    </div>
+
+                    <!-- S 分页 -->
+                    {include file="common/pageinfo" loadmode="paging" /}
+                    <!-- E 分页 -->
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

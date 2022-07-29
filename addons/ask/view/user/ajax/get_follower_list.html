@@ -1,0 +1,9 @@
+{__NOLAYOUT__}
+
+{foreach name="followerList" id="follower"}
+{include file="user/common/followeritem" /}
+{/foreach}
+
+<div class="pager text-center">
+    {$followerList->render()}
+</div>

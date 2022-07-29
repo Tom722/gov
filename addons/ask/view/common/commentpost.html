@@ -1,0 +1,59 @@
+{if $user}
+    {if $user.score<$config.limitscore.postcomment}
+    <div class="alert alert-warning">
+        <i class="fa fa-info-circle"></i> 积分大于{$config.limitscore.postcomment}才能够发布评论，当前你有{$user.score}积分，
+    </div>
+    {/if}
+{else /}
+    <div class="alert alert-warning">
+        <i class="fa fa-info-circle"></i> 请登录后再发布评论，<a href="{:url('index/user/login')}">点击登录</a>
+    </div>
+{/if}
+{if $type=='answer'}
+<div class="appendcomment">
+    <a href="javascript:" class="btn btn-light btn-block btn-appendcomment"><i class="fa fa-pencil"></i> 追加回复</a>
+</div>
+{/if}
+<form action="{:addon_url('ask/comment/post')}" method="post" class="postcomment">
+    {:token()}
+    <input type="hidden" name="id" value="{$source_id}"/>
+    <input type="hidden" name="type" value="{$type}"/>
+    <input type="hidden" name="reply_user_id" value="0"/>
+    <div class="form-group">
+        <textarea name="content" rows="10" class="form-control" data-rule="required" {if $user.score<$config.limitscore.postanswer}disabled placeholder="请登录后再发表评论"{/if} data-autosave-key="post-comment-{$Think.get.id|default=0|intval}" cols="6" rows="5"></textarea>
+    </div>
+    {if $user && in_array('postcomment', explode(',', $askConfig['captchaparts']??''))}
+    <div class="form-group">
+        <label class="control-label">验证码</label>
+        <div class="controls">
+            <div class="input-group" style="width:230px;">
+                <input type="text" name="captcha" class="form-control input-lg" placeholder="请输入验证码" autocomplete="off" data-rule="required;length(4)"/>
+                <span class="input-group-btn" style="padding:0;border:none;">
+                    <img src="{:captcha_src()}" width="100" height="40" onclick="this.src = '{:captcha_src()}?r=' + Math.random();"/>
+                </span>
+            </div>
+            <p class="help-block"></p>
+        </div>
+    </div>
+    {/if}
+    <div class="row">
+        <div class="col-xs-6">
+            <div class="form-group mb-0">
+                {if $user}
+                <input name="submit" type="submit" id="submit" value="提交{:isset($__question__)?'回复':'评论'}(Ctrl+回车)" {if $user.score<$config.limitscore.postcomment}disabled{/if} class="btn btn-primary">
+                {else /}
+                <a href="{:url('index/user/login')}" class="btn btn-primary">登录</a>
+                <a href="{:url('index/user/register')}" class="btn btn-light">注册新账号</a>
+                {/if}
+            </div>
+        </div>
+        <div class="col-xs-6 text-right">
+
+            <div class="checkbox my-1 hidden">
+                <label>
+                    <input name="subscribe" type="checkbox" class="checkbox" tabindex="7" checked="" value="1"> 有人回复时邮件通知我
+                </label>
+            </div>
+        </div>
+    </div>
+</form>

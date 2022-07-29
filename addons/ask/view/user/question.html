@@ -1,0 +1,32 @@
+{include file="user/header" /}
+<div class="container">
+    <div class="row" style="margin-top:20px;">
+        <div class="col-md-8 col-sm-12">
+            <ul class="nav nav-tabs nav-noborder mb-10 mt-20">
+                <li class="{:$questionType=='new'?'active':''}"><a href="?user_id={$__user__.id}&type=new">最新</a></li>
+                <li class="{:$questionType=='hot'?'active':''}"><a href="?user_id={$__user__.id}&type=hot">热门</a></li>
+                <li class="{:$questionType=='price'?'active':''}"><a href="?user_id={$__user__.id}&type=price">悬赏</a></li>
+                <li class="{:$questionType=='unsolved'?'active':''}"><a href="?user_id={$__user__.id}&type=unsolved">未解决</a></li>
+                <li class="{:$questionType=='unanswer'?'active':''}"><a href="?user_id={$__user__.id}&type=unanswer">未回答</a></li>
+            </ul>
+            <div class="tab-inner" style="background:#fff;padding:15px;">
+                <div class="question-list" data-page="{$Think.get.page|default=1|intval}" data-more="{$questionList->hasPages()}">
+                    {foreach name="questionList" id="question"}
+                    {include file="common/questionitem" /}
+                    {/foreach}
+
+                    <div class="pager text-center">
+                        {$questionList->render()}
+                    </div>
+
+                    {if $questionList->isEmpty()}
+                    <div class="loadmore loadmore-line loadmore-nodata"><span class="loadmore-tips">暂无数据</span></div>
+                    {/if}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-12">
+            {include file="user/sidebar" /}
+        </div>
+    </div>
+</div>

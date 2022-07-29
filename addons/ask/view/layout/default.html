@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>
+<html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html class="lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html> <!--<![endif]-->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <title>{:isset($title)?htmlentities($title):'首页'} {if $Think.get.page} - 第{$Think.get.page|intval}页{/if} - {ask:config name='ask.sitename'/}</title>
+    {if isset($keywords) && $keywords}
+    <meta name="keywords" content="{:isset($keywords)?htmlentities($keywords):''}"/>
+    {/if}
+    {if isset($description) && $description}
+    <meta name="description" content="{:isset($description)?htmlentities($description):''}"/>
+    {/if}
+
+    <link rel="shortcut icon" href="__CDN__/assets/img/favicon.ico" type="image/x-icon" />
+    {if $config.debug}
+    <link rel="stylesheet" type="text/css" href="__CDN__/assets/css/bootstrap.min.css?v={$site.version}"/>
+    <link rel="stylesheet" type="text/css" href="__CDN__/assets/libs/font-awesome/css/font-awesome.min.css?v={$site.version}"/>
+    <link rel="stylesheet" type="text/css" href="__CDN__/assets/libs/fastadmin-layer/dist/theme/default/layer.css?v={$site.version}"/>
+
+    <link rel="stylesheet" type="text/css" href="__ADDON__/css/swiper.min.css?v={$site.version}"/>
+    <link rel="stylesheet" type="text/css" href="__ADDON__/css/jquery.tagsinput.min.css?v={$site.version}"/>
+    <link rel="stylesheet" type="text/css" href="__ADDON__/css/jquery.autocomplete.min.css?v={$site.version}"/>
+    <link rel="stylesheet" type="text/css" href="__ADDON__/css/wysiwyg.css?v={$site.version}"/>
+    <link rel="stylesheet" type="text/css" href="__ADDON__/css/bootstrap-markdown.css?v={$site.version}"/>
+    <link rel="stylesheet" type="text/css" href="__ADDON__/css/summernote.css?v={$site.version}"/>
+
+    <link rel="stylesheet" media="screen" href="__ADDON__/css/common.css?v={$site.version}"/>
+    {else /}
+    <link rel="stylesheet" type="text/css" id="layuicss-layer" href="__CDN__/assets/libs/fastadmin-layer/dist/theme/default/layer.css?v={$site.version}"/>
+    <link rel="stylesheet" type="text/css" href="__ADDON__/css/all.min.css?v={$site.version}"/>
+    {/if}
+
+    {__STYLE__}
+
+    <!--[if lt IE 9]>
+    <script src="__CDN__/libs/html5shiv.js?v="></script>
+    <script src="__CDN__/libs/respond.min.js?v="></script>
+    <![endif]-->
+
+    <!--@formatter:off-->
+    <script type="text/javascript">
+        var Config = {:json_encode($askConfig)};
+    </script>
+    <!--@formatter:on-->
+
+</head>
+<body class="group-page">
+
+<header class="header">
+    <!-- S 导航 -->
+    <nav class="navbar navbar-default navbar-white navbar-fixed-top" role="navigation">
+        <div class="container">
+
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle {:$user && $user.ask.notices>0?'unread':''}" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{ask:config name='ask.indexurl'/}"><img src="{$Think.config.ask.sitelogo|default='/assets/addons/ask/img/logo.png'|cdnurl}" style="height:100%;"></a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="{:$askConfig.controllername=='index'?'active':''}"><a href="{:addon_url('ask/index/index')}">首页</a></li>
+                    <li class="{:$askConfig.controllername=='question'?'active':''}"><a href="{:addon_url('ask/question/index')}">问答</a></li>
+                    <li class="{:$askConfig.controllername=='article'?'active':''}"><a href="{:addon_url('ask/article/index')}">文章</a></li>
+                    <li class="{:$askConfig.controllername=='tag'?'active':''}"><a href="{:addon_url('ask/tag/index')}">话题</a></li>
+                    <li class="{:$askConfig.controllername=='expert'?'active':''}"><a href="{:addon_url('ask/expert/index')}">专家</a></li>
+<!--                    <li class="dropdown">-->
+<!--                        <a href="{:addon_url('ask/zone/index','',true)}" class="dropdown-toggle" data-toggle="dropdown">专区 <b class="caret"></b></a>-->
+<!--                        <ul class="dropdown-menu multi-level">-->
+<!--                            {foreach name="topZoneList" id="item"}-->
+<!--                            <li><a href="{$item.url}">{$item.name}</a></li>-->
+<!--                            {/foreach}-->
+<!--                            <li><a href="{:addon_url('ask/zone/index','',true)}">更多专区...</a></li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
+<!--                    <li><a href="{:url('/','',false)}">返回主站</a></li>-->
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <form class="form-inline navbar-form search-form pt-1" action="{:addon_url('ask/search/index')}" method="get">
+                            <input class="form-control" name="q" value="{$keyword|default=''|htmlentities}" type="text" id="searchinput" placeholder="搜索问题、话题或文章">
+                        </form>
+                    </li>
+                    <li class="hidden-xs">
+                        <div class="py-3 px-2">
+                            <a href="{:addon_url('ask/question/post')}" class="btn btn-primary">提问</a>
+                        </div>
+                    </li>
+                    {if $user}
+                    <li class="dropdown belling">
+                        <a href="{:addon_url('ask/user/index',[':id'=>$user['id']], false)}/notification?act=marktopall" class="dropdown-toggle {:$user.ask.notices>0?'unread':''}" data-toggle="dropdown"><i class="fa fa-bell-o fa-lg"></i></a>
+                        {if $user.ask.notices>0}
+                        <ul class="dropdown-menu">
+                            {if $user.ask.unadopted>0}
+                            <li><a href="{:addon_url('ask/user/index',[':id'=>$user['id']], false)}/question?type=unsolved">你有 <b>{$user.ask.unadopted}</b> 个提问待采纳</a></li>
+                            {/if}
+                            {if $user.ask.invites>0}
+                            <li><a href="{:addon_url('ask/user/index',[':id'=>$user['id']], false)}/invite?act=marktop">你有 <b>{$user.ask.invites}</b> 条邀请消息</a> <em>&times;</em></li>
+                            {/if}
+                            {if $user.ask.messages>0}
+                            <li><a href="{:addon_url('ask/user/index',[':id'=>$user['id']], false)}/message?act=marktop">你有 <b>{$user.ask.messages}</b> 条私信消息</a> <em>&times;</em></li>
+                            {/if}
+                            {if $user.ask.notifications>0}
+                            <li><a href="{:addon_url('ask/user/index',[':id'=>$user['id']], false)}/notification?act=marktop">你有 <b>{$user.ask.notifications}</b> 条通知消息</a> <em>&times;</em></li>
+                            {/if}
+                        </ul>
+                        {/if}
+                    </li>
+                    {/if}
+                    <li class="dropdown navbar-userinfo">
+                        {if $user}
+                        <a href="{:url('index/user/index')}" class="dropdown-toggle" data-toggle="dropdown">
+                            <span class="avatar-img pull-left"><img src="{$user.avatar|cdnurl}" class="img-circle" style="width:30px;height:30px;border-radius:50%;" alt=""></span>
+                            <span class="visible-xs pull-left ml-2 pt-1">{$user.nickname} <b class="caret"></b></span>
+                        </a>
+                        {else /}
+                        <a href="{:url('index/user/index')}" class="dropdown-toggle" data-toggle="dropdown">会员<span class="hidden-sm">中心</span> <b class="caret"></b></a>
+                        {/if}
+                        <ul class="dropdown-menu">
+                            {if $user}
+                            <li><a href="{:url('index/user/index')}"><i class="fa fa-user fa-fw"></i> 会员中心</a></li>
+                            <li><a href="{:addon_url('ask/user/index',[':id'=>$user['id']], false)}"><i class="fa fa-home fa-fw"></i> 我的主页</a></li>
+                            <li><a href="{:addon_url('ask/user/index',[':id'=>$user['id']], false)}/question"><i class="fa fa-question-circle fa-fw"></i> 我的提问</a></li>
+                            <li><a href="{:addon_url('ask/user/index',[':id'=>$user['id']], false)}/article"><i class="fa fa-file-text fa-fw"></i> 我的文章</a></li>
+                            <li><a href="{:addon_url('ask/user/index',[':id'=>$user['id']], false)}/collection"><i class="fa fa-bookmark fa-fw"></i> 我的收藏</a></li>
+                            <li><a href="{:url('index/user/logout')}"><i class="fa fa-sign-out fa-fw"></i> 退出</a></li>
+                            {else /}
+                            <li><a href="{:url('index/user/login')}"><i class="fa fa-sign-in fa-fw"></i> 登录</a></li>
+                            <li><a href="{:url('index/user/register')}"><i class="fa fa-user-o fa-fw"></i> 注册</a></li>
+                            {/if}
+
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+    <!-- E 导航 -->
+
+</header>
+
+{__CONTENT__}
+
+<footer class="footer">
+    <div class="container-fluid" id="footer">
+        <p class="address">
+            Copyright&nbsp;©&nbsp;2017-2020 All Rights Reserved {$site.name} {:__('Copyrights')} <a href="https://beian.miit.gov.cn" target="_blank">{$site.beian}</a>
+        </p>
+    </div>
+</footer>
+
+<div class="floatbar" style="margin-top: -220px;">
+
+    <div class="floatbar-item">
+        <a href="{:addon_url('ask/question/post')}" class="floatbar-btn">
+            <i class="fa fa-pencil"></i>
+            <p>
+                发布<br>
+                问题
+            </p>
+        </a>
+    </div>
+    {if isset($__question__)}
+    <div class="floatbar-item item-faq">
+        <a href="javascript:" class="floatbar-btn btn-share">
+            <i class="fa fa-share-alt"></i>
+            <p>
+                分享<br>
+                好友
+            </p>
+        </a>
+    </div>
+    <div class="floatbar-item item-faq">
+        <a href="javascript:" class="floatbar-btn">
+            <i class="fa fa-qrcode"></i>
+            <p>
+                手机<br>
+                浏览
+            </p>
+        </a>
+        <div class="floatbar-box box-qrcode" style="width:220px;">
+            <div class="floatbar-container">
+                <div class="clearfix">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <img src="{:addon_url('ask/qrcode/build')}?text={$__question__.fullurl|urlencode}" width="150">
+                            <div class="text-center">扫码手机浏览</div>
+                        </div>
+                    </div>
+                </div>
+                <span class="arrow" style="top:70px;"></span>
+            </div>
+        </div>
+    </div>
+    {/if}
+    <div class="floatbar-item floatbtn-item-top" style="display:none;">
+        <a href="javascript:" class="floatbar-btn backtotop">
+            <i class="fa fa-chevron-up"></i>
+            <p>
+                回到<br>
+                顶部
+            </p>
+        </a>
+    </div>
+</div>
+
+<!--搜索模板-->
+<script type="text/html" id="bodytpl">
+
+    <%if(typeof item.title == 'undefined'){%>
+    <%if(item.length>0){%>
+    <div class="autocomplete-searchtags">
+        <table style="width:100%;">
+            <tr>
+                <td colspan="2">
+                    <div class="search-subject">
+                        <%for(var i=0;i< item.length;i++){%>
+                        <a href="<%=item[i].url%>" class="tag"><%if(item[i].icon){%><img src="<%=item[i].icon%>" alt=""><%}%><%=#replace(item[i].name)%></a>
+                        <%}%>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <%}%>
+    <%}else{%>
+    <div class="autocomplete-suggestion autocomplete-questions" data-href="<%=item.url%>" data-url="<%=item.url%>">
+        <table style="width:100%;">
+            <tr>
+                <td>
+                    <div class="search-subject">
+                        <%if(item.price>0){%>
+                            <%if(item.type=='question'){%>
+                            <span class="question-price-tag" title="如果回答被采纳，回答者将获得<%=item.price%>元">￥<%=item.price%></span>
+                            <%}else{%>
+                            <span class="question-price-tag" title="此文章需要支付<%=item.price%>元才能查看">￥<%=item.price%></span>
+                            <%}%>
+                        <%}%>
+                        <%if(item.score>0){%>
+                            <%if(item.type=='question'){%>
+                            <span class="question-price-tag" title="如果回答被采纳，回答者将获得<%=item.price%>积分">￥<%=item.score%></span>
+                            <%}else{%>
+                            <span class="question-price-tag" title="此文章需要消耗<%=item.price%>积分才能查看">￥<%=item.score%></span>
+                            <%}%>
+                        <%}%>
+                        <a href="<%=item.url%>"><%=#replace(item.title)%></a>
+                    </div>
+                    <div class="search-meta text-muted small">
+                        <%=item.userinfo.nickname%> 发布于 <%=item.create_date%>
+                    </div>
+                </td>
+                <td class="text-muted text-right" style="width:70px;vertical-align: top;">
+                    <div class="tag tag-xs <%=item.type=='question'?'':'tag-danger'%>"><%=item.type=='question'?'问题':'文章'%></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <%}%>
+</script>
+
+<!--感谢模板-->
+<script id="thankstpl" type="text/html">
+    <div class="p-4">
+        <div class="alert alert-warning" role="alert">
+            我们应该多多支持小伙伴的分享及热心帮助！
+        </div>
+
+        <div class="">
+            <div class="text-center" style="margin-bottom:20px;">
+                <img src="<%=userAvatar%>" class="img-circle" width="100" height="100" alt="">
+                <h5><a href="<%=userUrl%>" target="_blank"><%=userNickname%></a></h5>
+            </div>
+            <form action="{:addon_url('ask/thanks/create')}" id="thanks-form" method="post" {if !$isWechat}target="_blank"{/if}>
+                <input type="hidden" name="id" value="<%=id%>"/>
+                <input type="hidden" name="type" value="<%=type%>"/>
+                <input type="hidden" name="money" value="1"/>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <button type="button" class="btn btn-light btn-block btn-money active" data-money="1">￥1 元</button>
+                    </div>
+                    <div class="col-xs-4">
+                        <button type="button" class="btn btn-light btn-block btn-money" data-money="5">￥5 元</button>
+                    </div>
+                    <div class="col-xs-4">
+                        <button type="button" class="btn btn-light btn-block btn-money" data-money="10">￥10 元</button>
+                    </div>
+                </div>
+                <div class="row my-4">
+                    <div class="col-xs-4">
+                        <button type="button" class="btn btn-light btn-block btn-money" data-money="20">￥20 元</button>
+                    </div>
+                    <div class="col-xs-4">
+                        <button type="button" class="btn btn-light btn-block btn-money" data-money="50">￥50 元</button>
+                    </div>
+                    <div class="col-xs-4">
+                        <button type="button" class="btn btn-light btn-block btn-money" data-money="100">￥100 元</button>
+                    </div>
+                </div>
+                <div class="row my-1 text-center">
+                    <div class="col-xs-12">
+                        <input type="text" class="form-control" value="" placeholder="请输入你的留言，可选"/>
+                    </div>
+                </div>
+                <hr>
+                <div class="row my-1 text-center">
+                    <div class="col-xs-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="paytype" id="paytype-wechat"
+                                   value="wechat" checked>
+                            <label class="form-check-label" for="paytype-wechat">微信</label>
+                        </div>
+                    </div>
+                    {if !$isWechat}
+                    <div class="col-xs-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="paytype" id="paytype-alipay"
+                                   value="alipay">
+                            <label class="form-check-label" for="paytype-alipay">支付宝</label>
+                        </div>
+                    </div>
+                    {/if}
+                    <div class="col-xs-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="paytype" id="paytype-balance"
+                                   value="balance">
+                            <label class="form-check-label" for="paytype-balance" data-toggle="tooltip" data-title="余额：￥{$user.money|default=0}">余额支付</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col text-center">
+                        <button type="submit" class="btn btn-primary btn-submit-thanks">立即支付</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</script>
+
+<!--举报模板-->
+<script id="reporttpl" type="text/html">
+    <div class="p-4">
+        <div class="alert alert-info" role="alert">
+            让我们一起共建文明社区！您的反馈至关重要！
+        </div>
+
+        <div class="">
+            <form action="{:addon_url('ask/report/create')}" id="report-form" method="post">
+                <input type="hidden" name="id" value="<%=id%>"/>
+                <input type="hidden" name="type" value="<%=type%>"/>
+                <div class="row radio">
+                    {volist name="config.reportreasonlist" id="item"}
+                    <div class="col-xs-6 py-1">
+                        <label><input type="radio" name="reason" value="{$key}" {if $i==1}checked{/if}> {$item}</label>
+                    </div>
+                    {/volist}
+                </div>
+
+                <div class="row my-1 text-center">
+                    <div class="col-xs-12">
+                        <input type="text" class="form-control" value="" placeholder="其它信息，可选"/>
+                    </div>
+                </div>
+                <hr>
+                <div class="row mt-2">
+                    <div class="col text-center">
+                        <button type="submit" class="btn btn-primary btn-submit-thanks">提交反馈</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</script>
+
+<!--支付模板-->
+<script type="text/html" id="paynowtpl">
+    <div class="" style="padding:20px 20px 20px 20px;min-width:330px;min-height:220px;">
+        <div>
+            <div class="alert alert-info">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div style="font-size:14px;"><b>支付金额：￥<%=price%></b></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <form action="{:addon_url('ask/order/submit')}" id="paynow-form" method="post" {if !$isWechat}target="_blank"{/if}>
+            <input type="hidden" name="id" value="<%=id%>"/>
+            <input type="hidden" name="type" value="<%=type%>"/>
+            <hr>
+            <div class="row my-4 text-center">
+                <div class="col-xs-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="paytype" id="paytype-wechat"
+                               value="wechat" checked>
+                        <label class="form-check-label" for="paytype-wechat">
+                            <img src="__ADDON__/img/wechat.png" height="30" alt="">
+                        </label>
+                    </div>
+                </div>
+                {if !$isWechat}
+                <div class="col-xs-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="paytype" id="paytype-alipay"
+                               value="alipay">
+                        <label class="form-check-label" for="paytype-alipay">
+                            <img src="__ADDON__/img/alipay.png" height="30" alt="">
+                        </label>
+                    </div>
+                </div>
+                {/if}
+                <div class="col-xs-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="paytype" id="paytype-balance" {if !$user}disabled{/if}
+                        value="balance">
+                        <label class="form-check-label" for="paytype-balance" data-toggle="tooltip" data-title="余额：￥{$user.money|default=0}">
+                            <img src="__ADDON__/img/balance.png" height="30" alt="">
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="row mt-2">
+                <div class="col text-center">
+                    <button type="submit" class="btn btn-primary btn-submit-pay">立即支付</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</script>
+
+<!--分享模板-->
+<script id="sharetpl" type="text/html">
+    <div id="sharenow" style="padding:20px;">
+        <div class="row text-center">
+            <div class="col-xs-12">
+                <img src="{:addon_url('ask/qrcode/build')}?text=<%=url%>&logo=1&logosize=50&padding=0" width="120" alt="">
+                <div class="my-2">
+                    扫码分享到微信
+                </div>
+            </div>
+        </div>
+        <div class="row text-center mt-3 pt-2">
+            <div class="col-xs-4">
+                <a href="http://service.weibo.com/share/share.php?url=<%=url%>&title=<%=title%>" target="_blank">
+                <span class="fa-stack fa-lg text-danger">
+                  <i class="fa fa-circle fa-stack-2x"></i>
+                  <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                </span><br>
+                    分享到微博
+                </a>
+            </div>
+            <div class="col-xs-4">
+                <a href="javascript:" class="btn-share-wechat" onclick="layer.msg('请使用微信扫描上方二维码进行分享');">
+                <span class="fa-stack fa-lg text-success">
+                  <i class="fa fa-circle fa-stack-2x"></i>
+                  <i class="fa fa-wechat fa-stack-1x fa-inverse"></i>
+                </span><br>
+                    分享到微信
+                </a>
+            </div>
+            <div class="col-xs-4">
+                <a href="https://connect.qq.com/widget/shareqq/index.html?url=<%=url%>&title=<%=title%>&desc=&summary=&site={$site.name}" target="_blank">
+                <span class="fa-stack fa-lg text-info">
+                  <i class="fa fa-circle fa-stack-2x"></i>
+                  <i class="fa fa-qq fa-stack-1x fa-inverse"></i>
+                </span><br>
+                    分享到QQ
+                </a>
+            </div>
+        </div>
+    </div>
+</script>
+
+{if $config.debug}
+<script type="text/javascript" src="__CDN__/assets/libs/jquery/dist/jquery.min.js?v={$site.version}"></script>
+<script type="text/javascript" src="__CDN__/assets/libs/bootstrap/dist/js/bootstrap.min.js?v={$site.version}"></script>
+<script type="text/javascript" src="__CDN__/assets/libs/fastadmin-layer/dist/layer.js?v={$site.version}"></script>
+<script type="text/javascript" src="__CDN__/assets/libs/art-template/dist/template-native.js?v={$site.version}"></script>
+
+<script type="text/javascript" src="__ADDON__/js/taboverride.js?v={$site.version}"></script>
+<script type="text/javascript" src="__ADDON__/js/bootstrap-markdown.js?v={$site.version}"></script>
+<script type="text/javascript" src="__ADDON__/js/jquery.pasteupload.js?v={$site.version}"></script>
+<script type="text/javascript" src="__ADDON__/js/jquery.textcomplete.js?v={$site.version}"></script>
+<script type="text/javascript" src="__ADDON__/js/markdown.js?v={$site.version}"></script>
+<script type="text/javascript" src="__ADDON__/js/turndown.js?v={$site.version}"></script>
+<script type="text/javascript" src="__ADDON__/js/summernote.js?v={$site.version}"></script>
+<script type="text/javascript" src="__ADDON__/js/summernote-zh-CN.min.js?v={$site.version}"></script>
+
+<script type="text/javascript" src='__ADDON__/js/jquery.autocomplete.js?v={$site.version}'></script>
+<script type="text/javascript" src='__ADDON__/js/jquery.tagsinput.js?v={$site.version}'></script>
+
+<script type="text/javascript" src="__ADDON__/js/ask.js?v={$site.version}"></script>
+<script type="text/javascript" src="__ADDON__/js/common.js?v={$site.version}"></script>
+<script type="text/javascript" src="__ADDON__/js/xss.min.js?v={$site.version}"></script>
+{else /}
+<script type="text/javascript" src="__ADDON__/js/all.min.js?v={$site.version}" merge="true"></script>
+<script type="text/javascript" src="__ADDON__/js/summernote.min.js?v={$site.version}" merge="true"></script>
+<script type="text/javascript" src="__ADDON__/js/summernote-zh-CN.min.js?v={$site.version}" merge="true"></script>
+<script type="text/javascript" src="__ADDON__/js/xss.min.js?v={$site.version}" merge="true"></script>
+{/if}
+
+{__SCRIPT__}
+
+<script>
+    //你可以在此插入你的统计代码
+</script>
+
+</body>
+</html>

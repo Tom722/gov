@@ -1,0 +1,42 @@
+<div class="container" style="min-height:400px;">
+    <div class="row" style="margin-top:20px;">
+        <div class="col-xs-12">
+            <div class="article-section taginfo-section text-center">
+                <p>
+                    <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-flag fa-stack-1x fa-inverse"></i>
+                    </span>
+                </p>
+
+                <h4 style="font-weight: 400;" class="text-muted">
+                    此文章只针对
+                    {if $zoneConditionList}
+                        <span class="text-primary">[{:implode('/', $zoneConditionList)}]</span>
+                    {/if}
+                    {if $zoneProductList}
+                        {if $zoneConditionList}且{/if}
+                        {if count($zoneProductList)>1}
+                        同时购买了
+                        {foreach name="zoneList" id="zone"}
+                            {if $key>0} 和 {/if}
+                            [<a href='{$zone.producturl}' target='_blank'>{$zone.productname}</a>]
+                        {/foreach}
+                        {else}
+                            购买了
+                            {php}$zone=reset($zoneProductList);{/php}
+                            [<a href='{$zone.producturl}' target='_blank'>{$zone.productname}</a>]
+                        {/if}
+                    {/if}
+                    的用户开放
+                </h4>
+                <div class="my-4">
+                    <a href="javascript:history.go(-1);" class="btn btn-primary">返回上一页</a>
+                    {if $zoneProductList}
+                        <a href="{$zone.producturl}" class="btn btn-outline-primary" target="_blank">去购买</a>
+                    {/if}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

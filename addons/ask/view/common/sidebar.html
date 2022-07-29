@@ -1,0 +1,101 @@
+<!-- S 热门文章 -->
+<div class="panel panel-default recommend-article">
+    <div class="panel-heading">
+        <h3 class="panel-title">热门文章</h3>
+    </div>
+    <div class="panel-body">
+        {ask:articlelist id="item" orderby="views"}
+        <div class="media media-number">
+            <div class="media-left">
+                <span class="num">{:$i}</span>
+            </div>
+            <div class="media-body">
+                <a class="link-dark" href="{$item.url}" title="{$item.title|htmlentities}">{$item.title|htmlentities}</a>
+            </div>
+        </div>
+        {/ask:articlelist}
+    </div>
+</div>
+<!-- E 热门文章 -->
+
+<div class="panel panel-blockimg">
+    {ask:block name="sidebarad1" /}
+</div>
+
+<!-- S 热门问题 -->
+<div class="panel panel-default hot-article">
+    <div class="panel-heading">
+        <h3 class="panel-title">热门问题</h3>
+    </div>
+    <div class="panel-body">
+        {ask:questionlist id="item" orderby="views"}
+        <div class="media media-number">
+            <div class="media-left">
+                <span class="num">{$i}</span>
+            </div>
+            <div class="media-body">
+                <a class="link-dark" href="{$item.url}" title="{$item.title|htmlentities}">{$item.title|htmlentities}</a>
+            </div>
+        </div>
+        {/ask:questionlist}
+    </div>
+</div>
+<!-- E 热门问题 -->
+
+<div class="panel panel-blockimg">
+    {ask:block name="sidebarad2" /}
+</div>
+
+<!-- S 热门标签 -->
+<div class="panel panel-default hot-tags">
+    <div class="panel-heading">
+        <h3 class="panel-title">热门标签</h3>
+    </div>
+    <div class="panel-body">
+        {ask:taglist id="item" limit="50" orderby="questions"}
+        <a href="{$item.url}" class="tag"> {if $item.icon}<img src="{$item.icon}" alt="">{/if} {$item.name}</a>
+        {/ask:taglist}
+    </div>
+</div>
+<!-- E 热门标签 -->
+
+<!-- S 等待解答 -->
+<div class="panel panel-default recommend-article">
+    <div class="panel-heading">
+        <h3 class="panel-title">等待解答</h3>
+    </div>
+    <div class="panel-body">
+        {ask:questionlist id="item" condition="0=answers"}
+        <div class="media media-number">
+            <div class="media-left">
+                <span class="tag">问</span>
+            </div>
+            <div class="media-body">
+                <a class="link-dark" href="{$item.url}" title="{$item.title|htmlentities}">{$item.title|htmlentities}</a>
+            </div>
+        </div>
+        {/ask:questionlist}
+    </div>
+</div>
+<!-- E 等待解答 -->
+
+<!-- S 推荐专家 -->
+<div class="panel panel-default panel-users">
+    <div class="panel-heading">
+        <h3 class="panel-title">推荐专家</h3>
+    </div>
+    <div class="panel-body">
+        {ask:userlist id="item" condition="1=isexpert" limit="5" cache="86400"}
+        <div class="media media-number">
+            <div class="media-left">
+                <a class="link-dark" href="{$item.url}" title="{$item.nickname}"><img class="media-object img-circle img-small" alt="{$item.nickname}" src="{$item.avatar|cdnurl}"></a>
+            </div>
+            <div class="media-body">
+                <div class="media-heading"><a class="link-dark" href="{$item.url}" title="{$item.nickname}">{$item.nickname}</a></div>
+                <div class="text-muted">{$item.answers}个答案 {$item.adoptions}次被采纳</div>
+            </div>
+        </div>
+        {/ask:userlist}
+    </div>
+</div>
+<!-- E 推荐专家 -->

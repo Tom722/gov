@@ -1,0 +1,91 @@
+<import src="/assets/libs/zanui/tab/index.wxml" />
+<wxs src="vips.wxs" module="util" />
+<view>
+
+  <view class="u-p-30">
+    <view class="center u-p-30">
+      <view class="u-flex ">
+        <view class="u-m-r-15 u-flex u-col-center">
+          <image class="avatar" src="{{userInfo.avatar}}"></image>
+        </view>
+        <view class="u-flex u-flex-column u-row-between u-col-top u-flex-1">
+          <view class="u-flex">
+            <view class="nickname">{{userInfo.nickname}}</view>
+            <view class="vip-name" wx:if="{{vipInfo.level}}">{{vipInfo.name}}</view>
+          </view>
+          <view class="u-m-t-10 u-font-22 u-flex u-row-between" style="width: 100%;">
+            <view class="">VIP等级：{{vipInfo.level || 0}}</view>
+            <view class="remainseconds" wx:if="{{vipInfo.remainseconds && vipInfo.remainseconds < 86400}}">
+              <count-down timestamp="{{vipInfo.remainseconds || 0}}" separator="zh" separator-color="#ffffff"
+                font-size="22"></count-down>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="u-flex u-row-between u-m-t-15">
+        <view class="">
+         {{util.expireRender(vipInfo.expiredate)}}
+        </view>
+        <view class="">
+          <button wx:if="{{vipInfo.level>0}}" class='zan-btn zan-btn--small zan-btn--danger radius' data-type="1"
+            bindtap="goBuy">续费会员</button>
+          <button wx:else class='zan-btn zan-btn--small zan-btn--danger radius' data-type="0"
+            bindtap="goBuy">购买会员</button>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <block wx:if="{{tab.list.length>1}}">
+    <!-- 分割线 -->
+    <view class="u-p-30 bg-title">选择购买会员</view>
+
+    <!-- S 选项卡 -->
+    <view class="vip">
+      <template is="zan-tab" data="{{ ...tab, componentId: 'vip' }}"></template>
+    </view>
+  </block>
+
+
+  <!-- 分割线 -->
+  <view class="u-flex u-row-between u-p-30 bg-title">
+    <view class="">选择开通时长</view>
+    <view class="">
+      <text class="u-m-l-10 zan-c-gray-dark">价格说明</text>
+    </view>
+  </view>
+  <!--  -->
+  <view class="u-p-l-30 u-p-r-30 u-p-t-30">
+    <view class="price-list u-flex u-flex-wrap">
+      <view class="item u-text-center" wx:for="{{pricedata}}" wx:key="index" data-index="{{index}}" bindtap="selectVip"
+        style="{{index == selectIndex[tab.selectedId]?'border:1px solid #3388FF;background:#edf5ff;':''}}">
+        <view class="">{{item.title}}</view>
+        <view class="u-p-t-15 u-p-b-15 price">
+          <text class="u-font-20">￥</text>
+          <text class="u-font-40 u-text-weight">{{item.price}}</text>
+        </view>
+        <view class="u-font-20 u-tips-color u-line-2">{{item.subtext}}</view>
+      </view>
+    </view>
+  </view>
+  <view class="u-p-30 bg-title">获得权益</view>
+  <view class="">
+    <view class="interests u-p-30 u-flex u-flex-wrap">
+      <view class="item u-text-center" wx:for="{{rightdata}}" wx:key="key">
+        <view class="u-flex u-row-center">
+          <image src="{{item.image}}" class="rightimg"></image>
+        </view>
+        <view class="u-font-30 u-text-weight u-m-t-10 u-m-b-10">{{item.text}}</view>
+        <view class="u-font-20 u-tips-color u-line-3">{{item.intro}}</view>
+      </view>
+    </view>
+  </view>
+  <view class="u-p-30"></view>
+  <view class="u-p-30"></view>
+
+  <view class="vip-footer u-p-30 u-border-top u-flex u-row-center" data-type="0" bindtap="goBuy">
+    <button style="background-color: {{isDisabled ? '#ccc' : '#3388FF'}}">
+      {{util.nowLevel(isDisabled,vipInfo.level,tab)}}
+    </button>
+  </view>
+</view>

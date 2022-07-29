@@ -1,0 +1,15 @@
+<div class="col-xs-4">
+    <div class="thumbnail">
+        <a href="{$follower.user.url}">
+            <img class="img-circle" style="width:80px;height:80px;margin:30px auto 10px auto;" src="{$follower.user.avatar|cdnurl}" alt="{$follower.user.nickname}" data-toggle="popover" data-title="{$follower.user.nickname}" data-type="user" data-id="{$follower.user.id}">
+        </a>
+        <div class="caption">
+            <h4 class="text-center"><a href="{$follower.user.url}" title="{$follower.user.nickname}">{$follower.user.nickname}</a></h4>
+            <p class="text-muted text-center" title="{$follower.user.bio}">{$follower.user.bio|default="这家伙很懒，什么也没写！"}</p>
+            <p class="text-center">
+                <a class="btn btn-primary btn-sm btn-attention {:$follower.user.followed?'followed':''}" data-type="user" data-id="{$follower.user.id}" href="javascript:"><i class="fa fa-plus"></i> <span>{:$follower.user.followed?'已关注':'关注'}</span></a>
+                <a class="btn btn-primary btn-sm btn-ask" data-id="{$follower.user.id}" href="{:addon_url('ask/question/post')}?user_id={$follower.user.id}">向TA提问</a>
+            </p>
+        </div>
+    </div>
+</div>
